@@ -24,6 +24,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 userRoutes(app);
 
+// app.use(express.static('./client/build'));
+
 app.all('*', (req, res) => {
   res.status(404).send({ message: 'route not found' });
 });

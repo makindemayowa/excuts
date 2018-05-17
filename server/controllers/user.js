@@ -151,3 +151,42 @@ exports.getOne = (req, res) => {
       return res.status(200).send({ message: 'success', user });
     });
 };
+
+exports.getAll = (req, res) => {
+  // const merchantId = req.user.id;
+  const limit = req.query.limit || 5;
+  const page = req.query.page || 1;
+  const offset = (limit * page) - limit;
+  // let query = {
+  //   merchantId
+  // };
+  // if (Object.keys(req.query).length &&
+  //   ('status' in req.query || 'updatedAt' in req.query)) {
+  //   query = {
+  //     merchantId,
+  //     status: req.query.status || '',
+  //     updatedAt: req.query.updatedAt || '',
+  //   };
+  // }
+  User
+    .find({})
+    .skip(offset)
+    .limit(limit)
+    .exec((err, products) => {
+      if (!products.length) {
+        return res.status(404).send({ message: 'No user found' });
+      }
+      User.count({}).exec((err, count) => {
+        if (err) return res.status(500).send({ err });
+        return res.status(200).send({
+          products,
+          pagination: {
+            count,
+            currentPage: page,
+            pages: Math.ceil(count / limit),
+            pageSize: (count - offset) > limit ? limit : (count - offset)
+          }
+        });
+      });
+    });
+};
