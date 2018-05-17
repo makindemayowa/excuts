@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import './styles/index.css';
-import App from './components/App.jsx';
+import Routes from './Routes';
 
 const url = '/api/user';
 
@@ -16,7 +16,7 @@ const url = '/api/user';
 
 ReactDOM.render(
   <Provider store={store()}>
-    <App />
+    <Routes />
   </Provider>,
   document.getElementById('root')
 );

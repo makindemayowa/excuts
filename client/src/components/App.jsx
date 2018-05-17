@@ -18,7 +18,7 @@ class App extends Component {
         <button onClick={() => this.props.simpleAction()}>Test redux action</button>
         <pre>
           {
-            JSON.stringify(this.props)
+            JSON.stringify(this.props.simpleReducer)
           }
         </pre>
       </div>
