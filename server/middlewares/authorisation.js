@@ -15,7 +15,7 @@ exports.checkToken = (req, res, next) => {
       next();
     });
   } else {
-    return res.status(200).json({
+    return res.status(400).json({
       message: 'No token provided.'
     });
   }

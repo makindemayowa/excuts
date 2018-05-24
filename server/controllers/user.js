@@ -21,7 +21,7 @@ exports.create = (req, res) => {
       req.body.status = 'pending';
       req.body.verifyingToken = registrationToken;
       const user = new User(req.body);
-      user.save((err, res) => {
+      user.save((err) => {
         if (err) {
           return res.status(500).send({ err });
         }
@@ -123,7 +123,8 @@ exports.login = (req, res) => {
     const userDetails = {
       email: user.email,
       id: user._id,
-      isAdmin: user.isMerchant,
+      role: user.role,
+      location: user.loc,
     };
     const jsonToken = helper.createToken({ userDetails }, '24h');
     return res.status(200).send({ message: 'login successful', jsonToken });
@@ -153,33 +154,35 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  // const merchantId = req.user.id;
   const limit = req.query.limit || 5;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
-  // let query = {
-  //   merchantId
-  // };
-  // if (Object.keys(req.query).length &&
-  //   ('status' in req.query || 'updatedAt' in req.query)) {
-  //   query = {
-  //     merchantId,
-  //     status: req.query.status || '',
-  //     updatedAt: req.query.updatedAt || '',
-  //   };
-  // }
+  const geoNear = {
+    $geoNear: {
+      near: {
+        type: 'Point',
+        coordinates:
+          [req.user.location.coordinates[0], req.user.location.coordinates[1]]
+      },
+      distanceField: 'distance',
+      spherical: true,
+      maxDistance: 10000000
+    },
+  };
+  const query2 = [geoNear, { $count: 'total' }];
   User
-    .find({})
+    .aggregate(geoNear)
     .skip(offset)
     .limit(limit)
-    .exec((err, products) => {
-      if (!products.length) {
+    .exec((err, users) => {
+      if (!users.length) {
         return res.status(404).send({ message: 'No user found' });
       }
-      User.count({}).exec((err, count) => {
+      User.aggregate(query2).exec((err, response) => {
+        const count = response[0].total;
         if (err) return res.status(500).send({ err });
         return res.status(200).send({
-          products,
+          users,
           pagination: {
             count,
             currentPage: page,
@@ -190,3 +193,24 @@ exports.getAll = (req, res) => {
       });
     });
 };
+
+exports.getCloseToMe = (req, res) => {
+  const query = [
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates:
+            [req.user.location.coordinates[0], req.user.location.coordinates[1]]
+        },
+        distanceField: 'distance',
+        spherical: true,
+        maxDistance: 10000
+      }
+    }
+  ];
+  User.aggregate(query, (err, results) => {
+    console.log(results);
+  });
+};
+

@@ -18,5 +18,6 @@ module.exports = {
     interests: Joi.string(),
     phone_no: Joi.number(),
     status: Joi.string(),
+    loc: Joi.object(),
   }),
 };

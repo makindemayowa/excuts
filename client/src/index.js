@@ -1,22 +1,48 @@
-import 'isomorphic-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Switch, BrowserRouter as Router } from 'react-router-dom';
 import store from './store';
-import './styles/index.css';
-import Routes from './Routes';
+import './scss/index.css';
+import AuthContainer from './containers/Auth.jsx'
+import routes from './Routes';
 
-const url = '/api/user';
 
-// fetch(url)
-//   .then((resp) => resp.json()) // Transform the data into json
-//   .then(function (data) {
-//     console.log(data)
-//   })
+
+// One degree of latitude =  111.66 km or  69.38 mi
+
+// window.navigator.geolocation.getCurrentPosition(function (pos) {
+//   console.log(pos.coords.longitude, pos.coords.latitude)
+// });
+const App = () => {
+  return (
+    <div>
+      <Router>
+        <div>
+          <Switch>
+            {
+              routes.map((route) => (
+                <AuthContainer
+                  path={route.path}
+                  name={route.name}
+                  exact={route.exact}
+                  Comp={route.component}
+                  key={route.path}
+                  secured={route.secured}
+                />
+              ))
+            }
+          </Switch>
+        </div>
+      </Router>
+    </div>
+  );
+}
+
 
 ReactDOM.render(
   <Provider store={store()}>
-    <Routes />
+    <App />
   </Provider>,
   document.getElementById('root')
 );

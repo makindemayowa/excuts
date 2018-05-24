@@ -1,13 +1,25 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import App from './components/App.jsx';
 
-const Routes = () => (
-  <BrowserRouter>
-    <Switch>
-      <Route exact path="/home" component={App} />
-    </Switch>
-  </BrowserRouter>
-);
-
-export default Routes;
+export default [
+  {
+    name: 'login',
+    path: '/',
+    secured: false,
+    component: App,
+    exact: true
+  },
+  {
+    name: 'raffle',
+    path: '/raffle',
+    secured: true,
+    component: App,
+    exact: true
+  },
+  {
+    name: 'raffle',
+    path: '*',
+    secured: true,
+    component: App,
+    exact: true
+  }
+]

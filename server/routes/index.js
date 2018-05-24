@@ -17,5 +17,5 @@ module.exports = (app) => {
   app.post('/api/reset-password/update', user.resetForgottenPassword);
   app.put('/api/user', auth.checkToken, user.update);
   app.get('/api/user/:id', auth.checkToken, user.getOne);
-  app.get('/api/user', user.getAll);
+  app.get('/api/user', auth.checkToken, user.getAll);
 };

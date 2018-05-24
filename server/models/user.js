@@ -19,8 +19,19 @@ const UserSchema = new Schema({
   phone_no: Number,
   status: String,
   verifyingToken: String,
-  passwordResetToken: String
+  passwordResetToken: String,
+  role: {
+    type: String,
+    default: 'availableForRent'
+  },
+  loc: {
+    type: { type: String },
+    coordinates: [],
+  }
 });
+
+// Dunno why I did this...Next you want to tie an index to the schema:
+// UserSchema.index({ loc: '2dsphere' });
 
 UserSchema.pre('save', function (next) {
   var user = this;

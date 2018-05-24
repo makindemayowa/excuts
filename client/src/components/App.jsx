@@ -1,26 +1,39 @@
+/*eslint-env jquery*/
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../styles/App.css';
 import { simpleAction } from '../actions/simpleAction';
+import NavBar from './Nav.jsx';
+import Footer from './Footer.jsx';
 
 
 class App extends Component {
-
+  componentDidMount() {
+    $('.sidenav').sidenav();
+    $('.authModal').modal({
+      // onCloseEnd: () => alert('closed')
+    });
+    $('.parallax').parallax({
+      responsiveThreshold: 30
+    });
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload
-        </p>
-        <button onClick={() => this.props.simpleAction()}>Test redux action</button>
-        <pre>
-          {
-            JSON.stringify(this.props.simpleReducer)
-          }
-        </pre>
+        <NavBar />
+        <div id="homepage">
+          <div className="background-wrap gradient">
+            <div className="hmpg-text">
+              Who knows? <br />
+              Your date might turn <br />out to be <strong>THE ONE</strong>
+            </div>
+            <div className="hmpg-btn">
+              <button className="btn modal-trigger waves-effect waves-light getStarted" data-target="signupModal" type="submit" name="action">
+                GET STARTED
+              </button>
+            </div>
+          </div>
+        </div>
+        <Footer />
       </div>
     );
   }
