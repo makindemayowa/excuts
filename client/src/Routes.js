@@ -1,25 +1,59 @@
-import App from './components/App.jsx';
+import Home from './components/landingPage/Home';
+import Dashboard from './components/dashboard/Dashboard';
+import Profile from './components/profile/Profile';
+import PublicProfile from './components/profile/PublicProfile';
+import Events from './components/events/Events';
+import CreateEvent from './components/events/CreateEvent';
+import NotFound from './components/NotFound';
 
 export default [
   {
     name: 'login',
     path: '/',
     secured: false,
-    component: App,
+    component: Home,
     exact: true
   },
   {
-    name: 'raffle',
-    path: '/raffle',
+    name: 'dashboard',
+    path: '/dashboard',
     secured: true,
-    component: App,
+    component: Dashboard,
+    exact: true
+  },
+  {
+    name: 'profile',
+    path: '/profile',
+    secured: true,
+    component: Profile,
+    exact: true
+  },
+  {
+    name: 'publicProfile',
+    path: '/publicProfile',
+    secured: true,
+    component: PublicProfile,
+    exact: true
+  },
+  {
+    name: 'events',
+    path: '/events',
+    secured: true,
+    component: Events,
+    exact: true
+  },
+  {
+    name: 'new-event',
+    path: '/new-event',
+    secured: true,
+    component: CreateEvent,
     exact: true
   },
   {
     name: 'raffle',
     path: '*',
     secured: true,
-    component: App,
+    component: NotFound,
     exact: true
   }
 ]

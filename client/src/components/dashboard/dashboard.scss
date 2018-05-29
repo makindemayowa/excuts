@@ -1,0 +1,51 @@
+.bg-3 {
+  background-color: rgb(244, 245, 246)
+}
+
+ul.pagination {
+  text-align: center;
+  li {
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    a {
+      height: 30px;
+      width: 30px;
+      border-radius: 30px;
+      padding: 0px;
+      display: inline-block;
+      font-size: 12px;
+    }
+  }
+  li.active {
+    background-color: #ff6666;
+  }
+  li.previous,
+  li.next {
+    width: 120px;
+    a {
+      width: 120px;
+      span {
+        display: inline-block;
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000;
+        i,
+        svg {
+          display: inline-block;
+          font-size: 30px;
+          background-color: #ff6666;
+          border-radius: 30px;
+          color: rgb(32, 33, 34)
+        }
+      }
+    }
+  }
+}
+
+.discover {
+
+}

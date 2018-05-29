@@ -1,10 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import storage from '../actions/storage';
-import Dashboard from '../components/Dashboard.jsx';
+import DashboardContainer from '../components/dashboard/DashboardContainer';
 
 const AuthContainer = ({ name, Comp, path, secured, exact }) => {
-  const isToken = localStorage.getItem('ays-token');
+  const isToken = localStorage.getItem('token');
 
   if (secured && !isToken) {
     return <Redirect to="/" />
@@ -26,7 +25,7 @@ const AuthContainer = ({ name, Comp, path, secured, exact }) => {
   return <Route
     path={path}
     render={() => (
-      <Dashboard Comp={Comp} />
+      <DashboardContainer Comp={Comp} />
     )}
     exact={exact}
     name={name}

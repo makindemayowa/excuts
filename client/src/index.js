@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Switch, BrowserRouter as Router } from 'react-router-dom';
 import store from './store';
-import './scss/index.css';
-import AuthContainer from './containers/Auth.jsx'
+import './scss/index.scss';
+import AuthContainer from './containers/Auth'
 import routes from './Routes';
+// var $ = require ('jquery')
 
 
 
