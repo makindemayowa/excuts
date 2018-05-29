@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Login from '../landingPage/Login';
 import Signup from '../landingPage/Signup';
+import { Link } from 'react-router-dom';
 import SubNav from './SubNav';
 
 
@@ -20,6 +21,7 @@ const NavBar = () => (
         <ul className="right hide-on-med-and-down">
           <li><a className="modal-trigger" href="#loginModal">Login</a></li>
           <li><a className="modal-trigger" href="#signupModal">Register</a></li>
+          <li><Link to="/" href="#" className="home-link"><i className="far fa-bell"></i></Link></li>
         </ul>
       </div>
     </nav>
@@ -33,37 +35,37 @@ const NavBar = () => (
       </li>
       <li>
         <NavLink
-          to="/discover"
+          to="/search"
           activeClassName="clicked"
-        ><i className="fas fa-search nav-icon" /><span>Blog</span>
+        ><i className="fas fa-search nav-icon" /><span>Search</span>
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/activities"
+          to="/notifications"
           activeClassName="clicked"
-        ><i className="fas fa-fire nav-icon" /><span>Notifications</span>
+        ><i className="far fa-bell nav-icon"></i><span>Notifications</span>
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/jobs"
+          to="/events"
           activeClassName="clicked"
-        ><i className="fas fa-suitcase nav-icon" /><span>Search</span>
+        ><i className="fas fa-suitcase nav-icon" /><span>Events</span>
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/pricing"
+          to="/new-event"
           activeClassName="clicked"
-        ><i className="fas fa-tag nav-icon" /><span>Blog</span>
+        ><i className="fas fa-tag nav-icon" /><span>Create Event</span>
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/Blog"
+          to="/publicprofile"
           activeClassName="clicked"
-        ><i className="fas fa-rss nav-icon" /><span>Blog</span>
+        ><i className="fas fa-rss nav-icon" /><span>Profile</span>
         </NavLink>
       </li>
     </ul>

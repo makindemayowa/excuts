@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import SubNav from '../common/SubNav';
 import EventsCard from './EventsCard'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 import './event.scss';
 
 
@@ -23,7 +26,7 @@ class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      startDate: ''
+      startDate: moment()
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -39,7 +42,6 @@ class Events extends Component {
       <div className="events">
         <SubNav currentPage={'events'} />
         <div className="container">
-          <div className="bottom_margin" />
           <div className="row">
             <div className="right createEvent">
               <Link to="/new-event" class="btn-floating btn-large waves-effect waves-light"><i class="material-icons">add</i></Link>
@@ -52,10 +54,50 @@ class Events extends Component {
               <EventsCard event={event} />
               <EventsCard event={event} />
             </div>
-            <div className="col s12 m5 l2">
-              <div className="card white darken-1">
-                <div className="card-content black-text">
-                  <span className="card-title">Search</span>
+            <div className="col s12 m5 l2 searchForm">
+              <div className="flex">
+                <div className="form-fields">
+                  <label>Gender</label>
+                  <select className="size1">
+                    <option value="1">Female</option>
+                    <option value="">Male</option>
+                    <option value="2">Other</option>
+                  </select>
+                </div>
+
+                <div className="form-fields">
+                  <label>Country</label>
+                  <select className="size1">
+                    <option value="">Nigeria</option>
+                    <option value="3">Norway</option>
+                    <option value="1">Oman</option>
+                    <option value="2">Pakistan</option>
+                  </select>
+                </div>
+
+                <div className="form-fields">
+                  <label>State</label>
+                  <select className="size1">
+                    <option value="">Lagos</option>
+                    <option value="1">Abuja</option>
+                    <option value="2">Abeokuta</option>
+                  </select>
+                </div>
+
+                <div className="form-fields">
+                  <label>Date</label>
+                  <div className="dtpcker">
+                    <DatePicker
+                      selected={this.state.startDate}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <button className="waves-effect right waves-light btn">
+                    Search
+                  </button>
                 </div>
               </div>
             </div>

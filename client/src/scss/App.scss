@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
+  background: #f5f5f5;
 }
 nav {
   background-color: #323232;
@@ -65,6 +66,10 @@ textarea.materialize-textarea.valid:focus,
   color: #5e5d5d !important;
   font-size: 12px;
   opacity: 1; /* Firefox */
+}
+
+.character-counter {
+  margin-top: -20px;
 }
 
 @media only screen and (max-width: 530px) {

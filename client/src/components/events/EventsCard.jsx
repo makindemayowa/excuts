@@ -42,7 +42,10 @@ export default props => (
           </span>
           {props.event.extra}
         </div>
-        <div className="cardfooter">{`Created By: ${props.event.createdBy}`}</div>
+        <div className="bottom_margin" />
+        <Link to="/profile">
+          <div className="cardfooter">{`Created By: ${props.event.createdBy}`}</div>        
+        </Link>
       </div>
       <ul class="collapsible">
         <li>

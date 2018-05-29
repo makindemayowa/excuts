@@ -4,6 +4,7 @@ import Profile from './components/profile/Profile';
 import PublicProfile from './components/profile/PublicProfile';
 import Events from './components/events/Events';
 import CreateEvent from './components/events/CreateEvent';
+import Search from './components/common/Search';
 import NotFound from './components/NotFound';
 
 export default [
@@ -47,6 +48,13 @@ export default [
     path: '/new-event',
     secured: true,
     component: CreateEvent,
+    exact: true
+  },
+  {
+    name: 'search',
+    path: '/search',
+    secured: true,
+    component: Search,
     exact: true
   },
   {
