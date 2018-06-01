@@ -32,6 +32,10 @@ const event = {
 };
 
 class App extends Component {
+  componentDidMount() {
+    $('.authModal').modal();
+  }
+
   render() {
     return (
       <div className="App">

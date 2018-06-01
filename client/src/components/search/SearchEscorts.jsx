@@ -1,8 +1,11 @@
+/*eslint-env jquery*/
+
 import React, { Component } from 'react';
 import moment from 'moment';
+import SubNav from '../common/SubNav';
 import './search.scss';
 
-class Search extends Component {
+class SearchEscort extends Component {
   constructor() {
     super();
     this.state = {
@@ -17,7 +20,7 @@ class Search extends Component {
   }
 
   componentDidMount() {
-
+    $('select').formSelect();
   }
   handleChange(date) {
     this.setState({
@@ -34,6 +37,7 @@ class Search extends Component {
   render() {
     return (
       <div className="mobilesearch">
+        <SubNav />
         <div className="searchForm paddMobile">
           <div className="flex">
             <div className="form-fields">
@@ -90,4 +94,4 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default SearchEscort;

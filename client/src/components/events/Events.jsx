@@ -1,3 +1,5 @@
+/*eslint-env jquery*/
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import SubNav from '../common/SubNav';
@@ -31,6 +33,11 @@ class Events extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidMount() {
+    $('.collapsible').collapsible();
+    $('select').formSelect();
+  }
+
   handleChange(date) {
     this.setState({
       startDate: date
@@ -57,11 +64,10 @@ class Events extends Component {
             <div className="col s12 m5 l2 searchForm">
               <div className="flex">
                 <div className="form-fields">
-                  <label>Gender</label>
+                  <label>Interested in</label>
                   <select className="size1">
                     <option value="1">Female</option>
                     <option value="">Male</option>
-                    <option value="2">Other</option>
                   </select>
                 </div>
 
@@ -85,12 +91,35 @@ class Events extends Component {
                 </div>
 
                 <div className="form-fields">
-                  <label>Date</label>
-                  <div className="dtpcker">
-                    <DatePicker
-                      selected={this.state.startDate}
-                      onChange={this.handleChange}
-                    />
+                  Date Range
+                  <div className="bottom_margin" />
+                  <div className="row">
+                    <div className="col s12">
+                      <div>
+                        From
+                      </div>
+                    </div>
+                    <div className="col s10 m9 l8">
+                      <div className="dtpcker">
+                        <DatePicker
+                          selected={this.state.startDate}
+                          onChange={this.handleChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col s12">
+                      To
+                    </div>
+                    <div className="col s10 m9 l8">
+                      <div className="dtpcker">
+                        <DatePicker
+                          selected={this.state.startDate}
+                          onChange={this.handleChange}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 

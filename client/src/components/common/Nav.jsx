@@ -35,9 +35,16 @@ const NavBar = () => (
       </li>
       <li>
         <NavLink
-          to="/search"
+          to="/search-event"
           activeClassName="clicked"
-        ><i className="fas fa-search nav-icon" /><span>Search</span>
+        ><i className="fas fa-search nav-icon" /><span>Search Events</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/search-escort"
+          activeClassName="clicked"
+        ><i className="fas fa-search nav-icon" /><span>Search Escorts</span>
         </NavLink>
       </li>
       <li>

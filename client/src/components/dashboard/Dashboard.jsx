@@ -33,8 +33,10 @@ class Discover extends Component {
   }
 
   componentDidMount() {
- 
+    $('select').formSelect(); 
+    $('.materialboxed').materialbox();
   }
+
   handleChange(date) {
     this.setState({
       startDate: date

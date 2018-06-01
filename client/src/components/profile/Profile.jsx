@@ -1,3 +1,5 @@
+/*eslint-env jquery*/
+
 import React, { Component } from 'react';
 import ProfileCard from './ProfileCard';
 import SubNav from '../common/SubNav';
@@ -19,6 +21,12 @@ class Profile extends Component {
     this.state = {
       filterOpen: false
     };
+  }
+
+  componentDidMount() {
+    $('select').formSelect(); 
+    $('.materialboxed').materialbox();
+    $('input#input_text, textarea#textarea1').characterCounter();
   }
 
   render() {

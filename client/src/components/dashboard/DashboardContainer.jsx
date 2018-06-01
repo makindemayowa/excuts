@@ -15,7 +15,6 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar />
-        {/* <SubNav /> */}
         <Comp />
         <Footer />
       </div>

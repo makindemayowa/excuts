@@ -1,3 +1,5 @@
+/*eslint-env jquery*/
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import DatePicker from 'react-datepicker';
@@ -7,6 +9,10 @@ import SubNav from '../common/SubNav';
 // import './profile.scss';
 
 const img = require('../../images/date2.jpg')
+const img1 = require('../../images/quote1.jpg')
+const img2 = require('../../images/quote2.jpg')
+const img3 = require('../../images/single.jpg')
+const img4 = require('../../images/love.jpg')
 const userInfo = {
   name: 'Jones Jimoh',
   age: 24,
@@ -20,9 +26,30 @@ class PublicProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      startDate: moment()
+      startDate: moment(),
+      currentImg: ''
     };
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    $('.carousel').carousel({
+      indicators: true,
+    });
+    $('.materialboxed').materialbox();
+    $('.collapsible').collapsible();
+    $('input#input_text, textarea#textarea1').characterCounter();
+
+    $('.carousel').carousel({
+      duration: 100,
+      indicators: true,
+      onCycleTo: (data) => {
+        const currentImg = data.getElementsByTagName("img")[0];
+       this.setState({
+        currentImg: currentImg.src
+       })
+     }
+    });
   }
 
   handleChange(date) {
@@ -34,6 +61,7 @@ class PublicProfile extends Component {
   render() {
     return (
       <div>
+        {console.log(this.state.currentImg)}
         <SubNav currentPage={'profile'}/>
         <div className="publicProfile container">
           <div className="bottom_margin" />
@@ -55,7 +83,7 @@ class PublicProfile extends Component {
             <div className="col s12 m5 l4">
               <div className="card">
                 <div className="card-image">
-                  <img src={userInfo.avatar} />
+                  <img className="materialboxed" alt="" width="650" src={this.state.currentImg || userInfo.avatar} />
                 </div>
               </div>
             </div>
@@ -63,10 +91,10 @@ class PublicProfile extends Component {
               <div className="slider">
                 <div className="carousel">
                   <a className="carousel-item" href="#one!"><img src={userInfo.avatar} /></a>
-                  <a className="carousel-item" href="#two!"><img src={userInfo.avatar} /></a>
-                  <a className="carousel-item" href="#three!"><img src={userInfo.avatar} /></a>
-                  <a className="carousel-item" href="#four!"><img src={userInfo.avatar} /></a>
-                  <a className="carousel-item" href="#five!"><img src={userInfo.avatar} /></a>
+                  <a className="carousel-item" href="#two!"><img src={img1} /></a>
+                  <a className="carousel-item" href="#three!"><img src={img2} /></a>
+                  <a className="carousel-item" href="#four!"><img src={img3} /></a>
+                  <a className="carousel-item" href="#five!"><img src={img4} /></a>
                 </div>
               </div>
             </div>

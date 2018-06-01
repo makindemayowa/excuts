@@ -23,7 +23,7 @@ class Events extends Component {
   render() {
     return (
       <div>
-        <SubNav currentPage={'events'} />
+        <SubNav />
         <div className="create_event">
           <div className="container">
             <div className="container">
