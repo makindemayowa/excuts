@@ -1,10 +1,11 @@
-/*eslint-env jquery*/
+/* eslint-env jquery */
+/* global M */
 
 import React, { Component } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-import SubNav from '../common/SubNav';
 import 'react-datepicker/dist/react-datepicker.css';
+import SubNav from '../common/SubNav';
 import './search.scss';
 
 class SearchEvent extends Component {
@@ -22,7 +23,9 @@ class SearchEvent extends Component {
   }
 
   componentDidMount() {
-    $('select').formSelect();
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+    // $('select').formSelect();
   }
   handleChange(date) {
     this.setState({
@@ -33,13 +36,13 @@ class SearchEvent extends Component {
   changeEvent(evt) {
     this.setState({
       [evt.target.name]: evt.target.value
-    })
+    });
   }
 
   render() {
     return (
       <div className="mobilesearch">
-      <SubNav />
+        <SubNav />
         <div className="searchForm paddMobile">
           <div className="col s12 m5 l2 searchForm">
             <div className="flex">

@@ -7,10 +7,12 @@ import CreateEvent from './components/events/CreateEvent';
 import SearchEscorts from './components/search/SearchEscorts';
 import SearchEvents from './components/search/SearchEvents';
 import NotFound from './components/NotFound';
+import Verify from './components/Verify';
+import VerifyMail from './components/VerifyMail';
 
 export default [
   {
-    name: 'login',
+    name: 'home',
     path: '/',
     secured: false,
     component: Home,
@@ -63,6 +65,20 @@ export default [
     path: '/search-escort',
     secured: true,
     component: SearchEscorts,
+    exact: true
+  },
+  {
+    name: 'verify',
+    path: '/verify',
+    secured: true,
+    component: Verify,
+    exact: true
+  },
+  {
+    name: 'verifymail',
+    path: '/email/verify/:token',
+    secured: false,
+    component: VerifyMail,
     exact: true
   },
   {

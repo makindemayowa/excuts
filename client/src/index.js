@@ -2,13 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Switch, BrowserRouter as Router } from 'react-router-dom';
-import store from './store';
+import configureStore from './store';
 import './scss/index.scss';
 import AuthContainer from './containers/Auth'
 import routes from './Routes';
-// var $ = require ('jquery')
-
-
 
 // One degree of latitude =  111.66 km or  69.38 mi
 
@@ -40,9 +37,8 @@ const App = () => {
   );
 }
 
-
 ReactDOM.render(
-  <Provider store={store()}>
+  <Provider store={configureStore()}>
     <App />
   </Provider>,
   document.getElementById('root')

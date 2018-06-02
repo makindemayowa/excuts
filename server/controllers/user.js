@@ -25,8 +25,8 @@ exports.create = (req, res) => {
         if (err) {
           return res.status(500).send({ err });
         }
-        const siteUrl = `${req.protocol} + "://" + ${req.get('host')}`;
-        const link = `${siteUrl}/api/signup/verify/${registrationToken}`;
+        const siteUrl = `${req.protocol}://${req.get('host')}`;
+        const link = `${siteUrl}/email/verify/${registrationToken}`;
         emails.sendVerificationMail(req.body.email, link);
       });
     }
@@ -96,13 +96,20 @@ exports.verifyToken = (req, res) => {
   }, (err, user) => {
     if (err) return res.status(500).send({ err });
     if (!user) return res.status(400).send({ message: 'Invalid Auth Token' });
-
     user.status = 'verified';
     user.verifyingToken = '';
     user.save((err, updateduser) => {
       if (err) return res.status(500).send({ err });
+      const userDetails = {
+        email: updateduser.email,
+        role: updateduser.role,
+        id: updateduser._id,
+        status: updateduser.status,
+        location: updateduser.loc
+      };
+      const jsonToken = helper.createToken({ userDetails }, '24h');
       return res.status(200)
-        .send({ message: 'Email verified successfully', updateduser });
+        .send({ message: 'Email verified successfully', jsonToken });
     });
   });
 };
@@ -124,6 +131,7 @@ exports.login = (req, res) => {
       email: user.email,
       id: user._id,
       role: user.role,
+      status: user.status,
       location: user.loc,
     };
     const jsonToken = helper.createToken({ userDetails }, '24h');

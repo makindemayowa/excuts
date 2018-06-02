@@ -1,21 +1,24 @@
-/*eslint-env jquery*/
+/* eslint-env jquery */
+/* global M */
 
 import React, { Component } from 'react';
 import ReactPaginate from 'react-paginate';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 import UserCard from '../common/UserCard';
 import SubNav from '../common/SubNav';
-import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 import './dashboard.scss';
 
-const img = require('../../images/date2.jpg')
+const img = require('../../images/date2.jpg');
+
 const userInfo = {
   name: 'Jones Jimoh',
   age: 24,
   job: 'Bricklayer',
   avatar: img,
   location: 'Lagos, Nigeria',
-  about: 'I love to cook, sing, dance and whatever else you can imagine a good person doing up and about',
+  about: `I love to cook, sing, dance and whatever else 
+  you can imagine a good person doing up and about`,
 };
 
 class Discover extends Component {
@@ -33,8 +36,12 @@ class Discover extends Component {
   }
 
   componentDidMount() {
-    $('select').formSelect(); 
-    $('.materialboxed').materialbox();
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+    const materialboxed = document.querySelectorAll('.materialboxed');
+    M.Materialbox.init(materialboxed);
+    // $('select').formSelect(); 
+    // $('.materialboxed').materialbox();
   }
 
   handleChange(date) {
@@ -46,7 +53,7 @@ class Discover extends Component {
   changeEvent(evt) {
     this.setState({
       [evt.target.name]: evt.target.value
-    })
+    });
   }
 
   render() {

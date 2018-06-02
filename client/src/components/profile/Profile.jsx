@@ -1,11 +1,13 @@
-/*eslint-env jquery*/
+/* eslint-env jquery */
+/* global M */
 
 import React, { Component } from 'react';
 import ProfileCard from './ProfileCard';
 import SubNav from '../common/SubNav';
 import './profile.scss';
 
-const img = require('../../images/date2.jpg')
+const img = require('../../images/date2.jpg');
+
 const userInfo = {
   name: 'Jones Jimoh',
   age: 24,
@@ -24,8 +26,12 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    $('select').formSelect(); 
-    $('.materialboxed').materialbox();
+    const select = document.querySelectorAll('select');
+    M.FormSelect.init(select);
+    const materialboxed = document.querySelectorAll('.materialboxed');
+    M.Materialbox.init(materialboxed);
+    // $('select').formSelect(); 
+    // $('.materialboxed').materialbox();
     $('input#input_text, textarea#textarea1').characterCounter();
   }
 

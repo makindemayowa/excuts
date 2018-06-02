@@ -1,18 +1,19 @@
-/*eslint-env jquery*/
+/* eslint-env jquery */
+/* global M */
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import SubNav from '../common/SubNav';
-// import './profile.scss';
 
-const img = require('../../images/date2.jpg')
-const img1 = require('../../images/quote1.jpg')
-const img2 = require('../../images/quote2.jpg')
-const img3 = require('../../images/single.jpg')
-const img4 = require('../../images/love.jpg')
+const img = require('../../images/date2.jpg');
+const img1 = require('../../images/quote1.jpg');
+const img2 = require('../../images/quote2.jpg');
+const img3 = require('../../images/single.jpg');
+const img4 = require('../../images/love.jpg');
+
 const userInfo = {
   name: 'Jones Jimoh',
   age: 24,
@@ -24,7 +25,7 @@ const userInfo = {
 
 class PublicProfile extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       startDate: moment(),
       currentImg: ''
@@ -33,23 +34,38 @@ class PublicProfile extends Component {
   }
 
   componentDidMount() {
-    $('.carousel').carousel({
-      indicators: true,
-    });
-    $('.materialboxed').materialbox();
-    $('.collapsible').collapsible();
-    $('input#input_text, textarea#textarea1').characterCounter();
-
-    $('.carousel').carousel({
+    const carousel = document.querySelectorAll('.carousel');
+    M.Carousel.init(carousel, {
       duration: 100,
       indicators: true,
       onCycleTo: (data) => {
-        const currentImg = data.getElementsByTagName("img")[0];
-       this.setState({
-        currentImg: currentImg.src
-       })
-     }
+        const currentImg = data.getElementsByTagName('img')[0];
+        this.setState({
+          currentImg: currentImg.src
+        });
+      }
     });
+    const materialboxed = document.querySelectorAll('.materialboxed');
+    M.Materialbox.init(materialboxed);
+    const collapsible = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(collapsible);
+    // $('.carousel').carousel({
+    //   indicators: true,
+    // });
+    // $('.materialboxed').materialbox();
+    // $('.collapsible').collapsible();
+    $('input#input_text, textarea#textarea1').characterCounter();
+
+    // $('.carousel').carousel({
+    //   duration: 100,
+    //   indicators: true,
+    //   onCycleTo: (data) => {
+    //     const currentImg = data.getElementsByTagName("img")[0];
+    //    this.setState({
+    //     currentImg: currentImg.src
+    //    })
+    //  }
+    // });
   }
 
   handleChange(date) {
@@ -61,21 +77,20 @@ class PublicProfile extends Component {
   render() {
     return (
       <div>
-        {console.log(this.state.currentImg)}
-        <SubNav currentPage={'profile'}/>
+        <SubNav currentPage={'profile'} />
         <div className="publicProfile container">
           <div className="bottom_margin" />
           <div className="row">
             <div className="col s9 m10 l10 my_bold">
               MAYOWA ORIYOMI
-          </div>
+            </div>
             <div className="col s3 m2 l2 edit">
               <Link to="/profile">
-              <div>
-              <i className="left material-icons">edit</i>
-              <span className="edit">Edit</span>
-              </div>
-            </Link>
+                <div>
+                  <i className="left material-icons">edit</i>
+                  <span className="edit">Edit</span>
+                </div>
+              </Link>
             </div>
           </div>
           <div className="bottom_margin" />
@@ -102,42 +117,42 @@ class PublicProfile extends Component {
           <div className="row">
             <div className="my_bold">
               About
-          </div>
+            </div>
             <p>
               Material box is a material design implementation of the Lightbox plugin.
               When a user clicks on an image that can be enlarged,
               Material box centers the image and enlarges it in a smooth,
               non-jarring manner. To dismiss the image, the user can either click on the image again,
               scroll away, or press the ESC key.
-          </p>
+            </p>
           </div>
           <div className="row">
             <div className="my_bold">
               Personal Details
-          </div>
+            </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 Age
-            </p>
+              </p>
               <p className="col s6 m4 l3">
                 19
-            </p>
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 Country
-            </p>
+              </p>
               <p className="col s6 m4 l3">
                 Nigeria
-            </p>
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 State
-            </p>
+              </p>
               <p className="col s6 m4 l3">
                 Ogun
-            </p>
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">

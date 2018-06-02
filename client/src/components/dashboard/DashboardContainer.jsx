@@ -1,4 +1,6 @@
 /*eslint-env jquery*/
+/*global M*/
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { simpleAction } from '../../actions/simpleAction';
@@ -7,16 +9,23 @@ import Footer from '../common/Footer';
 // import SubNav from '../subNav/SubNav';
 
 class App extends Component {
-  componentDidMount() {
-    $('.sidenav').sidenav();
-  }
   render() {
     const Comp = this.props.Comp
     return (
       <div className="App">
-        <NavBar />
-        <Comp />
-        <Footer />
+        {
+          this.props.auth.isLogged ?
+            <div>
+              <NavBar isLogged={this.props.auth.isLogged}/>
+              <Comp />
+              <Footer />
+            </div> :
+            <div>
+              <NavBar />
+              <Comp />
+              <Footer />
+            </div>
+        }
       </div>
     );
   }

@@ -1,4 +1,5 @@
-/*eslint-env jquery*/
+/* eslint-env jquery */
+/* global M */
 
 import React, { Component } from 'react';
 import moment from 'moment';
@@ -20,7 +21,9 @@ class SearchEscort extends Component {
   }
 
   componentDidMount() {
-    $('select').formSelect();
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+    // $('select').formSelect();
   }
   handleChange(date) {
     this.setState({

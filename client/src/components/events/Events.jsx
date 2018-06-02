@@ -1,4 +1,5 @@
 /*eslint-env jquery*/
+/*global M*/
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
@@ -34,8 +35,12 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    $('.collapsible').collapsible();
-    $('select').formSelect();
+    const select = document.querySelectorAll('select');
+    M.FormSelect.init(select);
+    const collapsible = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(collapsible);
+    // $('.collapsible').collapsible();
+    // $('select').formSelect();
   }
 
   handleChange(date) {

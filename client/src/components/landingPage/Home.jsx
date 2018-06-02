@@ -1,22 +1,13 @@
-/*eslint-env jquery*/
+/* eslint-env jquery */
+/* global M */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { simpleAction } from '../../actions/simpleAction';
+import { Redirect } from 'react-router-dom';
 import NavBar from '../common/Nav';
-import UserCard from '../common/UserCard';
 import Footer from '../common/Footer';
-import EventsHomeCard from './EventsHomeCard'
+import EventsHomeCard from './EventsHomeCard';
+import { userSignUpRequest, userLoginRequest } from '../../actions/auth';
 
-
-const img = require('../../images/date2.jpg')
-const user1 = {
-  name: 'Jones Jimoh',
-  age: 24,
-  job: 'Bricklayer',
-  avatar: img,
-  location: 'Lagos, Uk',
-  about: 'I love to cook, sing, dance and whatever else you can imagine a good person doing up and about',
-};
 const event = {
   name: 'Movie',
   time: '9.50p.m',
@@ -24,30 +15,141 @@ const event = {
   venue: 'IMAX cinema, Lekki, Lagos',
   city: 'Lekki',
   state: 'Lagos',
-  photo: img,
   createdBy: 'Oriyomi O.O',
   preference: 'Only people staying on the mainland please',
-  details: "Avengers will be showing and I'll rather not watch it alone, It'll also be a good opportunity to know people around me",
-  extra: "Please note that I won't be paying for your transport. Just the movie is all"
+  details: `Avengers will be showing and I'll rather not
+   watch it alone, It'll also be a good opportunity to know people around me`,
+  extra: `Please note that I won't be paying for your 
+  transport. Just the movie is all`
 };
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      error: '',
+      success: false,
+      isLogged: false,
+    };
+    this.onChange = this.onChange.bind(this);
+    this.submitSignup = this.submitSignup.bind(this);
+    this.submitLogin = this.submitLogin.bind(this);
+  }
+
   componentDidMount() {
-    $('.authModal').modal();
+    const elems = document.querySelectorAll('.authModal');
+    M.Modal.init(elems, {
+      onCloseEnd: () => {
+        this.setState({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          error: '',
+        });
+      }
+    });
+    // $('.authModal').modal({
+    //   onCloseEnd: () => {
+    //     this.setState({
+    //       email: '',
+    //       password: '',
+    //       confirmPassword: '',
+    //       error: '',
+    //     });
+    //   }
+    // })
+  }
+
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+      error: ''
+    });
+  }
+
+  submitSignup(e) {
+    const elem = document.querySelector('#signupModal');
+    const instance = M.Modal.getInstance(elem);
+    this.setState({ error: '' });
+    e.preventDefault();
+    if (this.state.password !== this.state.confirmPassword) {
+      return this.setState({
+        error: 'passwords do not match'
+      });
+    }
+    const userdata = {
+      email: this.state.email,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    };
+    this.props
+      .userSignUpRequest(userdata)
+      .then(() => {
+        instance.close()
+        this.setState({ success: this.props.success })
+      })
+      .catch((errorData) => {
+        this.setState({
+          error: errorData.response.data.message
+        });
+      });
+  }
+
+  submitLogin(e) {
+    const elem = document.querySelector('#loginModal');
+    const instance = M.Modal.getInstance(elem);
+    this.setState({ error: '' });
+    e.preventDefault();
+    const userdata = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    this.props
+      .userLoginRequest(userdata)
+      .then(() => {
+        instance.close();
+        this.setState({ isLogged: this.props.isLogged });
+      })
+      .catch((errorData) => {
+        this.setState({
+          error: errorData.response.data.message
+        });
+      });
   }
 
   render() {
+    const { isLogged, success } = this.state;
+    if (isLogged) {
+      return <Redirect to="/dashboard" />;
+    }
+    if (success) {
+      return <Redirect to="/verify" />;
+    }
     return (
       <div className="App">
-        <NavBar />
+        <NavBar
+          onChange={this.onChange}
+          submitSignup={this.submitSignup}
+          submitLogin={this.submitLogin}
+          state={this.state}
+        />
         <div id="homepage">
           <div className="background-wrap gradient">
             <div className="hmpg-text">
               Who knows? <br />
-              Your date might turn <br />out to be <span className="d1">THE ONE</span>
+              Your date might turn <br />out to be
+              <span className="d1">THE ONE</span>
             </div>
             <div className="hmpg-btn">
-              <button className="btn btn-large modal-trigger waves-effect waves-light getStarted" data-target="signupModal" type="submit" name="action">
+              <button
+                className="btn btn-large modal-trigger waves-effect waves-light getStarted"
+                data-target="signupModal"
+                type="submit"
+                name="action"
+              >
                 GET STARTED
               </button>
             </div>
@@ -73,10 +175,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  ...state
-});
-const mapDispatchToProps = dispatch => ({
-  simpleAction: () => dispatch(simpleAction())
+  success: state.auth.success,
+  isLogged: state.auth.isLogged
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps,
+  { userSignUpRequest, userLoginRequest })(App);
