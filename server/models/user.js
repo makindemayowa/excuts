@@ -28,7 +28,8 @@ const UserSchema = new Schema({
     type: { type: String },
     coordinates: [],
   }
-});
+},
+{ timestamps: { createdAt: 'created_at' } });
 
 // Dunno why I did this...Next you want to tie an index to the schema:
 // UserSchema.index({ loc: '2dsphere' });

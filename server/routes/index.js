@@ -1,4 +1,5 @@
 const user = require('../controllers/user');
+const event = require('../controllers/events');
 const Validator = require('express-joi-validation');
 const dataValidators = require('../helpers/validator');
 const auth = require('../middlewares/authorisation');
@@ -18,4 +19,8 @@ module.exports = (app) => {
   app.put('/api/user', auth.checkToken, user.update);
   app.get('/api/user/:id', auth.checkToken, user.getOne);
   app.get('/api/user', auth.checkToken, user.getAll);
+  app.put('/api/event', auth.checkToken, event.update);
+  app.get('/api/event/:id', auth.checkToken, event.getOne);
+  app.get('/api/event', auth.checkToken, event.getAll);
+  app.delete('/api/event', auth.checkToken, event.delete);
 };
