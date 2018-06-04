@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import DashboardContainer from '../components/dashboard/DashboardContainer';
-const jwt = require('jsonwebtoken');
 
 class AuthContainer extends Component {
   render() {
-    const token = localStorage.getItem('tmo_token');
-    let isAuthenticated = false;
-    let user = {};
-    if (token) {
-      const decoded = jwt.decode(token)
-      user = decoded.userDetails
-      isAuthenticated = decoded.exp > Date.now() / 1000;
-    }
-  
+    const isAuthenticated = this.props.isAuthenticated;
+    const user = this.props.user;
     if (!isAuthenticated && (this.props.name === 'home' || this.props.name === 'verifymail')) {
       return <Route
         path={this.props.path}
@@ -49,7 +41,6 @@ class AuthContainer extends Component {
     }
   
     if (isAuthenticated && user.status === 'pending') {
-      console.log('hereeeee 444444')
       if (this.props.name === 'verify') {
         return <Route
           path={this.props.path}
@@ -78,7 +69,9 @@ class AuthContainer extends Component {
 
 const mapStateToProps = state => ({
   success: state.auth.success,
-  isLogged: state.auth.isLogged
+  isLogged: state.auth.isLogged,
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
 });
 const mapDispatchToProps = dispatch => ({});
 

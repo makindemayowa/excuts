@@ -1,4 +1,37 @@
 .profile {
+  .col .image_container {
+    max-height: 350px;
+    max-width: 362px;
+    margin-top: 10px;
+    background: #f5f5f5;
+    border-radius: 2px 2px 0 0;
+    overflow: hidden;
+  }
+  .upload_card {
+    max-width: 300px;
+  }
+  .txt-bs {
+    margin-left: -100px !important;
+  }
+  .image_upload_container {
+    max-width: 300px;
+    max-height: 300px;
+    position: relative;
+    overflow: hidden; 
+  }
+  #file {
+    width: 60%;
+    height: 100px;
+    background: rgba(150,225,150,0.5);
+    vertical-align: middle;
+    text-align: center;
+    padding: 0 20%;
+    margin-top: -334px;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 400px;
+    opacity: 0;
+  }
   .profile-image {
     // height: 250px;
   }
@@ -164,6 +197,12 @@
 
 @media only screen and (max-width: 530px) {
   .profile {
+    .txt-bs {
+      margin-left: auto !important;
+    }
+    .img-txt {
+      display: none;
+    }
     .submitContainer {
       text-align: center;
     }

@@ -42,6 +42,15 @@ const eventSchema = new Schema({
   status: {
     type: String,
   },
+  review: [{
+    reviewer: {
+      type: String,
+      required: true
+    },
+    review: {
+      type: String,
+    },
+  }],
 },
 { timestamps: { createdAt: 'created_at' } });
 

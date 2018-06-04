@@ -20,4 +20,15 @@ module.exports = {
     status: Joi.string(),
     loc: Joi.object(),
   }),
+  createEvent: Joi.object({
+    title: Joi.string().required(),
+    date: Joi.string().required(),
+    time: Joi.string().required(),
+    location: Joi.string().required(),
+    state: Joi.string().required(),
+    city: Joi.string().required(),
+    details: Joi.string().required(),
+    preference: Joi.string().required(),
+    extra: Joi.string().required(),
+  }),
 };

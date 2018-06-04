@@ -3,33 +3,22 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
 import SubNav from '../common/SubNav';
 import EventsCard from './EventsCard'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import './event.scss';
-
-
-const img = require('../../images/date2.jpg')
-const event = {
-  name: 'Movie',
-  time: '24th march, 2018',
-  venue: 'IMAX cinema, Lekki, Lagos',
-  city: 'Lekki',
-  state: 'Lagos',
-  photo: img,
-  createdBy: 'Oriyomi O.O',
-  preference: 'Only people staying on the mainland please',
-  details: "Avengers will be showing and I'll rather not watch it alone, It'll also be a good opportunity to know people around me",
-  extra: "Please note that I won't be paying for your transport. Just the movie is all"
-};
+import { getAllEventRequest } from '../../actions/events';
 
 class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      startDate: moment()
+      startDate: moment(),
+      events: []
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -39,8 +28,13 @@ class Events extends Component {
     M.FormSelect.init(select);
     const collapsible = document.querySelectorAll('.collapsible');
     M.Collapsible.init(collapsible);
-    // $('.collapsible').collapsible();
-    // $('select').formSelect();
+    this.props.getAllEventRequest().then(() => {
+      this.setState({
+        events: this.props.events
+      });
+      const collapsible = document.querySelectorAll('.collapsible');
+      M.Collapsible.init(collapsible);
+    });
   }
 
   handleChange(date) {
@@ -56,15 +50,17 @@ class Events extends Component {
         <div className="container">
           <div className="row">
             <div className="right createEvent">
-              <Link to="/new-event" class="btn-floating btn-large waves-effect waves-light"><i class="material-icons">add</i></Link>
+              <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
             </div>
           </div>
           <div className="row">
             <div className="col s12 m8 l10">
-              <EventsCard event={event} />
-              <EventsCard event={event} />
-              <EventsCard event={event} />
-              <EventsCard event={event} />
+              {
+                this.state.events.map((event) => <EventsCard
+                  event={event}
+                  key={event._id}
+                />)
+              }
             </div>
             <div className="col s12 m5 l2 searchForm">
               <div className="flex">
@@ -142,4 +138,18 @@ class Events extends Component {
   }
 }
 
-export default Events;
+Events.defaultProps = {
+  events: [],
+};
+
+Events.propTypes = {
+  events: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+};
+
+const mapStateToProps = state => ({
+  events: state.event.events,
+  pagination: state.event.pagination
+});
+
+export default connect(mapStateToProps,
+  { getAllEventRequest })(Events);

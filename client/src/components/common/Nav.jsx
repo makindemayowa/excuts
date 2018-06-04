@@ -48,7 +48,7 @@ class NavBar extends Component {
             </a>
             <a href="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></a>
             {
-              this.props.success ? (
+              this.props.isAuthenticated ? (
                 <ul className="right hide-on-med-and-down">
                   <li><Link to="#" onClick={this.logout}>Logout</Link></li>
                   <li><Link to="/" href="#" className="home-link"><i className="far fa-bell"></i></Link></li>
@@ -178,7 +178,7 @@ class NavBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  success: state.auth.success,
+  isAuthenticated: state.auth.isAuthenticated,
   islogged: state.auth.islogged,
   user: state.auth.user,
 });

@@ -217,8 +217,6 @@ exports.getCloseToMe = (req, res) => {
       }
     }
   ];
-  User.aggregate(query, (err, results) => {
-    console.log(results);
-  });
+  User.aggregate(query, (err, results) => {});
 };
 

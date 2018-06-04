@@ -2,6 +2,7 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import * as actionTypes from './actionType';
+import setAuthorisation from '../setAuthorisation'
 
 /**
  * Create an action to set currently logged in user
@@ -10,10 +11,11 @@ import * as actionTypes from './actionType';
  * @param {object} loggedInUser
  * @returns {object} type payload
  */
-export function setUser(loggedInUser) {
+export function setUser(loggedInUser, isAuthenticated) {
   return {
     type: actionTypes.SET_CURRENT_USER,
-    loggedInUser
+    loggedInUser,
+    isAuthenticated
   };
 }
 
@@ -35,7 +37,8 @@ export function userLoginRequest(userData) {
     const token = res.data.jsonToken;
     localStorage.setItem('tmo_token', token);
     const loggedInUser = jwtDecode(token).userDetails;
-    dispatch(setUser(loggedInUser));
+    setAuthorisation(token)
+    dispatch(setUser(loggedInUser, true));
   });
 }
 
@@ -67,6 +70,7 @@ export function updateUserDetails(id, userDetails) {
       const token = res.data.jsonToken;
       localStorage.setItem('token', token);
       const loggedInUser = jwtDecode(token).userDetails;
+      setAuthorisation(token)
       dispatch(setUser(loggedInUser));
     });
 }
@@ -85,8 +89,9 @@ export function verifyUserRequest(token) {
       const token = res.data.jsonToken;
       localStorage.setItem('tmo_token', token);
       const loggedInUser = jwtDecode(token).userDetails;
-      dispatch(setUser(loggedInUser));
-    });
+      setAuthorisation(token)
+      dispatch(setUser(loggedInUser, true));
+    }).catch((err) => {})
 }
 
 /**

@@ -28,7 +28,7 @@ export default props => (
           <span>
             <strong>Venue: &nbsp;&nbsp;</strong>
           </span>
-          {props.event.venue}
+          {props.event.location}
         </div>
         <div className="">
           <span>
@@ -43,9 +43,9 @@ export default props => (
           {props.event.extra}
         </div>
         <div className="bottom_margin" />
-        <Link to="/profile">
+        <Link to="/publicprofile">
           <div className="cardfooter">
-            {`Created By: ${props.event.createdBy}`}
+            {`Created By: ${props.event.created_by.email}`}
           </div>
         </Link>
       </div>
@@ -53,7 +53,7 @@ export default props => (
         <li>
           <div className="collapsible-header text-center">
             <i className="material-icons">message</i>
-            {`Reviews for ${props.event.createdBy}`}</div>
+            {`Reviews for ${props.event.created_by.email}`}</div>
           <div className="collapsible-body">
             <div className="row">
               <div className="">
