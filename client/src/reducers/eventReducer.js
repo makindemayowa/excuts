@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionType';
 
 const initialState = {
   events: {},
+  event: {},
   pagination: {},
   success: false,
 };
@@ -19,11 +20,20 @@ export default (state = initialState, action) => {
         ...state,
         success: true,
       };
+    case actionTypes.GET_ONE_EVENT_SUCCESS:
+      return {
+        ...state,
+        event: action.event,
+      };
     case actionTypes.GET_ALL_EVENT_SUCCESS:
       return {
         ...state,
         events: action.events,
         pagination: action.pagination,
+      };
+    case actionTypes.INTERESTED_SUCCESS:
+      return {
+        ...state,
       };
     default:
       return state;

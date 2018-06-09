@@ -1,3 +1,10 @@
+.emptyProfile {
+  margin-top: 100px;
+  min-height: 50vh;
+  a {
+    color: #ff6666;
+  }
+}
 .profile {
   .col .image_container {
     max-height: 350px;
@@ -8,12 +15,14 @@
     overflow: hidden;
   }
   .upload_card {
+    cursor: pointer;
     max-width: 300px;
   }
   .txt-bs {
     margin-left: -100px !important;
   }
   .image_upload_container {
+    cursor: pointer;
     max-width: 300px;
     max-height: 300px;
     position: relative;

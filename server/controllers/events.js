@@ -42,10 +42,12 @@ exports.updateReview = (req, res) => {
   Events.findOneAndUpdate({
     _id: req.params.id
   },
-    { $set: {
-      review: req.body.review,
-      reviewer: req.user._id
-    } }, { new: true }, (err, response) => {
+    {
+      $set: {
+        // 'review.review': req.body.review,
+        // 'review.reviewer': req.user.id
+      }
+    }, { new: true }, (err, response) => {
       if (!response) {
         return res.status(400).send({ message: 'An error occurred' });
       }
@@ -54,23 +56,51 @@ exports.updateReview = (req, res) => {
     });
 };
 
-// exports.deleteReview = (req, res) => {
-//   Events.findOne(
-//     { _id: req.params.id, reviewer: req.user._id, }, (err, review) => {
-//       if (!review) {
-//         return res.status(404).send({ message: 'review not found' });
-//       }
-//       if (err) return res.status(500).send({ err });
-//       if (review) {
-//         Review.remove({ _id: req.params.id },
-//           () => res.status(204).send({ message: 'success' }));
-//       }
-//     });
-// };
+exports.interested = (req, res) => {
+  Events.findOne({
+    _id: req.params.id,
+    created_by: { $ne: req.user.id }
+  }).then((event) => {
+    if (!event) {
+      res.status(404)
+        .send({ message: 'Event not found' });
+    } else {
+      const index = event.interested.findIndex(
+        interested => interested._id == req.user.id
+      );
+      if (index !== -1) {
+        return res.status(400)
+          .send({
+            message: 'You have already signified interest for this event'
+          });
+      }
+      event.interested.push(req.user.id);
+      event.save((err, updatedInterest) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        global.io.sockets.emit('user_interested', {
+          user: req.user.email,
+          owner: event.created_by._id
+        });
+        return res.status(200)
+          .send({ message: 'Success', updatedInterest });
+      });
+    }
+  }).catch((err) => {
+    if (err) return res.status(500).send({ err });
+  });
+};
 
 exports.getOne = (req, res) => {
-  Events.findOne({ _id: req.params.id },
-    (err, event) => {
+  Events
+    .findOne({ _id: req.params.id })
+    .populate('created_by')
+    .sort({
+      'reviews.created_at': 1
+    })
+    .populate('reviews')
+    .exec((err, event) => {
       if (!event) {
         return res.status(404).send({ message: 'Event not found' });
       }
@@ -91,8 +121,12 @@ exports.getAll = (req, res) => {
     .find(query)
     .skip(offset)
     .limit(limit)
-    .sort({ created_at: -1 })
+    .sort({
+      created_at: -1,
+      'reviews.created_at': -1
+    })
     .populate('created_by')
+    .populate('reviews')
     .exec((err, events) => {
       if (!events.length) {
         return res.status(404).send({ message: 'No event found' });

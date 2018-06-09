@@ -5,6 +5,7 @@ const initialState = {
   success: false,
   isAuthenticated: false,
   user: {},
+  userDetails: {},
 };
 
 /**
@@ -28,6 +29,11 @@ export default (state = initialState, action) => {
         success: true,
         isAuthenticated: action.isAuthenticated,
         user: action.loggedInUser,
+      };
+    case actionTypes.SET_USER_DETAILS:
+      return {
+        ...state,
+        userDetails: action.userDetails,
       };
     case actionTypes.LOGOUT:
       return {

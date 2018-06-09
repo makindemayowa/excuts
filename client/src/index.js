@@ -6,7 +6,11 @@ import configureStore from './store';
 import './scss/index.scss';
 import AuthContainer from './containers/Auth'
 import routes from './Routes';
+const io = require('socket.io-client');
 
+const socket = io.connect();
+
+export default socket;
 // One degree of latitude =  111.66 km or  69.38 mi
 
 // window.navigator.geolocation.getCurrentPosition(function (pos) {

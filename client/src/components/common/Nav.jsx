@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Redirect } from 'react-router-dom';
+import socket from '../../index';
 import Login from '../landingPage/Login';
 import Signup from '../landingPage/Signup';
 import { Link } from 'react-router-dom';
@@ -13,13 +14,29 @@ class NavBar extends Component {
     super();
     this.state = {
       logged: true,
+      notifications: [{
+        message: `is interested in your event`
+      }]
     }
     this.logout = this.logout.bind(this);
+    this.handleNotification = this.handleNotification.bind(this);
     this.sidenav = '';
   }
   componentDidMount() {
     const elems = document.querySelectorAll('.sidenav');
     this.sidenav = M.Sidenav.init(elems);
+    const dropdown = document.querySelectorAll('.dropdown-trigger');
+    M.Dropdown.init(dropdown);
+    socket.on('user_interested', (msg) => this.handleNotification(msg));
+  }
+
+  handleNotification(msg) {
+    const user = this.props.user;
+    if (msg.owner === user.id) {
+      this.state.notifications.push({
+        message: `${msg.user} is interested in your event`
+      })
+    }
   }
 
   logout() {
@@ -32,6 +49,8 @@ class NavBar extends Component {
 
   render() {
     const { logged } = this.state;
+    // const notificationsCount = this.state.notifications.length;
+    const notificationsCount = 3;
     if (!logged) {
       return <Redirect to="/" />
     }
@@ -51,7 +70,19 @@ class NavBar extends Component {
               this.props.isAuthenticated ? (
                 <ul className="right hide-on-med-and-down">
                   <li><Link to="#" onClick={this.logout}>Logout</Link></li>
-                  <li><Link to="/" href="#" className="home-link"><i className="far fa-bell"></i></Link></li>
+                  <li><Link
+                    to="/"
+                    href="#"
+                    data-target='dropdown1'
+                    className="dropdown-trigger home-link"
+                    onKeyDown={() => this.setState({
+                      notifications: []
+                    })}
+                  >
+                      <i className="far fa-bell"></i>
+                    </Link>
+                    <span className="red-text">{notificationsCount > 0 && notificationsCount}</span>
+                  </li>
                 </ul>
               ) :
                 <ul className="right hide-on-med-and-down">
@@ -61,6 +92,13 @@ class NavBar extends Component {
             }
           </div>
         </nav>
+        <ul id='dropdown1' class='dropdown-content'>
+        {
+          this.state.notifications.map((notification) => <li>
+            {notification.message}
+          </li>)
+        }
+        </ul>
         <ul className="sidenav" id="mobile-demo">
           {
             this.props.user.status === 'verified' && (

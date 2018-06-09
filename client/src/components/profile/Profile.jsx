@@ -2,11 +2,14 @@
 /* global M */
 
 import React, { Component } from 'react';
-import ProfileCard from './ProfileCard';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import SubNav from '../common/SubNav';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import './profile.scss';
+import { updateUserDetails, getUserDetails } from '../../actions/auth';
+import ProfileCard from './ProfileCard';
 
 const img = require('../../images/quote1.jpg');
 
@@ -34,6 +37,7 @@ class Profile extends Component {
       phone_no: '',
       public: true,
       about: '',
+      here_to: '',
       here_for_fun: false,
       here_to_hire: false,
       professional: false,
@@ -48,18 +52,37 @@ class Profile extends Component {
       error: '',
       imgurl: '',
       myfile: '',
+      success: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    // this.toggleChange = this.toggleChange.bind(this);
+    this.toggleChange = this.toggleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    const select = document.querySelectorAll('select');
-    M.FormSelect.init(select);
-    const materialboxed = document.querySelectorAll('.materialboxed');
-    M.Materialbox.init(materialboxed);
-    $('input#input_text, textarea#textarea1').characterCounter();
+    this.props.getUserDetails().then(() => {
+      this.setState({
+        age: this.props.user.age || '',
+        sex: this.props.user.sex || '',
+        country: this.props.user.country || '',
+        state: this.props.user.state || '',
+        city: this.props.user.city || '',
+        best_time: this.props.user.best_time || '',
+        occupation: this.props.user.occupation || '',
+        education: this.props.user.education || '',
+        phone_no: this.props.user.phone_no || '',
+        public: this.props.user.public || true,
+        about: this.props.user.about || '',
+        here_to: this.props.user.here_to || '',
+      }, () => {
+        const select = document.querySelectorAll('select');
+        M.FormSelect.init(select);
+        const materialboxed = document.querySelectorAll('.materialboxed');
+        M.Materialbox.init(materialboxed);
+        $('input#input_text, textarea#textarea1').characterCounter();
+      });
+    })
   }
   onChange(e) {
     this.setState({
@@ -85,23 +108,53 @@ class Profile extends Component {
         item.checked = true
         this.setState({
           [item.id]: true,
+          here_to: [item.id],
         });
       }
     })
   }
 
-  onSubmit(e) {
-    if (this.state.about.length > 120) {
-      return 'error'
-    }
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: !this.state[e.target.name],
+    });
   }
 
-  handleClick = (data) => {
+  onSubmit(e) {
+    e.preventDefault();
+    const userDetails = {
+      age: this.state.age,
+      sex: this.state.sex,
+      country: this.state.country,
+      state: this.state.state,
+      city: this.state.city,
+      best_time: this.state.best_time,
+      occupation: this.state.occupation,
+      education: this.state.education,
+      phone_no: this.state.phone_no,
+      public: true,
+      about: this.state.about,
+      here_to: this.state.here_to,
+      time1: this.state.time1,
+      rate1: this.state.rate1,
+      time2: this.state.time2,
+      rate2: this.state.rate2,
+      time3: this.state.time3,
+      rate3: this.state.rate3,
+      time4: this.state.time4,
+      rate4: this.state.rate4,
+      imgurl: this.state.age,
+    }
+    this.props.updateUserDetails(userDetails).then(() => {
+      this.setState({
+        success: true,
+      });
+    })
   }
 
   render() {
-    if (this.state.here_for_fun) {
-
+    if (this.state.success) {
+      return <Redirect to="/publicprofile" />;
     }
     return (
       <div>
@@ -113,6 +166,7 @@ class Profile extends Component {
               <div className="my_bold">Profile Photo</div>
               <div className="col s6 m6 l6">
                 <div>
+                  {console.log(this.props.user)}
                   <div className="row">
                     <div className="col s12 m12 l8">
                       <div>
@@ -122,8 +176,8 @@ class Profile extends Component {
                             ref='cropper'
                             src={img}
                             autoCropArea={1.0}
-                            style={{ height: 512, width: 600 }}
-                            aspectRatio={16 / 9}
+                            style={{ 'max-height': 300, 'max-width': 340 }}
+                            aspectRatio={16 / 12}
                             cropBoxResizable={false}
                             crop={this._crop.bind(this)}
                           />
@@ -131,26 +185,29 @@ class Profile extends Component {
                       </div>
                       <div>
                         {
-                          this.state.savedAlready ?
-                            <div className="card">
-                              <div className="card-image image_container">
-                                <img alt="" className="profile-image" src={img} />
+                          !this.state.imgurl &&
+                          (
+                            this.state.savedAlready ?
+                              <div className="card">
+                                <div className="card-image image_container">
+                                  <img alt="" className="profile-image" src={img} />
+                                </div>
+                                <div className="">
+                                  <i className="far fa-trash-alt delete" />
+                                </div>
+                              </div> :
+                              <div className="card upload_card">
+                                <div className="card-image image_upload_container">
+                                  <img alt="" className="profile-image" src={require('../../images/upload.jpg')} />
+                                  <input
+                                    name="imgurl"
+                                    type="file"
+                                    id="file"
+                                    onChange={this.onChange}
+                                  />
+                                </div>
                               </div>
-                              <div className="">
-                                <i className="far fa-trash-alt delete" />
-                              </div>
-                            </div> :
-                            <div className="card upload_card">
-                              <div className="card-image image_upload_container">
-                                <img alt="" className="profile-image" src={require('../../images/upload.jpg')} />
-                                <input
-                                  name="imgurl"
-                                  type="file"
-                                  id="file"
-                                  onChange={this.onChange}
-                                />
-                              </div>
-                            </div>
+                          )
                         }
                       </div>
                     </div>
@@ -188,101 +245,101 @@ class Profile extends Component {
               </div>
             </div>
           </div>
-          <div className="container">
-            <div className="">
-              <span className="my_bold">PERSONAL DETAILS</span>
-            </div>
-            <div className="row">
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="Age"
-                  name="age"
-                  type="number"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.age}
-                />
+          <form onSubmit={this.onSubmit}>
+            <div className="container">
+              <div className="">
+                <span className="my_bold">PERSONAL DETAILS</span>
               </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="Sex"
-                  name="sex"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.sex}
-                />
+              <div className="row">
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Age"
+                    name="age"
+                    type="number"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.age}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Sex"
+                    name="sex"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.sex}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Country"
+                    name="country"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.country}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="State"
+                    name="state"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.state}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="City"
+                    name="city"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.city}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Best time to reach you"
+                    name="best_time"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.best_time}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Occupation"
+                    name="occupation"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.occupation}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Education"
+                    name="education"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.education}
+                  />
+                </div>
               </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="Country"
-                  name="country"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.country}
-                />
-              </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="State"
-                  name="state"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.state}
-                />
-              </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="City"
-                  name="city"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.city}
-                />
-              </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="Best time to reach you"
-                  name="best_time"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.best_time}
-                />
-              </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="Occupation"
-                  name="occupation"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.occupation}
-                />
-              </div>
-              <div className="col s4 m4 l3">
-                <input
-                  placeholder="Education"
-                  name="education"
-                  type="text"
-                  className="validate"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.education}
-                />
-              </div>
-            </div>
-            <form action="">
               <div className="row">
                 <div className="col s4 m4 l3">
                   <input
@@ -303,42 +360,40 @@ class Profile extends Component {
                       id="show"
                       name="public"
                       checked={this.state.public}
-                      onChange={this.toggleChange}
+                      onChange={this.handleChange}
                     />
                     <span>Make Public</span>
                   </label>
                 </span>
               </div>
-            </form>
-          </div>
-          <div className="container">
-            <div className="bottom_margin" />
-            <div className="">
-              <span className="my_bold">ABOUT YOURSELF</span>
             </div>
-            <div className="bottom_margin" />
-            <div className="row">
-              <div className="col s12">
-                <textarea
-                  placeholder="Tell us about yourself..."
-                  id="about"
-                  className="materialize-textarea"
-                  data-length="120"
-                  maxlength="120"
-                  name="about"
-                  value={this.state.about}
-                  onChange={this.onChange}
-                />
+            <div className="container">
+              <div className="bottom_margin" />
+              <div className="">
+                <span className="my_bold">ABOUT YOURSELF</span>
+              </div>
+              <div className="bottom_margin" />
+              <div className="row">
+                <div className="col s12">
+                  <textarea
+                    placeholder="Tell us about yourself..."
+                    id="about"
+                    className="materialize-textarea"
+                    data-length="120"
+                    maxlength="120"
+                    name="about"
+                    value={this.state.about}
+                    onChange={this.onChange}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="container">
-            <div className="">
-              <span className="my_bold">PREFERENCE</span>
-            </div>
-            <div className="bottom_margin" />
-            <div className="row">
-              <form action="">
+            <div className="container">
+              <div className="">
+                <span className="my_bold">PREFERENCE</span>
+              </div>
+              <div className="bottom_margin" />
+              <div className="row">
                 <span className="col s12 m4 l4">
                   <label>
                     <input
@@ -346,7 +401,7 @@ class Profile extends Component {
                       className="filled-in checkbox-color"
                       id="here_for_fun"
                       name="1"
-                      onClick={this.toggleChange.bind(this)}
+                      onClick={this.toggleChange}
                     />
                     <span>I'm just here to have fun</span>
                   </label>
@@ -358,7 +413,7 @@ class Profile extends Component {
                       className="filled-in checkbox-color"
                       id="here_to_hire"
                       name="1"
-                      onClick={this.toggleChange.bind(this)}
+                      onClick={this.toggleChange}
                     />
                     <span>I'm here to hire</span>
                   </label>
@@ -370,152 +425,126 @@ class Profile extends Component {
                       className="filled-in checkbox-color"
                       id="professional"
                       name="1"
-                      onClick={this.toggleChange.bind(this)}
+                      onClick={this.toggleChange}
                     />
                     <span>Professional Escort</span>
                   </label>
                 </span>
-              </form>
-            </div>
+              </div>
 
-            {
-              this.state.professional &&
-              <div className="row">
+              {
+                this.state.professional &&
                 <div className="row">
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="2 hours"
-                      name="time1"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.time1}
-                    />
+                  <div className="row">
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="2 hours"
+                        name="time1"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.time1}
+                      />
+                    </div>
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="#1,000"
+                        name="rate1"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.rate1}
+                      />
+                    </div>
                   </div>
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="#1,000"
-                      name="rate1"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.rate1}
-                    />
+                  <div className="row">
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="8 hours"
+                        name="time2"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.time2}
+                      />
+                    </div>
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="#2,000"
+                        name="rate2"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.rate2}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="Weekend"
+                        name="time3"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.time3}
+                      />
+                    </div>
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="#3,000"
+                        name="rate3"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.rate3}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="Tour"
+                        name="time4"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.time4}
+                      />
+                    </div>
+                    <div className="col s6 m4 l4">
+                      <input
+                        placeholder="#5,000"
+                        name="rate4"
+                        type="text"
+                        className="validate"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.rate4}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="8 hours"
-                      name="time2"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.time2}
-                    />
-                  </div>
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="#2,000"
-                      name="rate2"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.rate2}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="Weekend"
-                      name="time3"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.time3}
-                    />
-                  </div>
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="#3,000"
-                      name="rate3"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.rate3}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="Tour"
-                      name="time4"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.time4}
-                    />
-                  </div>
-                  <div className="col s6 m4 l4">
-                    <input
-                      placeholder="#5,000"
-                      name="rate4"
-                      type="text"
-                      className="validate"
-                      required
-                      onChange={this.onChange}
-                      value={this.state.rate4}
-                    />
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-          {/* <div className="container">
-            <div className="row">
-              <div className="my_bold">PHOTOS</div>
-              <p>Upload images for your photos section and try to mix different photo styles <br />
-                Please try to upload high resolution images
-            </p>
-              <p className="warning-text">
-                ***We’re not asking you to put on your Sunday best; just try to keep it classy and appropriate for public consumption.
-                No nudity, no sexually explicit content, no sex toys.
-                Photos that violate these guidelines may be deleted, and the most severe cases may result in account removal.***
-            </p>
+              }
             </div>
-            <div className="new_uploads">
-              <div className="row">
-                <ProfileCard
-                  userInfo={userInfo}
-                />
-                <ProfileCard
-                  userInfo={userInfo}
-                />
-                <ProfileCard
-                  userInfo={userInfo}
-                />
-                <ProfileCard
-                  userInfo={userInfo}
-                />
-                <div className="col s12 m12 l12 upload-more">
-                  <a className="waves-effect waves-light btn upload-more-button"><i className="fas fa-cloud-upload-alt fa-3x left" />UPLOAD MORE PHOTOS</a>
-                </div>
-              </div>
+            <div className="submitContainer">
+              <button
+                className="waves-effect waves-light btn save-btn"
+                type="submit"
+                name="action"
+              >Save</button>
+              <button
+                className="waves-effect waves-light btn cancel-btn"
+              >Cancel</button>
             </div>
-          </div> */}
-          <div className="submitContainer">
-            <a className="waves-effect waves-light btn save-btn">Save</a>
-            <a className="waves-effect waves-light btn cancel-btn">Cancel</a>
-          </div>
+          </form>
           <div className="bottom_margin" />
         </div>
       </div>
@@ -523,4 +552,12 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+  success: state.auth.success,
+  user: state.auth.userDetails,
+  isLogged: state.auth.isLogged
+});
+
+export default connect(mapStateToProps,
+  { updateUserDetails, getUserDetails })(Profile);
+

@@ -61,6 +61,7 @@
     background-color: #fff;
     color: #000;
     border: 0.3px solid #cccccc;
+    max-height: 200px;
     .cardfooter {
       font-style: italic;
       font-size: 12px;
@@ -189,6 +190,40 @@
     background-color: #e5e5e5;
     color: #000
   }
+  .created_by {
+    margin-right: 14px;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+}
+.showinterest {
+  font-size: 14px
+}
+.interested {
+  font-size: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.notinterested {
+  font-size: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+  color: black
+}
+.infocus {
+  color: #ff6666;
+}
+.submitReview {
+  margin-top: -15px;
+}
+.review {
+  border: solid 0.3px #E3E3E3;
+  padding: 10px
+}
+.reviewer {
+  font-style: italic;
+  color: #ff6666;
+  font-size: 12px
 }
 .collapsible-header {
   outline: 0

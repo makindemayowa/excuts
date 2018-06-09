@@ -3,6 +3,8 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getUserDetails } from '../../actions/auth';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
@@ -28,44 +30,35 @@ class PublicProfile extends Component {
     super(props);
     this.state = {
       startDate: moment(),
-      currentImg: ''
+      currentImg: '',
+      user: this.props.user || {}
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
-    const carousel = document.querySelectorAll('.carousel');
-    M.Carousel.init(carousel, {
-      duration: 100,
-      indicators: true,
-      onCycleTo: (data) => {
-        const currentImg = data.getElementsByTagName('img')[0];
-        this.setState({
-          currentImg: currentImg.src
+    this.props.getUserDetails().then(() => {
+      this.setState({
+        user: this.props.user
+      }, () => {
+        const carousel = document.querySelectorAll('.carousel');
+        const materialboxed = document.querySelectorAll('.materialboxed');
+        const collapsible = document.querySelectorAll('.collapsible');
+        M.Collapsible.init(collapsible);
+        M.Carousel.init(carousel, {
+          duration: 100,
+          indicators: true,
+          onCycleTo: (data) => {
+            const currentImg = data.getElementsByTagName('img')[0];
+            this.setState({
+              currentImg: currentImg.src
+            });
+          }
         });
-      }
-    });
-    const materialboxed = document.querySelectorAll('.materialboxed');
-    M.Materialbox.init(materialboxed);
-    const collapsible = document.querySelectorAll('.collapsible');
-    M.Collapsible.init(collapsible);
-    // $('.carousel').carousel({
-    //   indicators: true,
-    // });
-    // $('.materialboxed').materialbox();
-    // $('.collapsible').collapsible();
-    $('input#input_text, textarea#textarea1').characterCounter();
-
-    // $('.carousel').carousel({
-    //   duration: 100,
-    //   indicators: true,
-    //   onCycleTo: (data) => {
-    //     const currentImg = data.getElementsByTagName("img")[0];
-    //    this.setState({
-    //     currentImg: currentImg.src
-    //    })
-    //  }
-    // });
+        M.Materialbox.init(materialboxed);
+        $('input#input_text, textarea#textarea1').characterCounter();
+      });
+    })
   }
 
   handleChange(date) {
@@ -75,9 +68,12 @@ class PublicProfile extends Component {
   }
 
   render() {
+    const { user } = this.state
     return (
       <div>
         <SubNav currentPage={'profile'} />
+        {
+          Object.keys(user).length !== 0 ?
         <div className="publicProfile container">
           <div className="bottom_margin" />
           <div className="row">
@@ -119,11 +115,7 @@ class PublicProfile extends Component {
               About
             </div>
             <p>
-              Material box is a material design implementation of the Lightbox plugin.
-              When a user clicks on an image that can be enlarged,
-              Material box centers the image and enlarges it in a smooth,
-              non-jarring manner. To dismiss the image, the user can either click on the image again,
-              scroll away, or press the ESC key.
+              {user.about}
             </p>
           </div>
           <div className="row">
@@ -135,7 +127,7 @@ class PublicProfile extends Component {
                 Age
               </p>
               <p className="col s6 m4 l3">
-                19
+                {user.age}
               </p>
             </div>
             <div className="row">
@@ -143,7 +135,7 @@ class PublicProfile extends Component {
                 Country
               </p>
               <p className="col s6 m4 l3">
-                Nigeria
+                {user.country}
               </p>
             </div>
             <div className="row">
@@ -151,7 +143,7 @@ class PublicProfile extends Component {
                 State
               </p>
               <p className="col s6 m4 l3">
-                Ogun
+                {user.state}
               </p>
             </div>
             <div className="row">
@@ -159,81 +151,92 @@ class PublicProfile extends Component {
                 City
             </p>
               <p className="col s6 m4 l3">
-                Abeokuta
-            </p>
+                {user.city}
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 Phone No
             </p>
               <p className="col s6 m4 l3">
-                070223344567
-            </p>
+                {user.phone_no}
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 Best time to reach me
             </p>
               <p className="col s6 m4 l3">
-                Anytime from 8p.m
-            </p>
+                {user.best_time}
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 Occupation
             </p>
               <p className="col s6 m4 l3">
-                Software developer
-            </p>
+                {user.occupation}
+              </p>
             </div>
             <div className="row">
               <p className="col s6 m4 l3">
                 Education
             </p>
               <p className="col s6 m4 l3">
-                B.Sc Computer Science
-            </p>
+                {user.education}
+              </p>
             </div>
           </div>
           <div className="row">
             <div className="my_bold">
               Rates
           </div>
-            <p>
-              I'm just here to have fun
-          </p>
-            <div className="row">
-              <p className="col s6 m4 l3">
-                2 hours
-            </p>
-              <p className="col s6 m4 l3">
-                #13,000
-            </p>
-            </div>
-            <div className="row">
-              <p className="col s6 m4 l3">
-                8 hours
-            </p>
-              <p className="col s6 m4 l3">
-                #25,000
-            </p>
-            </div>
-            <div className="row">
-              <p className="col s6 m4 l3">
-                Weekend
-            </p>
-              <p className="col s6 m4 l3">
-                #250,000
-            </p>
-            </div>
-            <div className="row">
-              <p className="col s6 m4 l3">
-                Tour
-            </p>
-              <p className="col s6 m4 l3">
-                #1,000,000
-            </p>
-            </div>
+            {user.here_to === 'here_for_fun' &&
+              <p>
+                I'm just here to have fun
+              </p>
+            }
+            {user.here_to === 'here_to_hire' &&
+              <p>
+                I'm here to hire
+              </p>
+            }
+            {user.here_to === 'professional' &&
+              <div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    2 hours
+                  </p>
+                  <p className="col s6 m4 l3">
+                    #13,000
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    8 hours
+                  </p>
+                  <p className="col s6 m4 l3">
+                    #25,000
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Weekend
+                  </p>
+                  <p className="col s6 m4 l3">
+                    #250,000
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Tour
+                  </p>
+                  <p className="col s6 m4 l3">
+                    #1,000,000
+                  </p>
+                </div>
+              </div>
+            }
           </div>
           <div className="row">
             <div className="my_bold">
@@ -322,10 +325,19 @@ class PublicProfile extends Component {
             </li>
           </ul>
           <div className="bottom_margin" />
-        </div>
+        </div>: 
+        <h5 className="emptyProfile center">Please update your profile
+          <Link to="/profile">&nbsp;here</Link>
+        </h5>
+        }
       </div>
     );
   }
 }
 
-export default PublicProfile;
+const mapStateToProps = state => ({
+  user: state.auth.userDetails,
+});
+
+export default connect(mapStateToProps,
+  { getUserDetails })(PublicProfile);

@@ -10,14 +10,14 @@ import Footer from '../common/Footer';
 
 class App extends Component {
   render() {
-    const Comp = this.props.Comp
+    const Comp = this.props.Comp    
     return (
       <div className="App">
         {
           this.props.auth.isLogged ?
             <div>
-              <NavBar isLogged={this.props.auth.isLogged}/>
-              <Comp />
+              <NavBar {...this.props} isLogged={this.props.auth.isLogged}/>
+              <Comp {...this.props}/>
               <Footer />
             </div> :
             <div>

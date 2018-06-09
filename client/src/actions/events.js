@@ -32,6 +32,35 @@ export function getAllSuccess(events, pagination) {
 }
 
 /**
+ * Create an action to set all events
+ *
+ * @export
+ * @param {object} event
+ * @returns {object} type payload
+ */
+export function getOneSuccess(event) {
+  return {
+    type: actionTypes.GET_ONE_EVENT_SUCCESS,
+    event
+  };
+}
+
+/**
+ * Create an action to show interested users in an event
+ *
+ * @export
+ * @param {string} id
+ * @returns {object} type payload
+ */
+export function interestedSuccess(event) {
+  return {
+    type: actionTypes.INTERESTED_SUCCESS,
+    event
+  };
+}
+
+
+/**
  * Request to the API to create an event
  *
  * @export
@@ -56,5 +85,45 @@ export function getAllEventRequest() {
     const events = res.data.events;
     const pagination = res.data.pagination;
     dispatch(getAllSuccess(events, pagination));
+  });
+}
+
+/**
+ * Request to the API to get available events
+ *
+ * @export
+ * @returns {object} dispatch object
+ */
+export function getOneEventRequest(id) {
+  return dispatch => axios.get(`/api/event/${id}`).then((res) => {
+    const event = res.data.event;
+    dispatch(getOneSuccess(event));
+  });
+}
+
+/**
+ * Request to the API to get post a review
+ *
+ * @export
+ * @returns {object} dispatch object
+ */
+export function postReviewRequest(id, review) {
+  return dispatch => axios.post(`/api/event/${id}/review`, {review}).then((res) => {
+    const events = res.data.events;
+    const pagination = res.data.pagination;
+    dispatch(getAllSuccess(events, pagination));
+  });
+}
+
+/**
+ * Request to the API to get post a review
+ *
+ * @export
+ * @returns {object} dispatch object
+ */
+export function postInterestedRequest(id) {
+  return dispatch => axios.put(`/api/event/${id}/interested`).then((res) => {
+    const event = res.data.event;
+    dispatch(interestedSuccess(event));
   });
 }

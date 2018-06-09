@@ -19,6 +19,20 @@ export function setUser(loggedInUser, isAuthenticated) {
   };
 }
 
+/**
+ * Create an action to set currently logged in user
+ *
+ * @export
+ * @param {object} loggedInUser
+ * @returns {object} type payload
+ */
+export function setDetails(userDetails) {
+  return {
+    type: actionTypes.SET_USER_DETAILS,
+    userDetails,
+  };
+}
+
 export function success() {
   return {
     type: actionTypes.SIGNUP_SUCCESS,
@@ -64,14 +78,29 @@ export function userSignUpRequest(userData) {
  * @param {object} userDetails
  * @returns {object} dispatch object
  */
-export function updateUserDetails(id, userDetails) {
+export function updateUserDetails(userDetails) {
   return dispatch =>
-    axios.put(`/api/v1/users/${id}`, userDetails).then((res) => {
+    axios.put('/api/user', userDetails).then((res) => {
       const token = res.data.jsonToken;
-      localStorage.setItem('token', token);
-      const loggedInUser = jwtDecode(token).userDetails;
+      localStorage.setItem('tmo_token', token);
+      const updatedUser = jwtDecode(token).userDetails;
       setAuthorisation(token)
-      dispatch(setUser(loggedInUser));
+      dispatch(setUser(updatedUser));
+    });
+}
+
+/**
+ * Request to the API to update an existing user
+ *
+ * @export
+ * @param {number} id
+ * @param {object} userDetails
+ * @returns {object} dispatch object
+ */
+export function getUserDetails() {
+  return dispatch =>
+    axios.get('/api/user').then((res) => {
+      dispatch(setDetails(res.data.user));
     });
 }
 

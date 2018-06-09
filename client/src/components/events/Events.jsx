@@ -11,16 +11,19 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import './event.scss';
-import { getAllEventRequest } from '../../actions/events';
+import { getAllEventRequest, postReviewRequest } from '../../actions/events';
 
 class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
       startDate: moment(),
-      events: []
+      events: [],
+      review: ''
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.createReview = this.createReview.bind(this);
   }
 
   componentDidMount() {
@@ -37,9 +40,36 @@ class Events extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const events = nextProps.events;
+    this.setState({
+      events,
+    });
+  }
+
   handleChange(date) {
     this.setState({
       startDate: date
+    });
+  }
+
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+      error: ''
+    });
+  }
+
+  createReview(id) {
+    const review = this.state.review
+    this.props.postReviewRequest(id, review).then((res) => {
+      this.props.getAllEventRequest().then(() => {
+        const collapsible = document.querySelectorAll('.collapsible');
+        M.Collapsible.init(collapsible);
+      });
+      this.setState({
+        review: ''
+      });
     });
   }
 
@@ -55,14 +85,20 @@ class Events extends Component {
           </div>
           <div className="row">
             <div className="col s12 m8 l10">
-              {
-                this.state.events.map((event) => <EventsCard
-                  event={event}
-                  key={event._id}
-                />)
-              }
+              <div className="row">
+                {
+                  this.state.events.map((event) => <EventsCard
+                    event={event}
+                    id={event._id}
+                    key={event._id}
+                    onChange={this.onChange}
+                    review={this.state.review}
+                    createReview={this.createReview}
+                  />)
+                }
+              </div>
             </div>
-            <div className="col s12 m5 l2 searchForm">
+            <div className="col s12 m4 l2 searchForm">
               <div className="flex">
                 <div className="form-fields">
                   <label>Interested in</label>
@@ -152,4 +188,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps,
-  { getAllEventRequest })(Events);
+  { getAllEventRequest, postReviewRequest })(Events);

@@ -3,6 +3,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Profile from './components/profile/Profile';
 import PublicProfile from './components/profile/PublicProfile';
 import Events from './components/events/Events';
+import EventDetails from './components/events/EventDetails';
 import CreateEvent from './components/events/CreateEvent';
 import SearchEscorts from './components/search/SearchEscorts';
 import SearchEvents from './components/search/SearchEvents';
@@ -40,6 +41,13 @@ export default [
     exact: true
   },
   {
+    name: 'publicProfile',
+    path: '/publicProfile/:id',
+    secured: true,
+    component: PublicProfile,
+    exact: true
+  },
+  {
     name: 'events',
     path: '/events',
     secured: true,
@@ -51,6 +59,13 @@ export default [
     path: '/new-event',
     secured: true,
     component: CreateEvent,
+    exact: true
+  },
+  {
+    name: 'event-detail',
+    path: '/event/:id',
+    secured: true,
+    component: EventDetails,
     exact: true
   },
   {
