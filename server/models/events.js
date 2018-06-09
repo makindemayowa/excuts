@@ -42,14 +42,15 @@ const eventSchema = new Schema({
   status: {
     type: String,
   },
-  review: [{
-    reviewer: {
-      type: String,
-      required: true
+  interested: [{
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
     },
-    review: {
-      type: String,
-    },
+  }],
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Review'
   }],
 },
 { timestamps: { createdAt: 'created_at' } });

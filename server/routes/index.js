@@ -1,5 +1,6 @@
 const user = require('../controllers/user');
 const event = require('../controllers/events');
+const review = require('../controllers/reviews');
 const Validator = require('express-joi-validation');
 const dataValidators = require('../helpers/validator');
 const auth = require('../middlewares/authorisation');
@@ -28,7 +29,7 @@ module.exports = (app) => {
     auth.checkToken,
     user.update
   );
-  app.get('/api/user/:id',
+  app.get('/api/user',
     auth.checkToken,
     user.getOne
   );
@@ -57,8 +58,12 @@ module.exports = (app) => {
     auth.checkToken,
     event.delete
   );
-  app.put('/api/event/review',
+  app.post('/api/event/:id/review',
     auth.checkToken,
-    event.updateReview
+    review.create
+  );
+  app.put('/api/event/:id/interested',
+    auth.checkToken,
+    event.interested
   );
 };

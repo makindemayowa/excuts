@@ -146,12 +146,26 @@ exports.update = (req, res) => {
         return res.status(400).send({ message: 'An error occurred' });
       }
       if (err) return res.status(500).send({ err });
-      return res.status(200).send({ message: 'success', response });
+      const userDetails = {
+        email: response.email,
+        id: response._id,
+        role: response.role,
+        status: response.status,
+        location: response.loc,
+      };
+      const jsonToken = helper.createToken({ userDetails }, '24h');
+      return res.status(200).send({ message: 'success', jsonToken });
     });
 };
 
 exports.getOne = (req, res) => {
-  User.findOne({ _id: req.params.id },
+  let query;
+  if (req.params.id) {
+    query = { _id: req.query.id };
+  } else {
+    query = { email: req.user.email };
+  }
+  User.findOne(query,
     (err, user) => {
       if (!user) {
         return res.status(404).send({ message: 'User not found' });

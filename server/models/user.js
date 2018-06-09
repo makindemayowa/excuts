@@ -8,16 +8,50 @@ const UserSchema = new Schema({
     type: String,
     unique: true
   },
+  phone_no: {
+    type: String,
+  },
   fullName: String,
   password: String,
   address: String,
   height: Number,
   weight: Number,
   age: Number,
+  here_to: {
+    type: String,
+    enum: ['here_for_fun', 'here_to_hire', 'professional']
+  },
+  sex: {
+    type: String,
+    enum: ['male', 'female', 'others']
+  },
+  country: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  best_time: {
+    type: String,
+  },
+  occupation: {
+    type: String,
+  },
+  public: {
+    type: Boolean,
+  },
+  education: {
+    type: String,
+  },
+  about: {
+    type: String,
+  },
   photos: Array,
   info: String,
   interests: String,
-  phone_no: Number,
   status: String,
   verifyingToken: String,
   passwordResetToken: String,
@@ -31,6 +65,8 @@ const UserSchema = new Schema({
   }
 },
 { timestamps: { createdAt: 'created_at' } });
+
+UserSchema.index({ email: 1, phone_no: 1 }, { unique: true });
 
 // Dunno why I did this...Next you want to tie an index to the schema:
 // UserSchema.index({ loc: '2dsphere' });
