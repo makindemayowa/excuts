@@ -29,7 +29,15 @@ module.exports = (app) => {
     auth.checkToken,
     user.update
   );
-  app.get('/api/user',
+  app.put('/api/user/photo',
+    auth.checkToken,
+    user.updatePhoto
+  );
+  app.delete('/api/user/photo',
+    auth.checkToken,
+    user.deletePhoto
+  );
+  app.get('/api/user/:id',
     auth.checkToken,
     user.getOne
   );

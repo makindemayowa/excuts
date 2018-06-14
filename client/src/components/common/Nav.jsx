@@ -58,13 +58,13 @@ class NavBar extends Component {
       <div>
         <nav className="nav-extended">
           <div className="nav-wrapper">
-            <a href="#!" className="brand-logo">
+            <Link to="/" className="brand-logo">
               <img
                 alt=""
                 className="companyLogo"
                 src={require('../../images/takemeout.png')}
               />
-            </a>
+            </Link>
             <a href="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></a>
             {
               this.props.isAuthenticated ? (
@@ -92,9 +92,9 @@ class NavBar extends Component {
             }
           </div>
         </nav>
-        <ul id='dropdown1' class='dropdown-content'>
+        <ul id='dropdown1' className='dropdown-content'>
         {
-          this.state.notifications.map((notification) => <li>
+          this.state.notifications.map((notification) => <li key={notification.message}>
             {notification.message}
           </li>)
         }

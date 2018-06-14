@@ -11,7 +11,9 @@ const UserSchema = new Schema({
   phone_no: {
     type: String,
   },
-  fullName: String,
+  firstName: String,
+  lastName: String,
+  profilePhoto: String,
   password: String,
   address: String,
   height: Number,
@@ -65,11 +67,10 @@ const UserSchema = new Schema({
   }
 },
 { timestamps: { createdAt: 'created_at' } });
-
-UserSchema.index({ email: 1, phone_no: 1 }, { unique: true });
+// UserSchema.index({ email: 1, phone_no: 1 }, { unique: true });
 
 // Dunno why I did this...Next you want to tie an index to the schema:
-// UserSchema.index({ loc: '2dsphere' });
+UserSchema.index({ loc: '2dsphere' });
 
 UserSchema.pre('save', function (next) {
   var user = this;

@@ -14,7 +14,7 @@ const Subnav = ({ currentPage }) => (
 );
 
 Subnav.propTypes = {
-  currentPage: PropTypes.string.isRequired
+  currentPage: PropTypes.string
 };
 
 export default Subnav;

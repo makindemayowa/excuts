@@ -40,6 +40,10 @@ class App extends Component {
   }
 
   componentDidMount() {
+    window.navigator.geolocation.getCurrentPosition((pos) => {
+      this.long = parseFloat(pos.coords.longitude);
+      this.lat = parseFloat(pos.coords.latitude);
+    });
     const elems = document.querySelectorAll('.authModal');
     M.Modal.init(elems, {
       onCloseEnd: () => {
@@ -51,16 +55,6 @@ class App extends Component {
         });
       }
     });
-    // $('.authModal').modal({
-    //   onCloseEnd: () => {
-    //     this.setState({
-    //       email: '',
-    //       password: '',
-    //       confirmPassword: '',
-    //       error: '',
-    //     });
-    //   }
-    // })
   }
 
   onChange(e) {
@@ -83,7 +77,11 @@ class App extends Component {
     const userdata = {
       email: this.state.email,
       password: this.state.password,
-      confirmPassword: this.state.confirmPassword
+      confirmPassword: this.state.confirmPassword,
+      loc: {
+        type: "Point",
+        coordinates: [this.long, this.lat]
+      }
     };
     this.props
       .userSignUpRequest(userdata)

@@ -4,22 +4,14 @@
 import React, { Component } from 'react';
 import ReactPaginate from 'react-paginate';
 import moment from 'moment';
+import { connect } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
 import UserCard from '../common/UserCard';
 import SubNav from '../common/SubNav';
+import {
+  getAllUsers
+} from '../../actions/auth';
 import './dashboard.scss';
-
-const img = require('../../images/date2.jpg');
-
-const userInfo = {
-  name: 'Jones Jimoh',
-  age: 24,
-  job: 'Bricklayer',
-  avatar: img,
-  location: 'Lagos, Nigeria',
-  about: `I love to cook, sing, dance and whatever else 
-  you can imagine a good person doing up and about`,
-};
 
 class Discover extends Component {
   constructor() {
@@ -29,19 +21,28 @@ class Discover extends Component {
       startDate: moment(),
       value: { min: 2, max: 10 },
       maxDistance: 5,
-      maxAge: 40
+      maxAge: 40,
+      users: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.changeEvent = this.changeEvent.bind(this);
   }
 
   componentDidMount() {
+    window.navigator.geolocation.getCurrentPosition((pos) => {
+      const long = pos.coords.longitude;
+      const lat = pos.coords.latitude;
+      this.props.getAllUsers(long, lat).then((res) => {
+        this.setState({
+          users: this.props.users
+        }, () => {
+          const materialboxed = document.querySelectorAll('.materialboxed');
+          M.Materialbox.init(materialboxed);
+        })
+      })
+    });
     const elems = document.querySelectorAll('select');
     M.FormSelect.init(elems);
-    const materialboxed = document.querySelectorAll('.materialboxed');
-    M.Materialbox.init(materialboxed);
-    // $('select').formSelect(); 
-    // $('.materialboxed').materialbox();
   }
 
   handleChange(date) {
@@ -57,6 +58,7 @@ class Discover extends Component {
   }
 
   render() {
+    const { users } = this.state
     return (
       <div>
         <SubNav />
@@ -67,15 +69,14 @@ class Discover extends Component {
               <div className="smaller-container">
                 <div className="row">
                   <div className="col s12 m10 l10">
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
-                    <UserCard userInfo={userInfo} />
+                    {
+                      users.map(user =>
+                        <UserCard
+                          key={user.email}
+                          userInfo={user}
+                        />
+                      )
+                    }
                   </div>
                   <div className="col m2 l2">
                     <div className="searchForm">
@@ -160,4 +161,11 @@ class Discover extends Component {
   }
 }
 
-export default Discover;
+const mapStateToProps = state => ({
+  users: state.auth.users,
+});
+
+export default connect(mapStateToProps,
+  {
+    getAllUsers,
+  })(Discover);

@@ -11,11 +11,7 @@ const io = require('socket.io-client');
 const socket = io.connect();
 
 export default socket;
-// One degree of latitude =  111.66 km or  69.38 mi
 
-// window.navigator.geolocation.getCurrentPosition(function (pos) {
-//   console.log(pos.coords.longitude, pos.coords.latitude)
-// });
 const App = () => {
   return (
     <div>

@@ -4,18 +4,44 @@ import jwtDecode from 'jwt-decode';
 import * as actionTypes from './actionType';
 import setAuthorisation from '../setAuthorisation'
 
-/**
- * Create an action to set currently logged in user
- *
- * @export
- * @param {object} loggedInUser
- * @returns {object} type payload
- */
+function ajaxInProcess() {
+  return {
+    type: actionTypes.API_CALL_IN_PROGRESS,
+  };
+}
+
+function endAjax() {
+  return {
+    type: actionTypes.END_API_CALL,
+  };
+}
+
+function getAllSucess(users) {
+  return {
+    type: actionTypes.GET_ALL_EVENT_SUCCESS,
+    users
+  };
+}
+
 export function setUser(loggedInUser, isAuthenticated) {
   return {
     type: actionTypes.SET_CURRENT_USER,
     loggedInUser,
     isAuthenticated
+  };
+}
+
+/**
+ * Create an action to set currently logged in users photo
+ *
+ * @export
+ * @param {object} imgUrl
+ * @returns {object} type payload
+ */
+export function setPhoto(imgUrl) {
+  return {
+    type: actionTypes.SET_UPLOADED_PHOTO,
+    imgUrl,
   };
 }
 
@@ -81,11 +107,22 @@ export function userSignUpRequest(userData) {
 export function updateUserDetails(userDetails) {
   return dispatch =>
     axios.put('/api/user', userDetails).then((res) => {
-      const token = res.data.jsonToken;
-      localStorage.setItem('tmo_token', token);
-      const updatedUser = jwtDecode(token).userDetails;
-      setAuthorisation(token)
-      dispatch(setUser(updatedUser));
+      dispatch(setDetails(res.data.updatedUser));
+    });
+}
+
+/**
+ * Request to the API to update an existing user
+ *
+ * @export
+ * @param {number} id
+ * @param {object} userDetails
+ * @returns {object} dispatch object
+ */
+export function getAllUsers(long, lat) {
+  return dispatch =>
+    axios.get(`/api/user/?long=${long}&lat=${lat}`).then((res) => {
+      dispatch(getAllSucess(res.data.users));
     });
 }
 
@@ -99,7 +136,7 @@ export function updateUserDetails(userDetails) {
  */
 export function getUserDetails() {
   return dispatch =>
-    axios.get('/api/user').then((res) => {
+    axios.get('/api/user/me').then((res) => {
       dispatch(setDetails(res.data.user));
     });
 }
@@ -120,7 +157,50 @@ export function verifyUserRequest(token) {
       const loggedInUser = jwtDecode(token).userDetails;
       setAuthorisation(token)
       dispatch(setUser(loggedInUser, true));
-    }).catch((err) => {})
+    }).catch((err) => { })
+}
+
+/**
+ * Request to the API to update an existing user picture
+ *
+ * @export
+ * @param {number} id
+ * @param {object} formData
+ * @returns {object} dispatch object
+ */
+export function uploadPictureRequest(formData) {
+  const cloudName = 'mayowa'
+  delete axios.defaults.headers.common['x-access-token'];
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData).then((response) => {
+      const data = response.data;
+      const fileURL = {
+        fileUrl: data.secure_url
+      }
+      axios.put('/api/user/photo', fileURL).then((res) => {
+        dispatch(endAjax());
+        dispatch(setDetails(res.data.updatedUser));
+        console.log(res)
+      });
+    }).catch((err) => { })
+  }
+}
+
+/**
+ * Request to the API to update an existing user picture
+ *
+ * @export
+ * @param {number} id
+ * @param {object} formData
+ * @returns {object} dispatch object
+ */
+export function deletePictureRequest(imgUrl) {
+  return dispatch =>
+    axios.delete(`/api/user/photo`, imgUrl).then((response) => {
+      console.log(response)
+      dispatch(setDetails(response.data.updatedUser));
+    }).catch((err) => { })
 }
 
 /**
@@ -130,9 +210,9 @@ export function verifyUserRequest(token) {
  * @returns {object} - remove token
  */
 export function logout() {
-  return (dispatch) => 
+  return (dispatch) =>
     Promise.resolve(localStorage.removeItem('tmo_token')).then(() => {
       dispatch({ type: actionTypes.LOGOUT });
     })
-  ;
+    ;
 }

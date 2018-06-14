@@ -41,6 +41,27 @@
     font-size: 400px;
     opacity: 0;
   }
+  .img__description {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+    background-image: url('../../images/profileImg.png');
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    background-size: cover;
+    color: #000;
+    margin: 0 auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .5s, visibility .2s;
+  }
+  .img__wrap:hover .img__description {
+    visibility: visible;
+    opacity: 1;
+  }
   .profile-image {
     // height: 250px;
   }

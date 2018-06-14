@@ -5,7 +5,10 @@ const initialState = {
   success: false,
   isAuthenticated: false,
   user: {},
+  users: [],
   userDetails: {},
+  loading: false,
+  photos: ['http://res.cloudinary.com/mayowa/image/upload/v1528715613/pbsvdzf8fnboydysjenx.png'],
 };
 
 /**
@@ -16,6 +19,16 @@ const initialState = {
 */
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.API_CALL_IN_PROGRESS:
+      return {
+        ...state,
+        loading: true,
+      };
+    case actionTypes.END_API_CALL:
+      return {
+        ...state,
+        loading: false,
+      };
     case actionTypes.SIGNUP_SUCCESS:
       return {
         ...state,
@@ -30,10 +43,20 @@ export default (state = initialState, action) => {
         isAuthenticated: action.isAuthenticated,
         user: action.loggedInUser,
       };
+    case actionTypes.GET_ALL_EVENT_SUCCESS:
+      return {
+        ...state,
+        users: action.users,
+      };
     case actionTypes.SET_USER_DETAILS:
       return {
         ...state,
         userDetails: action.userDetails,
+      };
+    case actionTypes.SET_UPLOADED_PHOTO:
+      return {
+        ...state,
+        photos: [...state.photos, action.imgUrl]
       };
     case actionTypes.LOGOUT:
       return {

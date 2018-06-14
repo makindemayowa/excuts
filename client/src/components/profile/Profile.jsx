@@ -1,31 +1,27 @@
 /* eslint-env jquery */
 /* global M */
-
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import SubNav from '../common/SubNav';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
+import toastr from 'toastr';
 import './profile.scss';
-import { updateUserDetails, getUserDetails } from '../../actions/auth';
-import ProfileCard from './ProfileCard';
-
-const img = require('../../images/quote1.jpg');
-
-const userInfo = {
-  name: 'Jones Jimoh',
-  age: 24,
-  job: 'Bricklayer',
-  avatar: img,
-  location: 'Lagos, Nigeria',
-  about: 'I love to cook, sing, dance and whatever else you can imagine a good person doing up and about',
-};
+import { updateUserDetails,
+  getUserDetails,
+  uploadPictureRequest,
+  deletePictureRequest
+ } from '../../actions/auth';
+import setAuthorisation from '../../setAuthorisation'
+import ProfileCard from './ProfileCard'
 
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
+      firstName: '',
+      lastName: '',
       age: '',
       sex: '',
       country: '',
@@ -51,13 +47,21 @@ class Profile extends Component {
       rate4: '',
       error: '',
       imgurl: '',
-      myfile: '',
-      success: false
+      myCroppedFile: '',
+      src: '',
+      uploadedImg: '',
+      imageUrls: [],
+      success: false,
+      loading: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.toggleChange = this.toggleChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.uploadFile = this.uploadFile.bind(this);
+    this.deleteFile = this.deleteFile.bind(this);
+    this.setDp = this.setDp.bind(this);
+    this.fileChangeHandler = this.fileChangeHandler.bind(this);
   }
 
   componentDidMount() {
@@ -75,6 +79,11 @@ class Profile extends Component {
         public: this.props.user.public || true,
         about: this.props.user.about || '',
         here_to: this.props.user.here_to || '',
+        imageUrls: this.props.user.photos || [],
+        loading: this.props.loading || false,
+        firstName: this.props.user.firstName || '',
+        lastName: this.props.user.lastName || '',
+        
       }, () => {
         const select = document.querySelectorAll('select');
         M.FormSelect.init(select);
@@ -84,6 +93,30 @@ class Profile extends Component {
       });
     })
   }
+
+  componentWillReceiveProps(nextProps) {
+    const loading = nextProps.loading;
+    const user = nextProps.user
+    this.setState({
+      loading,
+      imageUrls: user.photos || [],
+      age: user.age || '',
+      sex: user.sex || '',
+      country: user.country || '',
+      state: user.state || '',
+      city: user.city || '',
+      best_time: user.best_time || '',
+      occupation: user.occupation || '',
+      education: user.education || '',
+      phone_no: user.phone_no || '',
+      public: user.public || true,
+      about: user.about || '',
+      here_to: user.here_to || '',
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+    });
+  }
+
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -91,9 +124,60 @@ class Profile extends Component {
     });
   }
 
+  fileChangeHandler = (event) => {
+    if (this.props.user.photos.length >= 5) {
+      return toastr.error('You can"t upload more than 5 pictures')
+    }
+    if (!event.target.files[0].type.includes('image')) {
+      return toastr.error('You can only upload images')
+    }
+    const imageFile = event.target.files[0]
+    var reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+    reader.addEventListener("load", () => {
+      this.setState({
+        imgurl: imageFile,
+        src: reader.result,
+      });
+    }, false);
+
+  }
+
+  uploadFile() {
+    const formData = new FormData();
+    formData.append("file", this.state.myCroppedFile);
+    formData.append("upload_preset", "umwse311");
+    formData.append("timestamp", (Date.now() / 1000) | 0);
+    this.props.uploadPictureRequest(formData).then(() => {
+      this.setState({
+        imgurl: '',
+      })
+    })
+    const token = localStorage.getItem('tmo_token');
+    setAuthorisation(token)
+  }
+
+  deleteFile(e, imgurl) {
+    e.preventDefault()
+    this.props.deletePictureRequest(imgurl).then((res) => {
+      console.log(res)
+    })
+  }
+
+  setDp(e, imgurl) {
+    e.preventDefault()
+    const dp = {
+      profilePhoto: imgurl
+    }
+    this.props.updateUserDetails(dp).then((res) => {
+      console.log(res)
+    })
+  }
+
   _crop() {
-    // image in dataUrl
-    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+    this.setState({
+      myCroppedFile: this.refs.cropper.getCroppedCanvas().toDataURL(),
+    });
   }
 
   toggleChange(checkbox) {
@@ -124,6 +208,8 @@ class Profile extends Component {
     e.preventDefault();
     const userDetails = {
       age: this.state.age,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
       sex: this.state.sex,
       country: this.state.country,
       state: this.state.state,
@@ -143,7 +229,7 @@ class Profile extends Component {
       rate3: this.state.rate3,
       time4: this.state.time4,
       rate4: this.state.rate4,
-      imgurl: this.state.age,
+      imgurls: this.state.imageUrls,
     }
     this.props.updateUserDetails(userDetails).then(() => {
       this.setState({
@@ -153,6 +239,7 @@ class Profile extends Component {
   }
 
   render() {
+    const { imageUrls, imgurl, loading, src } = this.state;
     if (this.state.success) {
       return <Redirect to="/publicprofile" />;
     }
@@ -166,48 +253,53 @@ class Profile extends Component {
               <div className="my_bold">Profile Photo</div>
               <div className="col s6 m6 l6">
                 <div>
-                  {console.log(this.props.user)}
                   <div className="row">
                     <div className="col s12 m12 l8">
                       <div>
                         {
-                          this.state.imgurl &&
-                          <Cropper
-                            ref='cropper'
-                            src={img}
-                            autoCropArea={1.0}
-                            style={{ 'max-height': 300, 'max-width': 340 }}
-                            aspectRatio={16 / 12}
-                            cropBoxResizable={false}
-                            crop={this._crop.bind(this)}
-                          />
-                        }
-                      </div>
-                      <div>
-                        {
-                          !this.state.imgurl &&
-                          (
-                            this.state.savedAlready ?
-                              <div className="card">
-                                <div className="card-image image_container">
-                                  <img alt="" className="profile-image" src={img} />
+                          imgurl ?
+                            <div className="row">
+                              {
+                                loading &&
+                                <div className="progress">
+                                  <div className="indeterminate"></div>
                                 </div>
-                                <div className="">
-                                  <i className="far fa-trash-alt delete" />
-                                </div>
-                              </div> :
-                              <div className="card upload_card">
-                                <div className="card-image image_upload_container">
-                                  <img alt="" className="profile-image" src={require('../../images/upload.jpg')} />
-                                  <input
-                                    name="imgurl"
-                                    type="file"
-                                    id="file"
-                                    onChange={this.onChange}
-                                  />
-                                </div>
+                              }
+                              <Cropper
+                                ref='cropper'
+                                src={src}
+                                autoCropArea={1.0}
+                                style={{ maxHeight: 300, maxWidth: 340 }}
+                                aspectRatio={16 / 12}
+                                cropBoxResizable={false}
+                                crop={this._crop.bind(this)}
+                              />
+                              <button
+                                className="waves-effect waves-light btn"
+                                type="submit"
+                                onClick={this.uploadFile}
+                                name="action"
+                              >Done</button>
+                              <div>
+                                <input
+                                  name="imgurl"
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={this.fileChangeHandler}
+                                />
                               </div>
-                          )
+                            </div> :
+                            <div className="card upload_card">
+                              <div className="card-image image_upload_container">
+                                <img alt="" className="profile-image" src={require('../../images/upload.jpg')} />
+                                <input
+                                  name="imgurl"
+                                  type="file"
+                                  id="file"
+                                  onChange={this.fileChangeHandler}
+                                />
+                              </div>
+                            </div>
                         }
                       </div>
                     </div>
@@ -227,21 +319,17 @@ class Profile extends Component {
             </div>
             <div className="new_uploads">
               <div className="row">
-                {/* <ProfileCard
-                  userInfo={userInfo}
-                />
-                <ProfileCard
-                  userInfo={userInfo}
-                />
-                <ProfileCard
-                  userInfo={userInfo}
-                />
-                <ProfileCard
-                  userInfo={userInfo}
-                /> */}
-                <div className="col s12 m12 l12 upload-more">
-                  <a className="waves-effect waves-light btn upload-more-button"><i className="fas fa-cloud-upload-alt fa-3x left" />UPLOAD MORE PHOTOS</a>
-                </div>
+                {
+                  imageUrls.map(url =>
+                    <ProfileCard
+                      key={url}
+                      img={url}
+                      id={url}
+                      deletePhoto={this.deleteFile}
+                      setDp={this.setDp}
+                    />
+                  )
+                }
               </div>
             </div>
           </div>
@@ -251,6 +339,28 @@ class Profile extends Component {
                 <span className="my_bold">PERSONAL DETAILS</span>
               </div>
               <div className="row">
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="First name"
+                    name="firstName"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.firstName}
+                  />
+                </div>
+                <div className="col s4 m4 l3">
+                  <input
+                    placeholder="Last name"
+                    name="lastName"
+                    type="text"
+                    className="validate"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.lastName}
+                  />
+                </div>
                 <div className="col s4 m4 l3">
                   <input
                     placeholder="Age"
@@ -380,7 +490,7 @@ class Profile extends Component {
                     id="about"
                     className="materialize-textarea"
                     data-length="120"
-                    maxlength="120"
+                    maxLength="120"
                     name="about"
                     value={this.state.about}
                     onChange={this.onChange}
@@ -431,7 +541,6 @@ class Profile extends Component {
                   </label>
                 </span>
               </div>
-
               {
                 this.state.professional &&
                 <div className="row">
@@ -555,9 +664,14 @@ class Profile extends Component {
 const mapStateToProps = state => ({
   success: state.auth.success,
   user: state.auth.userDetails,
-  isLogged: state.auth.isLogged
+  isLogged: state.auth.isLogged,
+  loading: state.auth.loading,
 });
 
 export default connect(mapStateToProps,
-  { updateUserDetails, getUserDetails })(Profile);
+  { updateUserDetails,
+    getUserDetails,
+    uploadPictureRequest,
+    deletePictureRequest
+  })(Profile);
 

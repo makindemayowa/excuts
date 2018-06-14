@@ -28,10 +28,13 @@ exports.create = (req, res) => {
         const siteUrl = `${req.protocol}://${req.get('host')}`;
         const link = `${siteUrl}/email/verify/${registrationToken}`;
         emails.sendVerificationMail(req.body.email, link);
+        return res.status(200)
+          .send({ message: 'Please check your email to continue' });
       });
+    } else {
+      return res.status(409)
+        .send({ message: 'email already exists' });
     }
-    return res.status(200)
-      .send({ message: 'Please check your email to continue' });
   });
 };
 
@@ -141,26 +144,68 @@ exports.login = (req, res) => {
 
 exports.update = (req, res) => {
   User.findOneAndUpdate({ email: req.user.email },
-    { $set: req.body }, { new: true }, (err, response) => {
-      if (!response) {
+    { $set: req.body }, { new: true }, (err, updatedUser) => {
+      if (!updatedUser) {
         return res.status(400).send({ message: 'An error occurred' });
       }
-      if (err) return res.status(500).send({ err });
-      const userDetails = {
-        email: response.email,
-        id: response._id,
-        role: response.role,
-        status: response.status,
-        location: response.loc,
-      };
-      const jsonToken = helper.createToken({ userDetails }, '24h');
-      return res.status(200).send({ message: 'success', jsonToken });
+      return res.status(200).send({ message: 'success', updatedUser });
     });
+};
+
+exports.updatePhoto = (req, res) => {
+  if (!req.body.fileUrl) {
+    res.status(400)
+      .send({ message: 'Image url is required' });
+  }
+  User.findOne({
+    email: req.user.email,
+  }).then((user) => {
+    if (!user) {
+      res.status(404)
+        .send({ message: 'User not found' });
+    } else {
+      user.photos.push(req.body.fileUrl);
+      user.save((err, updatedUser) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        return res.status(200)
+          .send({ message: 'Success', updatedUser });
+      });
+    }
+  }).catch((err) => {
+    if (err) return res.status(500).send({ err });
+  });
+};
+
+exports.deletePhoto = (req, res) => {
+  User.findOne({
+    email: req.user.email,
+  }).then((user) => {
+    if (!user) {
+      res.status(404)
+        .send({ message: 'User not found' });
+    } else {
+      const index = user.photos.indexOf(req.body.fileUrl);
+      if (index > -1) {
+        user.photos.splice(index, 1);
+      }
+      user.save((err, updatedUser) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        return res.status(200)
+          .send({ message: 'Success', updatedUser });
+      });
+    }
+  }).catch((err) => {
+    if (err) return res.status(500).send({ err });
+  });
 };
 
 exports.getOne = (req, res) => {
   let query;
-  if (req.params.id) {
+  if (req.params.id !== 'me') {
     query = { _id: req.query.id };
   } else {
     query = { email: req.user.email };
@@ -176,6 +221,8 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
+  const long = parseFloat(req.query.long);
+  const lat = parseFloat(req.query.lat);
   const limit = req.query.limit || 5;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
@@ -184,7 +231,7 @@ exports.getAll = (req, res) => {
       near: {
         type: 'Point',
         coordinates:
-          [req.user.location.coordinates[0], req.user.location.coordinates[1]]
+          [long, lat]
       },
       distanceField: 'distance',
       spherical: true,
@@ -231,6 +278,6 @@ exports.getCloseToMe = (req, res) => {
       }
     }
   ];
-  User.aggregate(query, (err, results) => {});
+  User.aggregate(query, (err, results) => { });
 };
 
