@@ -27,7 +27,14 @@ export function setUser(loggedInUser, isAuthenticated) {
   return {
     type: actionTypes.SET_CURRENT_USER,
     loggedInUser,
-    isAuthenticated
+    isAuthenticated,
+  };
+}
+
+export function setLoc(loc) {
+  return {
+    type: actionTypes.SET_CURRENT_USER_LOC,
+    loc,
   };
 }
 
@@ -73,6 +80,18 @@ export function success() {
  * @returns {object} dispatch object
  */
 export function userLoginRequest(userData) {
+  // const loc = {}
+  // const geoOptions = {
+  //   timeout: 10 * 1000
+  // }
+  // const geoError = function(error) {
+  //   console.log('Error occurred. Error code: ' + error.code);
+  // };
+  // window.navigator.geolocation.getCurrentPosition((pos) => {
+  //   loc.long = pos.coords.longitude;
+  //   loc.lat = pos.coords.latitude;
+
+  // }, geoError, geoOptions);
   return dispatch => axios.post('/api/login', userData).then((res) => {
     const token = res.data.jsonToken;
     localStorage.setItem('tmo_token', token);
@@ -149,7 +168,34 @@ export function getUserDetails() {
  * @param {object} userDetails
  * @returns {object} dispatch object
  */
+export function getUserById(userId) {
+  return dispatch =>
+    axios.get(`/api/user/${userId}`).then((res) => {
+      dispatch(setDetails(res.data.user));
+    });
+}
+
+/**
+ * Request to the API to update an existing user
+ *
+ * @export
+ * @param {number} id
+ * @param {object} userDetails
+ * @returns {object} dispatch object
+ */
 export function verifyUserRequest(token) {
+  // const loc = {}
+  // const geoOptions = {
+  //   timeout: 10 * 1000
+  // }
+  // const geoError = function(error) {
+  //   console.log('Error occurred. Error code: ' + error.code);
+  // };
+  // window.navigator.geolocation.getCurrentPosition((pos) => {
+  //   loc.long = pos.coords.longitude;
+  //   loc.lat = pos.coords.latitude;
+
+  // }, geoError, geoOptions);
   return dispatch =>
     axios.get(`/api/signup/verify/${token}`).then((res) => {
       const token = res.data.jsonToken;

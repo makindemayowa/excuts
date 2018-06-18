@@ -9,6 +9,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import SubNav from '../common/SubNav';
+import ProfileForm from './ProfileForm';
 
 class PublicProfile extends Component {
   constructor(props) {
@@ -72,6 +73,12 @@ class PublicProfile extends Component {
     return (
       <div>
         <SubNav currentPage={'profile'} />
+        <ProfileForm
+          user={user}
+          currentImg={this.state.currentImg}
+          currentUser={this.props.currentUser}
+        />
+{/*         
         {
           user.profilePhoto ?
             <div className="publicProfile container">
@@ -339,9 +346,9 @@ class PublicProfile extends Component {
               <div className="bottom_margin" />
             </div> :
             <h5 className="emptyProfile center">Please update your profile
-          <Link to="/profile">&nbsp;here</Link>
+              <Link to="/profile">&nbsp;here</Link>
             </h5>
-        }
+        } */}
       </div>
     );
   }
@@ -349,6 +356,7 @@ class PublicProfile extends Component {
 
 const mapStateToProps = state => ({
   user: state.auth.userDetails,
+  currentUser: state.auth.user,
 });
 
 export default connect(mapStateToProps,

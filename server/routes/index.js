@@ -66,7 +66,7 @@ module.exports = (app) => {
     auth.checkToken,
     event.delete
   );
-  app.post('/api/event/:id/review',
+  app.post('/api/user/:id/review',
     auth.checkToken,
     review.create
   );

@@ -29,9 +29,15 @@ class Discover extends Component {
   }
 
   componentDidMount() {
+    var geoOptions = {
+      timeout: 10 * 1000
+    }
+    var geoError = function(error) {
+      console.log('Error occurred. Error code: ' + error.code);
+    };
     window.navigator.geolocation.getCurrentPosition((pos) => {
-      const long = pos.coords.longitude;
-      const lat = pos.coords.latitude;
+      const long = pos.coords.longitude || this.props.user.location.coordinates[0];
+      const lat = pos.coords.latitude || this.props.user.location.coordinates[1];
       this.props.getAllUsers(long, lat).then((res) => {
         this.setState({
           users: this.props.users
@@ -40,7 +46,7 @@ class Discover extends Component {
           M.Materialbox.init(materialboxed);
         })
       })
-    });
+    }, geoError, geoOptions);
     const elems = document.querySelectorAll('select');
     M.FormSelect.init(elems);
   }
@@ -163,6 +169,8 @@ class Discover extends Component {
 
 const mapStateToProps = state => ({
   users: state.auth.users,
+  user: state.auth.user,
+  loc: state.auth.loc,
 });
 
 export default connect(mapStateToProps,

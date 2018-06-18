@@ -2,6 +2,7 @@ import Home from './components/landingPage/Home';
 import Dashboard from './components/dashboard/Dashboard';
 import Profile from './components/profile/Profile';
 import PublicProfile from './components/profile/PublicProfile';
+import ProfileById from './components/profile/ProfileById';
 import Events from './components/events/Events';
 import EventDetails from './components/events/EventDetails';
 import CreateEvent from './components/events/CreateEvent';
@@ -10,6 +11,8 @@ import SearchEvents from './components/search/SearchEvents';
 import NotFound from './components/NotFound';
 import Verify from './components/Verify';
 import VerifyMail from './components/VerifyMail';
+import Contact from './components/common/Contact';
+import Safety from './components/common/Safety';
 
 export default [
   {
@@ -17,6 +20,20 @@ export default [
     path: '/',
     secured: false,
     component: Home,
+    exact: true
+  },
+  {
+    name: 'contact',
+    path: '/contact',
+    secured: false,
+    component: Contact,
+    exact: true
+  },
+  {
+    name: 'contact',
+    path: '/safety',
+    secured: false,
+    component: Safety,
     exact: true
   },
   {
@@ -41,10 +58,10 @@ export default [
     exact: true
   },
   {
-    name: 'publicProfile',
+    name: 'profileById',
     path: '/publicProfile/:id',
     secured: true,
-    component: PublicProfile,
+    component: ProfileById,
     exact: true
   },
   {

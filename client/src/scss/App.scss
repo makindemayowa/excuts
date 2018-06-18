@@ -79,6 +79,32 @@ textarea.materialize-textarea.valid:focus,
   color: red;
 }
 
+.eventHome .eventsContainer .eventCard {
+  max-height: 250px;
+}
+
+.contact {
+  min-height: 80vh;
+  padding-left: 30%;
+  padding-right: 30%;
+  .contactText {
+    text-align: center
+  }
+}
+
+.safety {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  min-height: 80vh;
+  .subHeader {
+    font-size: 17px;
+    font-weight: bolder;
+  }
+  .content {
+    font-size: 14px;
+  }
+}
+
 @media only screen and (max-width: 530px) {
   nav {
     .companyLogo {

@@ -1,7 +1,7 @@
 /* eslint-env jquery */
 /* global M */
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import SubNav from '../common/SubNav';
 import Cropper from 'react-cropper';

@@ -64,7 +64,11 @@ const UserSchema = new Schema({
   loc: {
     type: { type: String },
     coordinates: [],
-  }
+  },
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Review'
+  }]
 },
 { timestamps: { createdAt: 'created_at' } });
 // UserSchema.index({ email: 1, phone_no: 1 }, { unique: true });

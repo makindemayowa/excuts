@@ -7,7 +7,8 @@ import socket from '../../index';
 import Login from '../landingPage/Login';
 import Signup from '../landingPage/Signup';
 import { Link } from 'react-router-dom';
-import { logout } from '../../actions/auth'
+import { logout } from '../../actions/auth';
+import { userSignUpRequest, userLoginRequest } from '../../actions/auth';
 
 class NavBar extends Component {
   constructor() {
@@ -16,13 +17,37 @@ class NavBar extends Component {
       logged: true,
       notifications: [{
         message: `is interested in your event`
-      }]
+      }],
+      email: '',
+      password: '',
+      confirmPassword: '',
+      error: '',
+      success: false,
+      isLogged: false
     }
     this.logout = this.logout.bind(this);
     this.handleNotification = this.handleNotification.bind(this);
+    this.submitSignup = this.submitSignup.bind(this);
+    this.submitLogin = this.submitLogin.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.sidenav = '';
   }
   componentDidMount() {
+    window.navigator.geolocation.getCurrentPosition((pos) => {
+      this.long = parseFloat(pos.coords.longitude);
+      this.lat = parseFloat(pos.coords.latitude);
+    });
+    const authModals = document.querySelectorAll('.authModal');
+    M.Modal.init(authModals, {
+      onCloseEnd: () => {
+        this.setState({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          error: '',
+        });
+      }
+    });
     const elems = document.querySelectorAll('.sidenav');
     this.sidenav = M.Sidenav.init(elems);
     const dropdown = document.querySelectorAll('.dropdown-trigger');
@@ -37,6 +62,67 @@ class NavBar extends Component {
         message: `${msg.user} is interested in your event`
       })
     }
+  }
+
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+      error: ''
+    });
+  }
+
+  submitLogin(e) {
+    const elem = document.querySelector('#loginModal');
+    const instance = M.Modal.getInstance(elem);
+    this.setState({ error: '' });
+    e.preventDefault();
+    const userdata = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    this.props
+      .userLoginRequest(userdata)
+      .then(() => {
+        instance.close();
+        this.setState({ isLogged: this.props.isLogged });
+      })
+      .catch((errorData) => {
+        this.setState({
+          error: errorData.response.data.message
+        });
+      });
+  }
+
+  submitSignup(e) {
+    const elem = document.querySelector('#signupModal');
+    const instance = M.Modal.getInstance(elem);
+    this.setState({ error: '' });
+    e.preventDefault();
+    if (this.state.password !== this.state.confirmPassword) {
+      return this.setState({
+        error: 'passwords do not match'
+      });
+    }
+    const userdata = {
+      email: this.state.email,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword,
+      loc: {
+        type: "Point",
+        coordinates: [this.long, this.lat]
+      }
+    };
+    this.props
+      .userSignUpRequest(userdata)
+      .then(() => {
+        instance.close()
+        this.setState({ success: this.props.success })
+      })
+      .catch((errorData) => {
+        this.setState({
+          error: errorData.response.data.message
+        });
+      });
   }
 
   logout() {
@@ -65,7 +151,7 @@ class NavBar extends Component {
                 src={require('../../images/takemeout.png')}
               />
             </Link>
-            <a href="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></a>
+            <Link to="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></Link>
             {
               this.props.isAuthenticated ? (
                 <ul className="right hide-on-med-and-down">
@@ -79,8 +165,8 @@ class NavBar extends Component {
                       notifications: []
                     })}
                   >
-                      <i className="far fa-bell"></i>
-                    </Link>
+                    <i className="far fa-bell"></i>
+                  </Link>
                     <span className="red-text">{notificationsCount > 0 && notificationsCount}</span>
                   </li>
                 </ul>
@@ -93,11 +179,11 @@ class NavBar extends Component {
           </div>
         </nav>
         <ul id='dropdown1' className='dropdown-content'>
-        {
-          this.state.notifications.map((notification) => <li key={notification.message}>
-            {notification.message}
-          </li>)
-        }
+          {
+            this.state.notifications.map((notification) => <li key={notification.message}>
+              {notification.message}
+            </li>)
+          }
         </ul>
         <ul className="sidenav" id="mobile-demo">
           {
@@ -196,29 +282,28 @@ class NavBar extends Component {
               )
           }
         </ul>
-        {this.props.state && (
-          <div>
-            <Login
-              onChange={this.props.onChange}
-              onSubmit={this.props.submitLogin}
-              state={this.props.state}
-            />
-            <Signup
-              onChange={this.props.onChange}
-              onSubmit={this.props.submitSignup}
-              state={this.props.state}
-            />
-          </div>
-        )}
+        <div>
+          <Login
+            onChange={this.onChange}
+            onSubmit={this.submitLogin}
+            state={this.state}
+          />
+          <Signup
+            onChange={this.onChange}
+            onSubmit={this.submitSignup}
+            state={this.state}
+          />
+        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  success: state.auth.success,
   isAuthenticated: state.auth.isAuthenticated,
   islogged: state.auth.islogged,
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { logout })(NavBar);
+export default connect(mapStateToProps, { logout, userSignUpRequest, userLoginRequest })(NavBar);

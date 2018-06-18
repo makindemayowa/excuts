@@ -15,15 +15,9 @@ const reviewSchema = new Schema({
     required: true
   },
   reviewee: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true
-  },
-  event: {
-    type: Schema.Types.ObjectId,
-    ref: 'Event',
-    required: true
-  },
+  }
 },
 { timestamps: { createdAt: 'created_at' } });
 

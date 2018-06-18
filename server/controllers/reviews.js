@@ -1,38 +1,36 @@
 const Review = require('../models/reviews');
-const Events = require('../models/events');
+const User = require('../models/user');
 
 exports.create = (req, res) => {
   if (!req.body.review) {
     res.status(400)
       .send({ message: 'Review cannot be empty' });
   }
-  Events.findOne({
-    _id: req.params.id,
-    created_by: { $ne: req.user.id }
-  }).then((event) => {
-    if (!event) {
+  User.findOne({
+    _id: req.params.id
+  }).then((user) => {
+    if (!user) {
       res.status(404)
-        .send({ message: 'Event not found' });
+        .send({ message: 'User not found' });
     } else {
       const reviewBody = {
         reviewer: req.user.id,
         review: req.body.review,
-        reviewee: event.created_by,
-        event: event._id,
-        reviewersName: req.user.fullName || '',
+        reviewee: user.email,
+        reviewersName: req.user.firstName || ''
       };
       const review = new Review(reviewBody);
       review.save((err, newReview) => {
         if (err) {
           return res.status(500).send({ err });
         }
-        event.reviews.push(newReview);
-        event.save((err, updatedEvent) => {
+        user.reviews.push(newReview._id);
+        user.save((err, updatedUser) => {
           if (err) {
             return res.status(500).send({ err });
           }
           return res.status(200)
-            .send({ message: 'Success', updatedEvent });
+            .send({ message: 'Success', updatedUser });
         });
       });
     }

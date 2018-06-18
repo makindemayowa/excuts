@@ -23,7 +23,7 @@ const Footer = () => (
         <div className="col l4 m4 s4">
           <h6 className="white-text">COMPANY</h6>
           <ul>
-            <li><a className="grey-text text-lighten-3" href="#!">Contact</a></li>
+            <li><a className="grey-text text-lighten-3" href="/contact">Contact</a></li>
           </ul>
         </div>
         <div className="col l4 m4 s4">
@@ -38,7 +38,7 @@ const Footer = () => (
           <ul>
             <li><a className="grey-text text-lighten-3" href="#!">Privacy</a></li>
             <li><a className="grey-text text-lighten-3" href="#!">Terms</a></li>
-            <li><a className="grey-text text-lighten-3" href="#!">Safety</a></li>
+            <li><a className="grey-text text-lighten-3" href="/safety">Safety</a></li>
             <li><a className="grey-text text-lighten-3" href="#!">Cookie Policy</a></li>
           </ul>
         </div>

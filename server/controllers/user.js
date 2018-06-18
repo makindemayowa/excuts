@@ -106,6 +106,7 @@ exports.verifyToken = (req, res) => {
       const userDetails = {
         email: updateduser.email,
         role: updateduser.role,
+        firstName: user.firstName,
         id: updateduser._id,
         status: updateduser.status,
         location: updateduser.loc
@@ -134,6 +135,7 @@ exports.login = (req, res) => {
       email: user.email,
       id: user._id,
       role: user.role,
+      firstName: user.firstName,
       status: user.status,
       location: user.loc,
     };
@@ -206,12 +208,14 @@ exports.deletePhoto = (req, res) => {
 exports.getOne = (req, res) => {
   let query;
   if (req.params.id !== 'me') {
-    query = { _id: req.query.id };
+    query = { _id: req.params.id };
   } else {
     query = { email: req.user.email };
   }
-  User.findOne(query,
-    (err, user) => {
+  User
+    .findOne(query)
+    .populate('reviews')
+    .exec((err, user) => {
       if (!user) {
         return res.status(404).send({ message: 'User not found' });
       }

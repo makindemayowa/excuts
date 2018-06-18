@@ -7,6 +7,7 @@ const initialState = {
   user: {},
   users: [],
   userDetails: {},
+  loc: {},
   loading: false,
   photos: ['http://res.cloudinary.com/mayowa/image/upload/v1528715613/pbsvdzf8fnboydysjenx.png'],
 };
@@ -42,6 +43,12 @@ export default (state = initialState, action) => {
         success: true,
         isAuthenticated: action.isAuthenticated,
         user: action.loggedInUser,
+        loc: action.loc
+      };
+    case actionTypes.SET_CURRENT_USER_LOC:
+      return {
+        ...state,
+        loc: action.loc
       };
     case actionTypes.GET_ALL_EVENT_SUCCESS:
       return {

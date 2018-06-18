@@ -108,10 +108,11 @@ export function getOneEventRequest(id) {
  * @returns {object} dispatch object
  */
 export function postReviewRequest(id, review) {
-  return dispatch => axios.post(`/api/event/${id}/review`, {review}).then((res) => {
-    const events = res.data.events;
-    const pagination = res.data.pagination;
-    dispatch(getAllSuccess(events, pagination));
+  return dispatch => axios.post(`/api/user/${id}/review`, {review}).then((res) => {
+    // console.log('response from API', res)
+    // const events = res.data.events;
+    // const pagination = res.data.pagination;
+    // dispatch(getAllSuccess(events, pagination));
   });
 }
 

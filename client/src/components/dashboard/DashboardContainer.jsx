@@ -1,5 +1,4 @@
 /*eslint-env jquery*/
-/*global M*/
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
