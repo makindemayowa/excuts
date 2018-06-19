@@ -212,6 +212,21 @@
   .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
     background-color: #ff6666;
   }
+  .submitReview {
+    margin-top: -15px;
+    margin-bottom: 15px;
+  }
+  .review {
+    font-size: 12px;
+    border: solid 0.3px #E3E3E3;
+    padding: 10px;
+    margin-bottom: 5px;
+  }
+  .reviewer {
+    font-style: italic;
+    color: #ff6666;
+    font-size: 12px
+  }
 }
 .carousel, .slider {
   height: 200px; 
