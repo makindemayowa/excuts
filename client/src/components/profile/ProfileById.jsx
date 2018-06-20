@@ -1,5 +1,5 @@
 /* eslint-env jquery */
-/* global M */
+/* global M google */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
@@ -14,19 +14,18 @@ class ProfileById extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startDate: moment(),
-      endDate: moment(),
-      startTime: moment(),
-      endTime: moment(),
+      date: moment(),
       currentImg: '',
       review: '',
       description: '',
+      venue: '',
       user: this.props.user || {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.createReview = this.createReview.bind(this);
     this.onChange = this.onChange.bind(this);
     this.requestDate = this.requestDate.bind(this);
+    // this.addAutocomplete = this.addAutocomplete.bind(this);
   }
 
   componentDidMount() {
@@ -70,6 +69,26 @@ class ProfileById extends Component {
     })
   }
 
+  // addAutocomplete() {
+  //   const address = (document.getElementById('entry'));
+  //   const autocomplete = new google.maps.places.Autocomplete(address);
+  //   autocomplete.setTypes();
+  //   google.maps.event.addListener(autocomplete, 'place_changed', function() {
+  //     const place = autocomplete.getPlace();
+  //     if (!place.geometry) {
+  //       return;
+  //     }
+  //     let newAddress = '';
+  //     if (place.address_components) {
+  //       newAddress = [
+  //         (place.address_components[0] && place.address_components[0].short_name || ''),
+  //         (place.address_components[1] && place.address_components[1].short_name || ''),
+  //         (place.address_components[2] && place.address_components[2].short_name || '')
+  //       ].join(' ');
+  //     }
+  //   });
+  // }
+
   componentWillReceiveProps(nextProps) {
     const user = nextProps.user;
     this.setState({
@@ -84,6 +103,9 @@ class ProfileById extends Component {
   }
 
   onChange(e) {
+    // if (e.target.name === "venue") {
+    //   this.addAutocomplete()
+    // }
     this.setState({
       [e.target.name]: e.target.value,
       error: ''
@@ -105,11 +127,9 @@ class ProfileById extends Component {
 
   requestDate() {
     const dateBody = {
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      description: this.state.description
+      date: this.state.date,
+      description: this.state.description,
+      venue: this.state.venue
     }
     this.props.postDateRequest(this.profileId, dateBody).then(() => {
       this.setState({
@@ -122,7 +142,7 @@ class ProfileById extends Component {
   }
 
   render() {
-    const { user, startDate, endDate, startTime, endTime, description } = this.state
+    const { user, date, venue, description } = this.state
     return (
       <div>
         <SubNav currentPage={'profile'} />
@@ -133,10 +153,8 @@ class ProfileById extends Component {
           createReview={this.createReview}
           review={this.state.review}
           onChange={this.onChange}
-          startDate={startDate}
-          endDate={endDate}
-          startTime={startTime}
-          endTime={endTime}
+          date={date}
+          venue={venue}
           handleChange={this.handleChange}
           description={description}
           requestDate={this.requestDate}

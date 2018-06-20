@@ -211,46 +211,26 @@ const ProfileForm = props => {
                   <div className="collapsible-header"><i className="material-icons">contact_mail</i>Contract Mayowa</div>
                   <div className="collapsible-body">
                     <div className="row">
-                      <div className="my_bold col s12 m12 l12">
-                        From
+                      <div className="my_bold col s4 m4 l4">
+                        Date
                       </div>
-                      <div className="col s6 m6 l6">
+                      <div className="col s12 m8 l8">
                         <DatePicker
-                          selected={props.startDate}
-                          onChange={(e) => props.handleChange(e, 'startDate')}
-                        />
-                      </div>
-                      <div className="col s6 m6 l6">
-                        <DatePicker
-                          selected={props.startTime}
-                          onChange={(e) => props.handleChange(e, 'startTime')}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          dateFormat="LT"
-                          timeCaption="Time"
+                          selected={props.date}
+                          onChange={(e) => props.handleChange(e, 'date')}
                         />
                       </div>
                     </div>
                     <div className="row">
-                      <div className="my_bold col s12 m12 l12">
-                        To
+                      <div className="my_bold col s4 m4 l4">
+                        Venue
                       </div>
-                      <div className="col s6 m6 l6">
-                        <DatePicker
-                          selected={props.endDate}
-                          onChange={(e) => props.handleChange(e, 'endDate')}
-                        />
-                      </div>
-                      <div className="col s6 m6 l6">
-                        <DatePicker
-                          selected={props.endTime}
-                          onChange={(e) => props.handleChange(e, 'endTime')}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          dateFormat="LT"
-                          timeCaption="Time"
+                      <div className="col s12 m8 l8">
+                        <input
+                          id="entry"
+                          value={props.venue}
+                          name="venue"
+                          onChange={props.onChange}
                         />
                       </div>
                     </div>

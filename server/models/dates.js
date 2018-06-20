@@ -10,19 +10,18 @@ const dateSchema = new Schema({
   description: {
     type: String,
   },
-  startDate: {
+  date: {
     type: String,
   },
-  endDate: {
+  venue: {
     type: String,
   },
-  startTime: {
+  comment: {
     type: String,
-    required: true
   },
-  endTime: {
+  status: {
     type: String,
-    required: true
+    enum: ['accepted', 'rejected', 'pending']
   },
   requested: {
     type: Schema.Types.ObjectId,

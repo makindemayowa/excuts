@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actionType';
 
 const initialState = {
-  dates: {},
+  dateRequests: [],
+  myCreatedRequests: [],
   date: {},
   pagination: {},
   success: false,
@@ -19,6 +20,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         success: true,
+      };
+    case actionTypes.GET_ALL_DATE_SUCCESS:
+      return {
+        ...state,
+        dateRequests: action.dateRequests,
+      };
+    case actionTypes.GET_ALL_DATE_I_CREATED_SUCCESS:
+      return {
+        ...state,
+        myCreatedRequests: action.dateRequests,
       };
     default:
       return state;

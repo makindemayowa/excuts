@@ -13,6 +13,7 @@ import Verify from './components/Verify';
 import VerifyMail from './components/VerifyMail';
 import Contact from './components/common/Contact';
 import Safety from './components/common/Safety';
+import DateRequests from './components/dateRequests/DateRequests';
 
 export default [
   {
@@ -97,6 +98,13 @@ export default [
     path: '/search-escort',
     secured: true,
     component: SearchEscorts,
+    exact: true
+  },
+  {
+    name: 'daterequests',
+    path: '/date-requests',
+    secured: true,
+    component: DateRequests,
     exact: true
   },
   {

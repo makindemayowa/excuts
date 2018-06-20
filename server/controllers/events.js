@@ -97,7 +97,7 @@ exports.getOne = (req, res) => {
     .findOne({ _id: req.params.id })
     .populate('created_by')
     .sort({
-      'reviews.created_at': 1
+      'reviews.created_at': -1
     })
     .populate('reviews')
     .exec((err, event) => {
