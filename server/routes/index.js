@@ -75,6 +75,18 @@ module.exports = (app) => {
     auth.checkToken,
     date.create
   );
+  app.get('/api/daterequests',
+    auth.checkToken,
+    date.getAllDates
+  );
+  app.get('/api/mydaterequests',
+    auth.checkToken,
+    date.getMyDates
+  );
+  app.put('/api/daterequests/:id',
+    auth.checkToken,
+    date.update
+  );
   app.put('/api/event/:id/interested',
     auth.checkToken,
     event.interested

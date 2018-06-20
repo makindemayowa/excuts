@@ -34,26 +34,31 @@ class Discover extends Component {
     this.setState({
       loading: true
     })
+    const getUsers = (long, lat) => this.props.getAllUsers(long, lat).then((res) => {
+      this.setState({
+        users: this.props.users,
+        loading: false
+      }, () => {
+        const materialboxed = document.querySelectorAll('.materialboxed');
+        M.Materialbox.init(materialboxed);
+        const elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+      })
+    })
     var geoOptions = {
       timeout: 10 * 1000
     }
-    var geoError = function (error) {
-      console.log('Error occurred. Error code: ' + error.code);
+    const prevLong = this.props.user.location.coordinates[0];
+    const prevLat = this.props.user.location.coordinates[1];
+    const geoError = function () {
+      const long = prevLong;
+      const lat = prevLat;
+      getUsers(long, lat)
     };
     window.navigator.geolocation.getCurrentPosition((pos) => {
-      const long = pos.coords.longitude || this.props.user.location.coordinates[0];
-      const lat = pos.coords.latitude || this.props.user.location.coordinates[1];
-      this.props.getAllUsers(long, lat).then((res) => {
-        this.setState({
-          users: this.props.users,
-          loading: false
-        }, () => {
-          const materialboxed = document.querySelectorAll('.materialboxed');
-          M.Materialbox.init(materialboxed);
-          const elems = document.querySelectorAll('select');
-          M.FormSelect.init(elems);
-        })
-      })
+      const long = pos.coords.longitude;
+      const lat = pos.coords.latitude;
+      getUsers(long, lat)
     }, geoError, geoOptions);
   }
 
