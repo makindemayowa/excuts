@@ -1,6 +1,5 @@
 /* eslint-env jquery */
 /* global M */
-
 import React, { Component } from 'react';
 import ReactPaginate from 'react-paginate';
 import moment from 'moment';
