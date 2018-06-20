@@ -12,12 +12,14 @@ import {
   getAllUsers
 } from '../../actions/auth';
 import './dashboard.scss';
+import Loader from '../common/Loader'
 
 class Discover extends Component {
   constructor() {
     super();
     this.state = {
       filterOpen: false,
+      loading: false,
       startDate: moment(),
       value: { min: 2, max: 10 },
       maxDistance: 5,
@@ -29,10 +31,13 @@ class Discover extends Component {
   }
 
   componentDidMount() {
+    this.setState({
+      loading: true
+    })
     var geoOptions = {
       timeout: 10 * 1000
     }
-    var geoError = function(error) {
+    var geoError = function (error) {
       console.log('Error occurred. Error code: ' + error.code);
     };
     window.navigator.geolocation.getCurrentPosition((pos) => {
@@ -40,15 +45,16 @@ class Discover extends Component {
       const lat = pos.coords.latitude || this.props.user.location.coordinates[1];
       this.props.getAllUsers(long, lat).then((res) => {
         this.setState({
-          users: this.props.users
+          users: this.props.users,
+          loading: false
         }, () => {
           const materialboxed = document.querySelectorAll('.materialboxed');
           M.Materialbox.init(materialboxed);
+          const elems = document.querySelectorAll('select');
+          M.FormSelect.init(elems);
         })
       })
     }, geoError, geoOptions);
-    const elems = document.querySelectorAll('select');
-    M.FormSelect.init(elems);
   }
 
   handleChange(date) {
@@ -64,10 +70,13 @@ class Discover extends Component {
   }
 
   render() {
-    const { users } = this.state
+    const { users, loading } = this.state
     return (
       <div>
         <SubNav />
+        {
+          loading && <Loader />
+        }
         <div className="discover bg-3">
           <div className="bottom_margin" />
           <div className="content-div bg-3">
@@ -84,59 +93,62 @@ class Discover extends Component {
                       )
                     }
                   </div>
-                  <div className="col m2 l2">
-                    <div className="searchForm">
-                      <div className="flex">
-                        <div className="form-fields">
-                          <label>Gender</label>
-                          <select className="size1">
-                            <option value="1">Female</option>
-                            <option value="">Male</option>
-                            <option value="2">Other</option>
-                          </select>
-                        </div>
+                  {
+                    !loading &&
+                    <div className="col m2 l2">
+                      <div className="searchForm">
+                        <div className="flex">
+                          <div className="form-fields">
+                            <label>Gender</label>
+                            <select className="size1">
+                              <option value="1">Female</option>
+                              <option value="">Male</option>
+                              <option value="2">Other</option>
+                            </select>
+                          </div>
 
-                        <div className="form-fields">
-                          <label>Country</label>
-                          <select className="size1">
-                            <option value="">Nigeria</option>
-                            <option value="3">Norway</option>
-                            <option value="1">Oman</option>
-                            <option value="2">Pakistan</option>
-                          </select>
-                        </div>
+                          <div className="form-fields">
+                            <label>Country</label>
+                            <select className="size1">
+                              <option value="">Nigeria</option>
+                              <option value="3">Norway</option>
+                              <option value="1">Oman</option>
+                              <option value="2">Pakistan</option>
+                            </select>
+                          </div>
 
-                        <div className="form-fields">
-                          <label>State</label>
-                          <select className="size1">
-                            <option value="">Lagos</option>
-                            <option value="1">Abuja</option>
-                            <option value="2">Abeokuta</option>
-                          </select>
-                        </div>
-                        <form action="#">
-                          Maximum Distance: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <div className="form-fields">
+                            <label>State</label>
+                            <select className="size1">
+                              <option value="">Lagos</option>
+                              <option value="1">Abuja</option>
+                              <option value="2">Abeokuta</option>
+                            </select>
+                          </div>
+                          <form action="#">
+                            Maximum Distance: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           <span id="maxDistance">{this.state.maxDistance}km</span>
-                          <p className="range-field">
-                            <input type="range" name="maxDistance" value={this.state.maxDistance} onChange={this.changeEvent} min="0" max="100" />
-                          </p>
-                        </form>
-                        <form action="#">
-                          Maximum Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <p className="range-field">
+                              <input type="range" name="maxDistance" value={this.state.maxDistance} onChange={this.changeEvent} min="0" max="100" />
+                            </p>
+                          </form>
+                          <form action="#">
+                            Maximum Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           <span id="maxAge">{this.state.maxAge}</span>
-                          <p className="range-field">
-                            <input type="range" name="maxAge" value={this.state.maxAge} onChange={this.changeEvent} min="18" max="60" />
-                          </p>
-                        </form>
-                        <div className="">
-                          <button className="waves-effect waves-light btn">
-                            Search
+                            <p className="range-field">
+                              <input type="range" name="maxAge" value={this.state.maxAge} onChange={this.changeEvent} min="18" max="60" />
+                            </p>
+                          </form>
+                          <div className="">
+                            <button className="waves-effect waves-light btn">
+                              Search
                           </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  }
                 </div>
               </div>
             </section>
