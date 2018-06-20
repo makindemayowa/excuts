@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Redirect } from 'react-router-dom';
+import toastr from 'toastr';
 import socket from '../../index';
 import Login from '../landingPage/Login';
 import Signup from '../landingPage/Signup';
@@ -20,7 +21,6 @@ class NavBar extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      error: '',
       success: false,
       isLogged: false
     }
@@ -43,7 +43,6 @@ class NavBar extends Component {
           email: '',
           password: '',
           confirmPassword: '',
-          error: '',
         });
       }
     });
@@ -66,14 +65,12 @@ class NavBar extends Component {
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
-      error: ''
     });
   }
 
   submitLogin(e) {
     const elem = document.querySelector('#loginModal');
     const instance = M.Modal.getInstance(elem);
-    this.setState({ error: '' });
     e.preventDefault();
     const userdata = {
       email: this.state.email,
@@ -83,24 +80,21 @@ class NavBar extends Component {
       .userLoginRequest(userdata)
       .then(() => {
         instance.close();
+        toastr.success('login successful')
         this.setState({ isLogged: this.props.isLogged });
       })
       .catch((errorData) => {
-        this.setState({
-          error: errorData.response.data.message
-        });
+        toastr.error(errorData.response.data.message)
       });
   }
 
   submitSignup(e) {
     const elem = document.querySelector('#signupModal');
     const instance = M.Modal.getInstance(elem);
-    this.setState({ error: '' });
     e.preventDefault();
+    
     if (this.state.password !== this.state.confirmPassword) {
-      return this.setState({
-        error: 'passwords do not match'
-      });
+      return toastr.error('passwords do not match')
     }
     const userdata = {
       email: this.state.email,
@@ -114,13 +108,12 @@ class NavBar extends Component {
     this.props
       .userSignUpRequest(userdata)
       .then(() => {
+        toastr.success('signup successful')
         instance.close()
         this.setState({ success: this.props.success })
       })
       .catch((errorData) => {
-        this.setState({
-          error: errorData.response.data.message
-        });
+        toastr.error(errorData.response.data.message)
       });
   }
 

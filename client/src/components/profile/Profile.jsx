@@ -206,6 +206,9 @@ class Profile extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    if (this.state.sex !== 'male' && this.state.sex !== 'female') {
+      return toastr.error('sex should be male or female')
+    }
     const userDetails = {
       age: this.state.age,
       firstName: this.state.firstName,
