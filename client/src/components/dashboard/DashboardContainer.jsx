@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { simpleAction } from '../../actions/simpleAction';
 import NavBar from '../common/Nav';
 import Footer from '../common/Footer';
-// import SubNav from '../subNav/SubNav';
 
 class App extends Component {
   render() {
