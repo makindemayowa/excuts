@@ -1,5 +1,4 @@
 /*global M*/
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Redirect } from 'react-router-dom';
