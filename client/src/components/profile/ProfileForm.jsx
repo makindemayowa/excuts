@@ -1,5 +1,7 @@
 import React from 'react';
+import DatePicker from 'react-datepicker';
 import { Link } from 'react-router-dom';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ProfileForm = props => {
   return (
@@ -206,16 +208,50 @@ const ProfileForm = props => {
               props.currentUser.email !== props.user.email &&
               <ul className="collapsible">
                 <li>
-                  <div className="collapsible-header"><i className="material-icons">message</i>Contract {`${props.user.firstName}`}</div>
+                  <div className="collapsible-header"><i className="material-icons">contact_mail</i>Contract Mayowa</div>
                   <div className="collapsible-body">
                     <div className="row">
                       <div className="my_bold col s12 m12 l12">
                         From
-                  </div>
+                      </div>
+                      <div className="col s6 m6 l6">
+                        <DatePicker
+                          selected={props.startDate}
+                          onChange={(e) => props.handleChange(e, 'startDate')}
+                        />
+                      </div>
+                      <div className="col s6 m6 l6">
+                        <DatePicker
+                          selected={props.startTime}
+                          onChange={(e) => props.handleChange(e, 'startTime')}
+                          showTimeSelect
+                          showTimeSelectOnly
+                          timeIntervals={15}
+                          dateFormat="LT"
+                          timeCaption="Time"
+                        />
+                      </div>
                     </div>
                     <div className="row">
                       <div className="my_bold col s12 m12 l12">
                         To
+                      </div>
+                      <div className="col s6 m6 l6">
+                        <DatePicker
+                          selected={props.endDate}
+                          onChange={(e) => props.handleChange(e, 'endDate')}
+                        />
+                      </div>
+                      <div className="col s6 m6 l6">
+                        <DatePicker
+                          selected={props.endTime}
+                          onChange={(e) => props.handleChange(e, 'endTime')}
+                          showTimeSelect
+                          showTimeSelectOnly
+                          timeIntervals={15}
+                          dateFormat="LT"
+                          timeCaption="Time"
+                        />
                       </div>
                     </div>
                     <div className="row">
@@ -226,21 +262,32 @@ const ProfileForm = props => {
                       <div className="bottom_margin" />
                       <div className="row">
                         <div className="col s12 m8 l8">
-                          <textarea placeholder="Interest me..." id="textarea1" className="materialize-textarea" data-length="120" />
+                          <textarea
+                            placeholder="Interest me..."
+                            id="textarea1"
+                            name="description"
+                            value={props.description}
+                            onChange={props.onChange}
+                            className="materialize-textarea"
+                            data-length="120"
+                          />
                         </div>
                       </div>
                     </div>
                     <div className="bottom_margin" />
                     <div className="row ">
-                      <button className="col s12 m8 l8 waves-effect waves-light btn edit-button">
+                      <button
+                        className="col s12 m8 l8 waves-effect waves-light btn edit-button"
+                        onClick={props.requestDate}
+                      >
                         Send Request
-                  </button>
+                      </button>
                     </div>
                   </div>
                 </li>
                 <li>
                   <div className="collapsible-header text-center">
-                    <i className="material-icons">message</i>
+                    <i className="material-icons">rate_review</i>
                     {`Reviews for ${props.user.firstName}`}
                   </div>
                   <div className="collapsible-body">
@@ -271,9 +318,9 @@ const ProfileForm = props => {
                         return (
                           <div className="review" key={review._id}>
                             <Link to={`/publicProfile/${currentId}`}>
-                            <div className="reviewer">
-                              {`By: ${review.reviewersName}`}
-                            </div>
+                              <div className="reviewer">
+                                {`By: ${review.reviewersName}`}
+                              </div>
                             </Link>
                             <div className="">
                               <div className="card-content black-text">

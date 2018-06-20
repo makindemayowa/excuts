@@ -68,6 +68,10 @@ const UserSchema = new Schema({
   reviews: [{
     type: Schema.Types.ObjectId,
     ref: 'Review'
+  }],
+  dateRequests: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Date'
   }]
 },
 { timestamps: { createdAt: 'created_at' } });

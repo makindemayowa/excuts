@@ -1,13 +1,11 @@
 /* eslint-env jquery */
 /* global M */
-
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
 import { getUserById } from '../../actions/auth';
 import { postReviewRequest } from '../../actions/events';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { postDateRequest } from '../../actions/dates';
 import moment from 'moment';
 import SubNav from '../common/SubNav';
 import ProfileForm from './ProfileForm';
@@ -17,13 +15,18 @@ class ProfileById extends Component {
     super(props);
     this.state = {
       startDate: moment(),
+      endDate: moment(),
+      startTime: moment(),
+      endTime: moment(),
       currentImg: '',
       review: '',
+      description: '',
       user: this.props.user || {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.createReview = this.createReview.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.requestDate = this.requestDate.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +69,7 @@ class ProfileById extends Component {
       });
     })
   }
+
   componentWillReceiveProps(nextProps) {
     const user = nextProps.user;
     this.setState({
@@ -73,9 +77,9 @@ class ProfileById extends Component {
     });
   }
 
-  handleChange(date) {
+  handleChange(date, name) {
     this.setState({
-      startDate: date
+      [name]: date
     });
   }
 
@@ -99,8 +103,26 @@ class ProfileById extends Component {
     });
   }
 
+  requestDate() {
+    const dateBody = {
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      description: this.state.description
+    }
+    this.props.postDateRequest(this.profileId, dateBody).then(() => {
+      this.setState({
+        description: '',
+      })
+      toastr.success('Request successful')
+    }).catch((err) => {
+      toastr.error('An error occured')
+    })
+  }
+
   render() {
-    const { user } = this.state
+    const { user, startDate, endDate, startTime, endTime, description } = this.state
     return (
       <div>
         <SubNav currentPage={'profile'} />
@@ -111,6 +133,13 @@ class ProfileById extends Component {
           createReview={this.createReview}
           review={this.state.review}
           onChange={this.onChange}
+          startDate={startDate}
+          endDate={endDate}
+          startTime={startTime}
+          endTime={endTime}
+          handleChange={this.handleChange}
+          description={description}
+          requestDate={this.requestDate}
         />
       </div>
     );
@@ -123,4 +152,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps,
-  { getUserById, postReviewRequest })(ProfileById);
+  { getUserById, postReviewRequest, postDateRequest })(ProfileById);

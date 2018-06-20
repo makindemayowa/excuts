@@ -4,11 +4,12 @@ import './userCard.scss';
 
 export default props => {
   const currentId = `${props.userInfo._id}`;
+  const noAvatar = require('../../images/noavatar.png')
   return (
-    <div className="col s6 m6 l3">
+    <div className="col s12 m6 l3">
       <div className="card">
         <div className="card-image">
-          <img className="materialboxed" width="650" alt={props.userInfo.firstName} src={props.userInfo.profilePhoto} />
+          <img className="materialboxed" width="650" alt={props.userInfo.firstName} src={props.userInfo.profilePhoto || noAvatar} />
         </div>
         <div className="card-content">
           <p className="content-title">
