@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd client && npm run build && cd - && node index.js",
+    "start": "cd client && npm install && npm run build && cd - && node index.js",
     "server": "nodemon --exec npm start",
     "client": "cd client && npm start",
     "dev": "concurrently \"npm run client\" \"npm run server\""
