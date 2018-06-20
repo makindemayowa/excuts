@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 const routes = require('./server/routes/index');
 
 const app = express();
@@ -33,12 +34,12 @@ io.on('connection', (socket) => {
   });
 });
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 routes(app);
 
-app.use(express.static('./client/build'));
-
-app.all('*', (req, res) => {
-  res.status(404).send({ message: 'route not found' });
-});
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, 'client/build/index.html'))
+);
 
 module.exports = app;
