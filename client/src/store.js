@@ -2,7 +2,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer';
 import jwtDecode from 'jwt-decode';
-import { setUser, setLoc } from './actions/auth';
+import {
+  setUser,
+  // setLoc
+} from './actions/auth';
 import setAuthorisation from './setAuthorisation'
 
 export default function configureStore(initialState = {}) {

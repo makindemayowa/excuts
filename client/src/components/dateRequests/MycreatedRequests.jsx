@@ -26,7 +26,7 @@ export default props => {
               <b>Date: &nbsp;&nbsp;</b>
             </span>
             <span>
-              {`${new Date(props.daterequest.date)}`} &nbsp;&nbsp;
+              {`${new Date(props.daterequest.date).toDateString()}`} &nbsp;&nbsp;
             </span>
           </div>
           <div className="">

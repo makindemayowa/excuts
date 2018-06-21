@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { Link } from 'react-router-dom'
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 import toastr from 'toastr';
 import SubNav from '../common/SubNav';
 import {
@@ -20,7 +19,7 @@ class Events extends Component {
     super(props)
     this.state = {
       event: {
-        created_by: {},
+        created_by_id: '',
         interested: false,
         loading: true
       },
@@ -109,7 +108,7 @@ class Events extends Component {
                       <span className="showinterest">
                         Interested?
                   </span>
-                      <a href="#" onClick={this.showInterest}>
+                      <a onClick={this.showInterest}>
                         <i className="far fa-thumbs-up interested"></i>
                       </a>
                     </div>
@@ -117,8 +116,8 @@ class Events extends Component {
                     <div className="newEventContainer">
                       <div className="bottom_margin" />
                       <div className="right created_by red-text">
-                        <Link className="red-text" to={`/publicProfile/${event.created_by._id}`}>
-                          By:&nbsp;&nbsp;&nbsp;{event.created_by.email}
+                        <Link className="red-text" to={`/publicProfile/${event.created_by_id}`}>
+                          By:&nbsp;&nbsp;&nbsp;{event.created_by}
                         </Link>
                         <div className="bottom_margin" />
                       </div>
@@ -142,7 +141,7 @@ class Events extends Component {
                         <div className="row">
                           <div className="col s6 m4 l4">
                             Date
-                      </div>
+                          </div>
                           <div className="col s6 m4 l4 push-up">
                             <DatePicker
                               selected={this.state.date}
@@ -205,6 +204,22 @@ class Events extends Component {
                               className=""
                               required
                               value={event.city}
+                            />
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className=" col s6 m4 l4">
+                            Interested in
+                          </div>
+                          <div className="col s6 m4 l3 push-up">
+                            <input
+                              placeholder="male/female/others"
+                              name="interestedIn"
+                              type="text"
+                              className=""
+                              required
+                              onChange={this.onChange}
+                              value={event.interestedIn}
                             />
                           </div>
                         </div>

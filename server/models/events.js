@@ -19,8 +19,12 @@ const eventSchema = new Schema({
     required: true
   },
   created_by: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+    type: String,
+    required: true
+  },
+  created_by_id: {
+    type: String,
+    required: true
   },
   state: {
     type: String,
@@ -42,11 +46,13 @@ const eventSchema = new Schema({
   status: {
     type: String,
   },
+  interestedIn: {
+    type: String,
+    enum: ['male', 'female', 'others']
+  },
   interested: [{
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }]
 },
 { timestamps: { createdAt: 'created_at' } });

@@ -6,7 +6,8 @@ exports.create = (req, res) => {
     created_by: req.user.id
   }).then((existingEvent) => {
     if (!existingEvent) {
-      req.body.created_by = req.user.id;
+      req.body.created_by = req.user.email;
+      req.body.created_by_id = req.user.id;
       const event = new Events(req.body);
       event.save((err, newEvent) => {
         if (err) {
@@ -26,7 +27,7 @@ exports.create = (req, res) => {
 
 exports.update = (req, res) => {
   Events.findOneAndUpdate({
-    created_by: req.user.id,
+    created_by_id: req.user.id,
     _id: req.params.id
   },
     { $set: req.body }, { new: true }, (err, response) => {
@@ -59,7 +60,7 @@ exports.updateReview = (req, res) => {
 exports.interested = (req, res) => {
   Events.findOne({
     _id: req.params.id,
-    created_by: { $ne: req.user.id }
+    created_by_id: { $ne: req.user.id }
   }).then((event) => {
     if (!event) {
       res.status(404)
@@ -95,11 +96,7 @@ exports.interested = (req, res) => {
 exports.getOne = (req, res) => {
   Events
     .findOne({ _id: req.params.id })
-    .populate('created_by')
-    .sort({
-      'reviews.created_at': -1
-    })
-    .populate('reviews')
+    .populate('interested', 'firstName')
     .exec((err, event) => {
       if (!event) {
         return res.status(404).send({ message: 'Event not found' });
@@ -113,22 +110,26 @@ exports.getAll = (req, res) => {
   const limit = req.query.limit || 5;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
-  const query = {
-    created_by: { $ne: req.user.id },
-    // date: { $gte: new Date('2018-05-05') },
-  };
+  let query;
+  if (req.query.q === 'mine') {
+    query = {
+      created_by: req.user.email
+    };
+  } else {
+    query = {
+      created_by: { $ne: req.user.email },
+      // date: { $gte: new Date('2018-05-05') },
+    };
+  }
   Events
     .find(query)
     .skip(offset)
     .limit(limit)
     .sort({
       created_at: -1,
-      'reviews.created_at': -1
     })
-    .populate('created_by')
-    .populate('reviews')
     .exec((err, events) => {
-      if (!events.length) {
+      if (!events) {
         return res.status(404).send({ message: 'No event found' });
       }
       Events.count(query).exec((err, count) => {
@@ -147,7 +148,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-  Events.findOneAndUpdate({ _id: req.params.id, created_by: req.user.id, },
+  Events.findOneAndUpdate({ _id: req.params.id, created_by_id: req.user.id, },
     { $set: { status: 'archived' } }, { new: true }, (err, response) => {
       if (!response) {
         return res.status(404).send({ message: 'Event not found' });

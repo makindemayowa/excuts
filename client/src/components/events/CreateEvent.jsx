@@ -24,6 +24,7 @@ class Events extends Component {
       preference: '',
       extra: '',
       success: '',
+      interestedIn: '',
       error: ''
     };
     this.handleChange = this.handleChange.bind(this);
@@ -60,6 +61,7 @@ class Events extends Component {
       details: this.state.details,
       preference: this.state.preference,
       extra: this.state.extra,
+      interestedIn: this.state.interestedIn
     }
     // ensure you cannot create an event for past days    
     this.props.createEventRequest(eventDetail).then((res) => {
@@ -178,6 +180,22 @@ class Events extends Component {
                           required
                           onChange={this.onChange}
                           value={this.state.city}
+                        />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className=" col s6 m4 l4">
+                        Interested in
+                        </div>
+                      <div className="col s6 m4 l3 push-up">
+                        <input
+                          placeholder="male/female/others"
+                          name="interestedIn"
+                          type="text"
+                          className=""
+                          required
+                          onChange={this.onChange}
+                          value={this.state.interestedIn}
                         />
                       </div>
                     </div>

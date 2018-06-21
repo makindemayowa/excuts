@@ -6,7 +6,8 @@ import toastr from 'toastr';
 import PropTypes from 'prop-types';
 import SubNav from '../common/SubNav';
 import moment from 'moment';
-import Loader from '../common/Loader'
+import Loader from '../common/Loader';
+import NotFound from '../common/NotFound';
 import RequestCard from './RequestCard';
 import MycreatedRequests from './MycreatedRequests';
 import './dates.scss';
@@ -20,6 +21,7 @@ class DateRequests extends Component {
       dateRequests: [],
       comment: '',
       selectedTab: '',
+      myCreatedRequests: [],
       loading: true
     };
     this.handleChange = this.handleChange.bind(this);
@@ -33,6 +35,13 @@ class DateRequests extends Component {
     this.props.getDateRequest().then(() => {
       this.setState({
         dateRequests: this.props.dateRequests,
+        loading: false
+      }, () => {
+        const elems = document.querySelectorAll('.modal');
+        M.Modal.init(elems);
+      });
+    }).catch(() => {
+      this.setState({
         loading: false
       }, () => {
         const elems = document.querySelectorAll('.modal');
@@ -55,17 +64,36 @@ class DateRequests extends Component {
 
   handleChange(e) {
     this.setState({
+      loading: true,
       selectedTab: e.target.value,
+      dateRequests: []
     });
     if (e.target.value === 'mine') {
       this.props.getMyDateRequest(e.target.value).then(() => {
+        this.setState({
+          myCreatedRequests: this.props.myCreatedRequests,
+          loading: false
+        })
         const elems = document.querySelectorAll('.modal');
         M.Modal.init(elems);
-      });
+      }).catch(() => {
+        this.setState({
+          loading: false
+        })
+      });;
     } else {
       this.props.getDateRequest(e.target.value).then(() => {
-        const elems = document.querySelectorAll('.modal');
-        M.Modal.init(elems);
+        this.setState({
+          dateRequests: this.props.dateRequests,
+          loading: false
+        }, () => {
+          const elems = document.querySelectorAll('.modal');
+          M.Modal.init(elems);
+        });
+      }).catch(() => {
+        this.setState({
+          loading: false
+        })
       });
     }
   }
@@ -115,7 +143,7 @@ class DateRequests extends Component {
               {this.state.selectedTab !== 'mine' &&
                 <div className="row">
                   {
-                    this.props.dateRequests.map((daterequest) => (
+                    this.state.dateRequests.length ? (this.state.dateRequests.map((daterequest) => (
                       <RequestCard
                         key={daterequest._id}
                         daterequest={daterequest}
@@ -124,14 +152,17 @@ class DateRequests extends Component {
                         comment={this.state.comment}
                       />
                     )
-                    )
+                    )) :
+                      <NotFound
+                        type={'request'}
+                      />
                   }
                 </div>
               }
-              {this.state.selectedTab === 'mine' &&
+              {this.state.selectedTab === 'mine' && (this.state.myCreatedRequests.length ?
                 <div className="row">
                   {
-                    this.props.myCreatedRequests.map((daterequest) => (
+                    this.state.myCreatedRequests.map((daterequest) => (
                       <MycreatedRequests
                         key={daterequest._id}
                         daterequest={daterequest}
@@ -139,7 +170,10 @@ class DateRequests extends Component {
                     )
                     )
                   }
-                </div>
+                </div> :
+                <NotFound
+                  type={'request'}
+                />)
               }
             </div>}
         </div>

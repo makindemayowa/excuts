@@ -16,10 +16,11 @@ function endAjax() {
   };
 }
 
-function getAllSucess(users) {
+function getAllSucess(users, pagination) {
   return {
     type: actionTypes.GET_ALL_EVENT_SUCCESS,
-    users
+    users,
+    pagination
   };
 }
 
@@ -148,12 +149,20 @@ export function updateUserDetails(userDetails) {
  * @param {object} userDetails
  * @returns {object} dispatch object
  */
-export function getAllUsers(long, lat) {
+export function getAllUsers(long, lat, page) {
+  let url;
+  if (page) {
+    url = `/api/user/?long=${long}&lat=${lat}&page=${page}`
+  } else {
+    url = `/api/user/?long=${long}&lat=${lat}` 
+  }
   return dispatch => {
     dispatch(ajaxInProcess());
-    return axios.get(`/api/user/?long=${long}&lat=${lat}`).then((res) => {
+    return axios.get(url).then((res) => {
       dispatch(endAjax());
-      dispatch(getAllSucess(res.data.users));
+      const pagination = res.data.pagination;
+      const users = res.data.users;
+      dispatch(getAllSucess(users, pagination));
     });
   }
 }

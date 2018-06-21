@@ -7,23 +7,39 @@ export default props => {
     <div className="col s12 m6 l4">
       <div className="eventsContainer">
         <div className="card-panel eventCard">
-          <div className="">
-            <span>
-              <strong>Title: &nbsp;&nbsp;</strong>
-            </span>
-            {props.event.title}
-          </div>
+          {
+            (props.currentUser.email === props.event.created_by) &&
+            (
+              props.event.interested.length ?
+                <div>
+                  <Link to={`/interests/${currentId}`}>
+                    <div className="">
+                      {`${props.event.interested.length}${` interest shown`}`}
+                    </div>
+                  </Link>
+                  <br />
+                </div> :
+                <div>
+                  <div className="noInterest">
+                    <div className="">
+                      {`${props.event.interested.length}${` interest shown`}`}
+                    </div>
+                  </div>
+                </div>
+            )
+          }
+          <div className="bottom_margin" />
           <div className="">
             <span>
               <strong>Date: &nbsp;&nbsp;</strong>
             </span>
-            {props.event.date}
+            {`${new Date(props.event.date).toDateString()}`}
           </div>
           <div className="">
             <span>
-              <strong>Time: &nbsp;&nbsp;</strong>
+              <strong>State: &nbsp;&nbsp;</strong>
             </span>
-            {props.event.time}
+            {props.event.state}
           </div>
           <div className="">
             <span>
@@ -31,21 +47,27 @@ export default props => {
             </span>
             {props.event.location}
           </div>
-          <div className="">
-            <span>
-              <strong>Details: &nbsp;&nbsp;</strong>
-            </span>
-            {props.event.details}
+          <div className="bottom_margin" />
+          <div className="action_container">
+            {
+              (props.currentUser.email === props.event.created_by) &&
+              <span>
+                <Link className="delete" to={`/event/${currentId}`}>
+                  <span className="right cardfooter">
+                    delete
+                  </span>
+                </Link>
+              </span>
+            }
+            <Link className="" to={`/event/${currentId}`}>
+              <span className="right more cardfooter">
+                read more
+              </span>
+            </Link>
           </div>
           <div className="bottom_margin" />
-          <Link to={`/event/${currentId}`}>
-            <div className="cardfooter right">
-              Read more
-            </div>
-          </Link>
-          <div className="bottom_margin" />
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
