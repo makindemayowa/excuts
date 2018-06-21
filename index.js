@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const userRoutes = require('./server/routes/index');
+const routes = require('./server/routes/index');
 
 const app = express();
 const port = process.env.PORT;
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.listen(port, () => {
+const serverconnection = app.listen(port, () => {
   console.log(`app is listening on port ${port}!`);
 });
 
@@ -22,7 +22,18 @@ mongoose.connect(dbURL);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-userRoutes(app);
+const io = require('socket.io')(serverconnection);
+
+global.io = io;
+io.on('connection', (socket) => {
+  console.log(`this user ${socket.id} is connected`);
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
+routes(app);
 
 // app.use(express.static('./client/build'));
 

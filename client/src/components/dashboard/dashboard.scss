@@ -1,0 +1,124 @@
+.bg-3 {
+  background-color: rgb(244, 245, 246)
+}
+
+ul.pagination {
+  text-align: center;
+  li {
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    a {
+      height: 30px;
+      width: 30px;
+      border-radius: 30px;
+      padding: 0px;
+      display: inline-block;
+      font-size: 12px;
+    }
+  }
+  li.active {
+    background-color: #ff6666;
+  }
+  li.previous,
+  li.next {
+    width: 120px;
+    a {
+      width: 120px;
+      span {
+        display: inline-block;
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000;
+        i,
+        svg {
+          display: inline-block;
+          font-size: 30px;
+          background-color: #ff6666;
+          border-radius: 30px;
+          color: rgb(32, 33, 34)
+        }
+      }
+    }
+  }
+}
+
+.discover {
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 20px;
+    width: 12px;
+    border-radius: 2px;
+    background: #ff6666;
+    cursor: pointer;
+    margin-top: -14px; 
+    box-shadow: 1px 1px 1px #e5e5e5, 0px 0px 1px #e5e5e5;
+  }
+  .searchForm {
+    font-size: 12px;
+    margin-left: -16px;    
+    .select-dropdown {
+      background-color: #f5f5f5;
+      // border: none;
+      color: #ff6666;
+      text-transform: uppercase;
+      font-size: 11px;
+      margin: 0px 0px 15px 0px;
+    }
+    input.select-dropdown {
+      font-size: 12px;    
+    }
+    .select-wrapper {
+      span.caret {
+        color: rgb(116, 117, 118);
+        z-index: 2;
+        display: inline-block;
+        font-size: 12px;
+        right: 10px;
+      }
+      .dropdown-content {
+        li {
+          min-height: auto;
+          border-left: thin solid rgb(30, 31, 32);
+          span {
+            color: rgb(104, 105, 106);
+            text-transform: uppercase;
+            font-size: 11px;
+            padding: 7px 16px;
+          }
+        }
+        li:first-of-type {
+          span {
+            color: #ff6666;
+          }
+        }
+        li:hover {
+          background-color: rgb(21, 21, 21);
+          border-left: thin solid #ff6666;;
+        }
+      }
+    }
+    .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
+      background-color: #ff6666;
+    }
+    .dtpcker{
+      input[type=text]:not(.browser-default) {
+        font-size: 12px;
+        width: 134%;;
+      }
+    }
+  }
+}
+
+
+@media only screen and (max-width: 530px) {
+  .discover {
+    .searchForm {
+      display: none;
+    }
+  }
+}

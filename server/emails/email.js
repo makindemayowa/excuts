@@ -36,14 +36,14 @@ module.exports = {
     const verficationHtml = ejs.render(verifyAccountHtml, {
       link
     });
-    const subject = 'Bilimoda Email Verification';
+    const subject = 'Take Me Out Email Verification';
     sendMail(email, subject, verficationHtml);
   },
   sendPasswordRecoveryMail(email, link) {
     const resetHtml = ejs.render(resetPasswordHtml, {
       link
     });
-    const subject = 'Bilimoda password reset instructions';
+    const subject = 'Take Me Out password reset instructions';
     sendMail(email, subject, resetHtml);
   },
 };

@@ -21,17 +21,20 @@ exports.create = (req, res) => {
       req.body.status = 'pending';
       req.body.verifyingToken = registrationToken;
       const user = new User(req.body);
-      user.save((err, res) => {
+      user.save((err) => {
         if (err) {
           return res.status(500).send({ err });
         }
-        const siteUrl = `${req.protocol} + "://" + ${req.get('host')}`;
-        const link = `${siteUrl}/api/signup/verify/${registrationToken}`;
+        const siteUrl = `${req.protocol}://${req.get('host')}`;
+        const link = `${siteUrl}/email/verify/${registrationToken}`;
         emails.sendVerificationMail(req.body.email, link);
+        return res.status(200)
+          .send({ message: 'Please check your email to continue' });
       });
+    } else {
+      return res.status(409)
+        .send({ message: 'email already exists' });
     }
-    return res.status(200)
-      .send({ message: 'Please check your email to continue' });
   });
 };
 
@@ -96,13 +99,21 @@ exports.verifyToken = (req, res) => {
   }, (err, user) => {
     if (err) return res.status(500).send({ err });
     if (!user) return res.status(400).send({ message: 'Invalid Auth Token' });
-
     user.status = 'verified';
     user.verifyingToken = '';
     user.save((err, updateduser) => {
       if (err) return res.status(500).send({ err });
+      const userDetails = {
+        email: updateduser.email,
+        role: updateduser.role,
+        firstName: user.firstName,
+        id: updateduser._id,
+        status: updateduser.status,
+        location: updateduser.loc
+      };
+      const jsonToken = helper.createToken({ userDetails }, '24h');
       return res.status(200)
-        .send({ message: 'Email verified successfully', updateduser });
+        .send({ message: 'Email verified successfully', jsonToken });
     });
   });
 };
@@ -123,7 +134,10 @@ exports.login = (req, res) => {
     const userDetails = {
       email: user.email,
       id: user._id,
-      isAdmin: user.isMerchant,
+      role: user.role,
+      firstName: user.firstName,
+      status: user.status,
+      location: user.loc,
     };
     const jsonToken = helper.createToken({ userDetails }, '24h');
     return res.status(200).send({ message: 'login successful', jsonToken });
@@ -132,18 +146,76 @@ exports.login = (req, res) => {
 
 exports.update = (req, res) => {
   User.findOneAndUpdate({ email: req.user.email },
-    { $set: req.body }, { new: true }, (err, response) => {
-      if (!response) {
+    { $set: req.body }, { new: true }, (err, updatedUser) => {
+      if (!updatedUser) {
         return res.status(400).send({ message: 'An error occurred' });
       }
-      if (err) return res.status(500).send({ err });
-      return res.status(200).send({ message: 'success', response });
+      return res.status(200).send({ message: 'success', updatedUser });
     });
 };
 
+exports.updatePhoto = (req, res) => {
+  if (!req.body.fileUrl) {
+    res.status(400)
+      .send({ message: 'Image url is required' });
+  }
+  User.findOne({
+    email: req.user.email,
+  }).then((user) => {
+    if (!user) {
+      res.status(404)
+        .send({ message: 'User not found' });
+    } else {
+      user.photos.push(req.body.fileUrl);
+      user.save((err, updatedUser) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        return res.status(200)
+          .send({ message: 'Success', updatedUser });
+      });
+    }
+  }).catch((err) => {
+    if (err) return res.status(500).send({ err });
+  });
+};
+
+exports.deletePhoto = (req, res) => {
+  User.findOne({
+    email: req.user.email,
+  }).then((user) => {
+    if (!user) {
+      res.status(404)
+        .send({ message: 'User not found' });
+    } else {
+      const index = user.photos.indexOf(req.body.fileUrl);
+      if (index > -1) {
+        user.photos.splice(index, 1);
+      }
+      user.save((err, updatedUser) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        return res.status(200)
+          .send({ message: 'Success', updatedUser });
+      });
+    }
+  }).catch((err) => {
+    if (err) return res.status(500).send({ err });
+  });
+};
+
 exports.getOne = (req, res) => {
-  User.findOne({ _id: req.params.id },
-    (err, user) => {
+  let query;
+  if (req.params.id !== 'me') {
+    query = { _id: req.params.id };
+  } else {
+    query = { email: req.user.email };
+  }
+  User
+    .findOne(query)
+    .populate('reviews')
+    .exec((err, user) => {
       if (!user) {
         return res.status(404).send({ message: 'User not found' });
       }
@@ -153,33 +225,37 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  // const merchantId = req.user.id;
+  const long = parseFloat(req.query.long);
+  const lat = parseFloat(req.query.lat);
   const limit = req.query.limit || 5;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
-  // let query = {
-  //   merchantId
-  // };
-  // if (Object.keys(req.query).length &&
-  //   ('status' in req.query || 'updatedAt' in req.query)) {
-  //   query = {
-  //     merchantId,
-  //     status: req.query.status || '',
-  //     updatedAt: req.query.updatedAt || '',
-  //   };
-  // }
+  const geoNear = {
+    $geoNear: {
+      near: {
+        type: 'Point',
+        coordinates:
+          [long, lat]
+      },
+      distanceField: 'distance',
+      spherical: true,
+      maxDistance: 10000000
+    },
+  };
+  const query2 = [geoNear, { $count: 'total' }];
   User
-    .find({})
+    .aggregate(geoNear)
     .skip(offset)
     .limit(limit)
-    .exec((err, products) => {
-      if (!products.length) {
+    .exec((err, users) => {
+      if (!users.length) {
         return res.status(404).send({ message: 'No user found' });
       }
-      User.count({}).exec((err, count) => {
+      User.aggregate(query2).exec((err, response) => {
+        const count = response[0].total;
         if (err) return res.status(500).send({ err });
         return res.status(200).send({
-          products,
+          users,
           pagination: {
             count,
             currentPage: page,
@@ -190,3 +266,22 @@ exports.getAll = (req, res) => {
       });
     });
 };
+
+exports.getCloseToMe = (req, res) => {
+  const query = [
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates:
+            [req.user.location.coordinates[0], req.user.location.coordinates[1]]
+        },
+        distanceField: 'distance',
+        spherical: true,
+        maxDistance: 10000
+      }
+    }
+  ];
+  User.aggregate(query, (err, results) => { });
+};
+

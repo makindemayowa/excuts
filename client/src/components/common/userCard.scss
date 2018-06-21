@@ -1,0 +1,43 @@
+.card {
+  margin-bottom: 20px;    
+  top: 0;
+  transition: all 250ms cubic-bezier(.02, .01, .47, 1);
+  
+  &:hover {
+    box-shadow: 0 5px 10px rgb(217, 218, 219);
+  }
+}
+.card .card-content {
+  padding: 15px;
+  font-size: 12px;
+  color: #B7B8BE;
+
+  hr {
+    border: none;
+    border-top: 1px solid #B7B8BE; 
+  }
+
+  .fa-map-marker-alt {
+    margin-right: 5px;
+  }
+  .content-title {
+    font-weight: bold;
+    color: #3F4A50;
+    margin-bottom: 7px;
+    font-size: 14px;
+    a {
+      color: #000;
+    }
+  }
+  .userDetails {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .card .card-content {
+    .userDetails {
+      display: none;
+    }
+  }
+}

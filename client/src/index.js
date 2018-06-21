@@ -1,24 +1,45 @@
-import 'isomorphic-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
-import store from './store';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { Provider } from 'react-redux';
+import { Switch, BrowserRouter as Router } from 'react-router-dom';
+import configureStore from './store';
+import './scss/index.scss';
+import AuthContainer from './containers/Auth'
+import routes from './Routes';
+const io = require('socket.io-client');
 
-const url = '/api/user';
+const socket = io.connect();
 
-// fetch(url)
-//   .then((resp) => resp.json()) // Transform the data into json
-//   .then(function (data) {
-//     console.log(data)
-//   })
+export default socket;
+
+const App = () => {
+  return (
+    <div>
+      <Router>
+        <div>
+          <Switch>
+            {
+              routes.map((route) => (
+                <AuthContainer
+                  path={route.path}
+                  name={route.name}
+                  exact={route.exact}
+                  Comp={route.component}
+                  key={route.path}
+                  secured={route.secured}
+                />
+              ))
+            }
+          </Switch>
+        </div>
+      </Router>
+    </div>
+  );
+}
 
 ReactDOM.render(
-  <Provider store={store()}>
+  <Provider store={configureStore()}>
     <App />
   </Provider>,
   document.getElementById('root')
 );
-registerServiceWorker();
