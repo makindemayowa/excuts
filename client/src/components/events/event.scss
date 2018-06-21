@@ -1,4 +1,9 @@
 .events {
+  min-height: 70vh;
+  .notFound {
+    text-align: center;
+    font-weight: bolder
+  }
   .btn-floating {
     background-color: #ff6666;
   }

@@ -7,6 +7,7 @@ import { getUserById } from '../../actions/auth';
 import { postReviewRequest } from '../../actions/events';
 import { postDateRequest } from '../../actions/dates';
 import moment from 'moment';
+import Loader from '../common/Loader'
 import SubNav from '../common/SubNav';
 import ProfileForm from './ProfileForm';
 
@@ -19,6 +20,7 @@ class ProfileById extends Component {
       review: '',
       description: '',
       venue: '',
+      loading: true,
       user: this.props.user || {}
     };
     this.handleChange = this.handleChange.bind(this);
@@ -47,7 +49,8 @@ class ProfileById extends Component {
     M.Materialbox.init(materialboxed);
     this.props.getUserById(this.profileId).then(() => {
       this.setState({
-        user: this.props.user
+        user: this.props.user,
+        loading: false
       }, () => {
         const carousel = document.querySelectorAll('.carousel');
         const materialboxed = document.querySelectorAll('.materialboxed');
@@ -91,8 +94,10 @@ class ProfileById extends Component {
 
   componentWillReceiveProps(nextProps) {
     const user = nextProps.user;
+    const loading = nextProps.loading
     this.setState({
       user,
+      loading
     });
   }
 
@@ -142,23 +147,28 @@ class ProfileById extends Component {
   }
 
   render() {
-    const { user, date, venue, description } = this.state
+    const { user, date, venue, description, loading } = this.state
     return (
       <div>
         <SubNav currentPage={'profile'} />
-        <ProfileForm
-          user={user}
-          currentImg={this.state.currentImg}
-          currentUser={this.props.currentUser}
-          createReview={this.createReview}
-          review={this.state.review}
-          onChange={this.onChange}
-          date={date}
-          venue={venue}
-          handleChange={this.handleChange}
-          description={description}
-          requestDate={this.requestDate}
-        />
+        <div className="profileById">
+          {
+            loading ? <Loader /> :
+              <ProfileForm
+                user={user}
+                currentImg={this.state.currentImg}
+                currentUser={this.props.currentUser}
+                createReview={this.createReview}
+                review={this.state.review}
+                onChange={this.onChange}
+                date={date}
+                venue={venue}
+                handleChange={this.handleChange}
+                description={description}
+                requestDate={this.requestDate}
+              />
+          }
+        </div>
       </div>
     );
   }
@@ -166,7 +176,8 @@ class ProfileById extends Component {
 
 const mapStateToProps = state => ({
   user: state.auth.userDetails,
-  currentUser: state.auth.user
+  currentUser: state.auth.user,
+  loading: state.auth.loading
 });
 
 export default connect(mapStateToProps,
