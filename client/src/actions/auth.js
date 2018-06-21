@@ -92,13 +92,17 @@ export function userLoginRequest(userData) {
   //   loc.lat = pos.coords.latitude;
 
   // }, geoError, geoOptions);
-  return dispatch => axios.post('/api/login', userData).then((res) => {
-    const token = res.data.jsonToken;
-    localStorage.setItem('tmo_token', token);
-    const loggedInUser = jwtDecode(token).userDetails;
-    setAuthorisation(token)
-    dispatch(setUser(loggedInUser, true));
-  });
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.post('/api/login', userData).then((res) => {
+      const token = res.data.jsonToken;
+      localStorage.setItem('tmo_token', token);
+      const loggedInUser = jwtDecode(token).userDetails;
+      setAuthorisation(token)
+      dispatch(endAjax());
+      dispatch(setUser(loggedInUser, true));
+    });
+  }
 }
 
 /**
@@ -109,10 +113,13 @@ export function userLoginRequest(userData) {
  * @returns {object} dispatch object
  */
 export function userSignUpRequest(userData) {
-  return dispatch =>
-    axios.post('/api/signup', userData).then((res) => {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.post('/api/signup', userData).then((res) => {
+      dispatch(endAjax());
       dispatch(success());
     });
+  }
 }
 
 /**
@@ -124,10 +131,13 @@ export function userSignUpRequest(userData) {
  * @returns {object} dispatch object
  */
 export function updateUserDetails(userDetails) {
-  return dispatch =>
-    axios.put('/api/user', userDetails).then((res) => {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.put('/api/user', userDetails).then((res) => {
+      dispatch(endAjax());
       dispatch(setDetails(res.data.updatedUser));
     });
+  }
 }
 
 /**
@@ -139,10 +149,13 @@ export function updateUserDetails(userDetails) {
  * @returns {object} dispatch object
  */
 export function getAllUsers(long, lat) {
-  return dispatch =>
-    axios.get(`/api/user/?long=${long}&lat=${lat}`).then((res) => {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.get(`/api/user/?long=${long}&lat=${lat}`).then((res) => {
+      dispatch(endAjax());
       dispatch(getAllSucess(res.data.users));
     });
+  }
 }
 
 /**
@@ -154,10 +167,13 @@ export function getAllUsers(long, lat) {
  * @returns {object} dispatch object
  */
 export function getUserDetails() {
-  return dispatch =>
-    axios.get('/api/user/me').then((res) => {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.get('/api/user/me').then((res) => {
+      dispatch(endAjax());
       dispatch(setDetails(res.data.user));
     });
+  }
 }
 
 /**
@@ -169,10 +185,13 @@ export function getUserDetails() {
  * @returns {object} dispatch object
  */
 export function getUserById(userId) {
-  return dispatch =>
-    axios.get(`/api/user/${userId}`).then((res) => {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.get(`/api/user/${userId}`).then((res) => {
+      dispatch(endAjax());
       dispatch(setDetails(res.data.user));
     });
+  }
 }
 
 /**
@@ -196,14 +215,17 @@ export function verifyUserRequest(token) {
   //   loc.lat = pos.coords.latitude;
 
   // }, geoError, geoOptions);
-  return dispatch =>
-    axios.get(`/api/signup/verify/${token}`).then((res) => {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.get(`/api/signup/verify/${token}`).then((res) => {
       const token = res.data.jsonToken;
       localStorage.setItem('tmo_token', token);
       const loggedInUser = jwtDecode(token).userDetails;
       setAuthorisation(token)
+      dispatch(endAjax());
       dispatch(setUser(loggedInUser, true));
     }).catch((err) => { })
+  }
 }
 
 /**
@@ -227,7 +249,6 @@ export function uploadPictureRequest(formData) {
       axios.put('/api/user/photo', fileURL).then((res) => {
         dispatch(endAjax());
         dispatch(setDetails(res.data.updatedUser));
-        console.log(res)
       });
     }).catch((err) => { })
   }
@@ -242,11 +263,13 @@ export function uploadPictureRequest(formData) {
  * @returns {object} dispatch object
  */
 export function deletePictureRequest(imgUrl) {
-  return dispatch =>
-    axios.delete(`/api/user/photo`, imgUrl).then((response) => {
-      console.log(response)
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.delete(`/api/user/photo`, imgUrl).then((response) => {
+      dispatch(endAjax());
       dispatch(setDetails(response.data.updatedUser));
     }).catch((err) => { })
+  }
 }
 
 /**

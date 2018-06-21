@@ -187,6 +187,7 @@ const mapStateToProps = state => ({
   users: state.auth.users,
   user: state.auth.user,
   loc: state.auth.loc,
+  loading: state.auth.loading
 });
 
 export default connect(mapStateToProps,

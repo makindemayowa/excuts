@@ -6,6 +6,7 @@ import toastr from 'toastr';
 import PropTypes from 'prop-types';
 import SubNav from '../common/SubNav';
 import moment from 'moment';
+import Loader from '../common/Loader'
 import RequestCard from './RequestCard';
 import MycreatedRequests from './MycreatedRequests';
 import './dates.scss';
@@ -18,7 +19,8 @@ class DateRequests extends Component {
       startDate: moment(),
       dateRequests: [],
       comment: '',
-      selectedTab: ''
+      selectedTab: '',
+      loading: true
     };
     this.handleChange = this.handleChange.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -30,7 +32,8 @@ class DateRequests extends Component {
     M.FormSelect.init(elems);
     this.props.getDateRequest().then(() => {
       this.setState({
-        dateRequests: this.props.dateRequests
+        dateRequests: this.props.dateRequests,
+        loading: false
       }, () => {
         const elems = document.querySelectorAll('.modal');
         M.Modal.init(elems);
@@ -40,8 +43,10 @@ class DateRequests extends Component {
 
   componentWillReceiveProps(nextProps) {
     const dateRequests = nextProps.dateRequests;
+    const loading = nextProps.loading;
     this.setState({
-      dateRequests
+      dateRequests,
+      loading
     }, () => {
       const elems = document.querySelectorAll('.modal');
       M.Modal.init(elems);
@@ -88,6 +93,7 @@ class DateRequests extends Component {
   }
 
   render() {
+    const { loading } = this.state
     return (
       <div className="daterequests">
         <SubNav currentPage={'daterequests'} />
@@ -104,35 +110,38 @@ class DateRequests extends Component {
           </select>
         </div>
         <div className="container">
-          {this.state.selectedTab !=='mine' &&
-            <div className="row">
-              {
-                this.props.dateRequests.map((daterequest) => (
-                  <RequestCard
-                    key={daterequest._id}
-                    daterequest={daterequest}
-                    updateDateStatus={this.updateDateStatus}
-                    onChange={this.onChange}
-                    comment={this.state.comment}
-                  />
-                )
-                )
+          {loading ? <Loader /> :
+            <div>
+              {this.state.selectedTab !== 'mine' &&
+                <div className="row">
+                  {
+                    this.props.dateRequests.map((daterequest) => (
+                      <RequestCard
+                        key={daterequest._id}
+                        daterequest={daterequest}
+                        updateDateStatus={this.updateDateStatus}
+                        onChange={this.onChange}
+                        comment={this.state.comment}
+                      />
+                    )
+                    )
+                  }
+                </div>
               }
-            </div>
-          }
-          {this.state.selectedTab==='mine' &&
-            <div className="row">
-              {
-                this.props.myCreatedRequests.map((daterequest) => (
-                  <MycreatedRequests
-                    key={daterequest._id}
-                    daterequest={daterequest}
-                  />
-                )
-                )
+              {this.state.selectedTab === 'mine' &&
+                <div className="row">
+                  {
+                    this.props.myCreatedRequests.map((daterequest) => (
+                      <MycreatedRequests
+                        key={daterequest._id}
+                        daterequest={daterequest}
+                      />
+                    )
+                    )
+                  }
+                </div>
               }
-            </div>
-          }
+            </div>}
         </div>
       </div>
     );
@@ -150,6 +159,7 @@ DateRequests.propTypes = {
 const mapStateToProps = state => ({
   dateRequests: state.date.dateRequests,
   myCreatedRequests: state.date.myCreatedRequests,
+  loading: state.auth.loading,
 });
 
 export default connect(mapStateToProps,

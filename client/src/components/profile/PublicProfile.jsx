@@ -5,13 +5,15 @@ import { connect } from 'react-redux';
 import { getUserDetails } from '../../actions/auth';
 import SubNav from '../common/SubNav';
 import ProfileForm from './ProfileForm';
+import Loader from '../common/Loader'
 
 class PublicProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentImg: '',
-      user: this.props.user || {}
+      user: this.props.user || {},
+      loading: true
     };
   }
 
@@ -33,7 +35,8 @@ class PublicProfile extends Component {
     M.Materialbox.init(materialboxed);
     this.props.getUserDetails().then(() => {
       this.setState({
-        user: this.props.user
+        user: this.props.user,
+        loading: false
       }, () => {
         const carousel = document.querySelectorAll('.carousel');
         const materialboxed = document.querySelectorAll('.materialboxed');
@@ -56,15 +59,20 @@ class PublicProfile extends Component {
   }
 
   render() {
-    const { user, currentImg } = this.state
+    const { user, currentImg, loading } = this.state
     return (
       <div>
         <SubNav currentPage={'profile'} />
-        <ProfileForm
-          user={user}
-          currentImg={currentImg}
-          currentUser={this.props.currentUser}
-        />
+        <div className="publicProfileContainer">
+          {
+            loading ? <Loader /> :
+              <ProfileForm
+                user={user}
+                currentImg={currentImg}
+                currentUser={this.props.currentUser}
+              />
+          }
+        </div>
       </div>
     );
   }
@@ -73,6 +81,7 @@ class PublicProfile extends Component {
 const mapStateToProps = state => ({
   user: state.auth.userDetails,
   currentUser: state.auth.user,
+  loading: state.auth.loading
 });
 
 export default connect(mapStateToProps,

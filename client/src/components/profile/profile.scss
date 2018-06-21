@@ -5,7 +5,11 @@
     color: #ff6666;
   }
 }
+.profileById {
+  min-height: 70vh;
+}
 .profile {
+  min-height: 80vh;
   .col .image_container {
     max-height: 350px;
     max-width: 362px;
@@ -148,7 +152,9 @@
     color: #000
   }
 }
-
+.publicProfileContainer {
+  min-height: 70vh;
+}
 .publicProfile {
   a {
     color: #ff6666;
