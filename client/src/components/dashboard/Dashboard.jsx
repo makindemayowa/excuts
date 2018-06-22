@@ -24,8 +24,6 @@ class Discover extends Component {
       maxAge: 40,
       loadingText: '',
       currentPage: 1,
-      hasMoreItems: true,
-      users: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.changeEvent = this.changeEvent.bind(this);
@@ -39,7 +37,6 @@ class Discover extends Component {
   getUsers(long, lat, page) {
     this.props.getAllUsers(long, lat, page).then((res) => {
       this.setState({
-        users: this.props.users,
         loading: false
       }, () => {
         const materialboxed = document.querySelectorAll('.materialboxed');
@@ -60,23 +57,36 @@ class Discover extends Component {
     document.getElementsByTagName("footer")[0].style.display = 'none'
     const prevLong = this.props.user.location.coordinates[0];
     const prevLat = this.props.user.location.coordinates[1];
-    const geoError = function () {
-      const long = prevLong;
-      const lat = prevLat;
-      this.getUsers(long, lat)
-    };
-    window.navigator.geolocation.getCurrentPosition((pos) => {
-      this.long = pos.coords.longitude;
-      this.lat = pos.coords.latitude;
+    const geoError = () => {
+      this.long = prevLong;
+      this.lat = prevLat;
       this.getUsers(this.long, this.lat)
-    }, geoError, geoOptions);
+    };
+    if (!this.props.users.length) {
+      window.navigator.geolocation.getCurrentPosition((pos) => {
+        this.long = pos.coords.longitude;
+        this.lat = pos.coords.latitude;
+        this.getUsers(this.long, this.lat)
+      }, geoError, geoOptions);
+    } else {
+      let currentPage = Number(this.props.pagination.currentPage)
+      this.setState({
+        currentPage: currentPage,
+        loading: false
+      }
+    )
+    }
   }
 
   loadItems() {
+    // I still need to find an efficient way to deal with current location
+    if (!this.long) {
+      this.long = this.props.user.location.coordinates[0];
+      this.lat = this.props.user.location.coordinates[1];
+    }
     let page = this.state.currentPage
     if (this.props.pagination.pages === page) {
       this.setState({
-        hasMoreItems: false,
         loadingText: ''
       });
       document.getElementsByTagName("footer")[0].style.display = 'block'
@@ -84,7 +94,7 @@ class Discover extends Component {
       this.setState({
         currentPage: page+=1,
         loadingText: 'please wait...'
-      },()=> {
+      }, () => {
         this.getUsers(this.long, this.lat, this.state.currentPage)
       });
     }
@@ -103,7 +113,7 @@ class Discover extends Component {
   }
 
   render() {
-    const { users, loading } = this.state
+    const { loading } = this.state
     return (
       <div>
         <SubNav />
@@ -119,9 +129,9 @@ class Discover extends Component {
                   {
                     <div className="col s12 m10 l10">
                       {
-                        users.map(user =>
+                        this.props.users.map(user =>
                           <UserCard
-                            key={user.email}
+                            key={user._id}
                             userInfo={user}
                           />
                         )
