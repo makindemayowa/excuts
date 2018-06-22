@@ -48,6 +48,10 @@ class Discover extends Component {
   }
 
   componentDidMount() {
+    const materialboxed = document.querySelectorAll('.materialboxed');
+    M.Materialbox.init(materialboxed);
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
     this.setState({
       loading: true
     })
