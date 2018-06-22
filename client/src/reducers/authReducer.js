@@ -51,7 +51,7 @@ export default (state = initialState, action) => {
         ...state,
         loc: action.loc
       };
-    case actionTypes.GET_ALL_EVENT_SUCCESS:
+    case actionTypes.GET_ALL_USERS_SUCCESS:
       return {
         ...state,
         users: [...state.users, ...action.users ],
