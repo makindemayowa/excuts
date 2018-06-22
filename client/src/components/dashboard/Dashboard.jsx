@@ -1,7 +1,6 @@
 /* eslint-env jquery */
 /* global M */
 import React, { Component } from 'react';
-import ReactPaginate from 'react-paginate';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,19 +22,21 @@ class Discover extends Component {
       value: { min: 2, max: 10 },
       maxDistance: 5,
       maxAge: 40,
-      users: []
+      loadingText: '',
+      currentPage: 1,
     };
     this.handleChange = this.handleChange.bind(this);
     this.changeEvent = this.changeEvent.bind(this);
+    window.onscroll = () => {
+      if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+        this.loadItems()
+      }
+    };
   }
 
-  componentDidMount() {
-    this.setState({
-      loading: true
-    })
-    const getUsers = (long, lat) => this.props.getAllUsers(long, lat).then((res) => {
+  getUsers(long, lat, page) {
+    this.props.getAllUsers(long, lat, page).then((res) => {
       this.setState({
-        users: this.props.users,
         loading: false
       }, () => {
         const materialboxed = document.querySelectorAll('.materialboxed');
@@ -44,21 +45,59 @@ class Discover extends Component {
         M.FormSelect.init(elems);
       })
     })
+  }
+
+  componentDidMount() {
+    this.setState({
+      loading: true
+    })
     var geoOptions = {
       timeout: 10 * 1000
     }
+    document.getElementsByTagName("footer")[0].style.display = 'none'
     const prevLong = this.props.user.location.coordinates[0];
     const prevLat = this.props.user.location.coordinates[1];
-    const geoError = function () {
-      const long = prevLong;
-      const lat = prevLat;
-      getUsers(long, lat)
+    const geoError = () => {
+      this.long = prevLong;
+      this.lat = prevLat;
+      this.getUsers(this.long, this.lat)
     };
-    window.navigator.geolocation.getCurrentPosition((pos) => {
-      const long = pos.coords.longitude;
-      const lat = pos.coords.latitude;
-      getUsers(long, lat)
-    }, geoError, geoOptions);
+    if (!this.props.users.length) {
+      window.navigator.geolocation.getCurrentPosition((pos) => {
+        this.long = pos.coords.longitude;
+        this.lat = pos.coords.latitude;
+        this.getUsers(this.long, this.lat)
+      }, geoError, geoOptions);
+    } else {
+      let currentPage = Number(this.props.pagination.currentPage)
+      this.setState({
+        currentPage: currentPage,
+        loading: false
+      }
+    )
+    }
+  }
+
+  loadItems() {
+    // I still need to find an efficient way to deal with current location
+    if (!this.long) {
+      this.long = this.props.user.location.coordinates[0];
+      this.lat = this.props.user.location.coordinates[1];
+    }
+    let page = this.state.currentPage
+    if (this.props.pagination.pages === page) {
+      this.setState({
+        loadingText: ''
+      });
+      document.getElementsByTagName("footer")[0].style.display = 'block'
+    } else {
+      this.setState({
+        currentPage: page+=1,
+        loadingText: 'please wait...'
+      }, () => {
+        this.getUsers(this.long, this.lat, this.state.currentPage)
+      });
+    }
   }
 
   handleChange(date) {
@@ -74,7 +113,7 @@ class Discover extends Component {
   }
 
   render() {
-    const { users, loading } = this.state
+    const { loading } = this.state
     return (
       <div>
         <SubNav />
@@ -87,15 +126,20 @@ class Discover extends Component {
             <section className="new-idols">
               <div className="smaller-container">
                 <div className="row">
-                  <div className="col s12 m10 l10">
-                    {
-                      users.map(user =>
-                        <UserCard
-                          key={user.email}
-                          userInfo={user}
-                        />
-                      )
-                    }
+                  {
+                    <div className="col s12 m10 l10">
+                      {
+                        this.props.users.map(user =>
+                          <UserCard
+                            key={user._id}
+                            userInfo={user}
+                          />
+                        )
+                      }
+                    </div>
+                  }
+                  <div>
+                    {this.state.loadingText}
                   </div>
                   {
                     !loading &&
@@ -157,26 +201,6 @@ class Discover extends Component {
               </div>
             </section>
           </div>
-
-          <div className="content-div">
-            <div className="content" style={{ minHeight: '100px' }}>
-              <div className="custom-pagination">
-                <ReactPaginate
-                  previousLabel={<span><i className="fas fa-arrow-circle-left" /> <span>PREVIOUS</span> </span>}
-                  nextLabel={<span><span>NEXT</span><i className="fas fa-arrow-circle-right" /></span>}
-                  breakLabel={<a href="">...</a>}
-                  breakClassName="break-me"
-                  pageCount={10}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={2}
-                  onPageChange={() => { console.log('hello'); }}
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                  activeClassName="active"
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     );
@@ -187,6 +211,7 @@ const mapStateToProps = state => ({
   users: state.auth.users,
   user: state.auth.user,
   loc: state.auth.loc,
+  pagination: state.auth.pagination,
   loading: state.auth.loading
 });
 

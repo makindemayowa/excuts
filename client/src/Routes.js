@@ -14,6 +14,7 @@ import VerifyMail from './components/VerifyMail';
 import Contact from './components/common/Contact';
 import Safety from './components/common/Safety';
 import DateRequests from './components/dateRequests/DateRequests';
+import Interests from './components/events/Interests';
 
 export default [
   {
@@ -84,6 +85,13 @@ export default [
     path: '/event/:id',
     secured: true,
     component: EventDetails,
+    exact: true
+  },
+  {
+    name: 'event-interests',
+    path: '/interests/:id',
+    secured: true,
+    component: Interests,
     exact: true
   },
   {

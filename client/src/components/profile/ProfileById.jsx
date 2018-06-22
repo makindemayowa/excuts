@@ -1,5 +1,5 @@
 /* eslint-env jquery */
-/* global M google */
+/* global M */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';

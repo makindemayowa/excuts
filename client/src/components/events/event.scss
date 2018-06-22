@@ -1,11 +1,48 @@
 .events {
   min-height: 70vh;
+  .navSelect {
+    margin-left: 10px;
+    margin-top: 10px;
+    .select-wrapper {
+      width: 30%;
+      span.caret {
+        color: rgb(116, 117, 118);
+        z-index: 2;
+        display: inline-block;
+        font-size: 12px;
+        right: 10px;
+      }
+      .dropdown-content {
+        li {
+          min-height: auto;
+          border-left: thin solid rgb(30, 31, 32);
+          span {
+            color: rgb(104, 105, 106);
+            text-transform: uppercase;
+            font-size: 11px;
+            padding: 7px 16px;
+          }
+        }
+        li:first-of-type {
+          span {
+            color: #ff6666;
+          }
+        }
+        li:hover {
+          background-color: rgb(21, 21, 21);
+          border-left: thin solid #ff6666;;
+        }
+      }
+    }
+  }
   .notFound {
     text-align: center;
     font-weight: bolder
   }
   .btn-floating {
     background-color: #ff6666;
+    margin-right: 10px;
+    margin-top: -85px;
   }
   .searchForm {
     font-size: 12px;    
@@ -63,6 +100,12 @@
 .eventsContainer {
   font-size: 13px;
   .eventCard {
+    a {
+      color: #ff6666;
+    }
+    .noInterest {
+      color: #ff6666;
+    }
     background-color: #fff;
     color: #000;
     border: 0.3px solid #cccccc;
@@ -72,6 +115,12 @@
       font-size: 12px;
       color: #ff6666;
       text-align: right;
+    }
+    .action_container {
+      text-align: center;
+      .edit, .delete, .more {
+        margin-right: 15px !important;
+      }
     }
   }
   .collapsible {
@@ -221,6 +270,10 @@
 .collapsible-header {
   outline: 0
 }
+.interests {
+  min-height: 70vh;
+
+}
 
 @media only screen and (max-width: 530px) {
   .create_event {
@@ -249,6 +302,11 @@
   .events {
     .searchForm {
       display: none;
+    }
+    .navSelect {
+      .select-wrapper {
+        width: 50%
+      }
     }
   }
 }

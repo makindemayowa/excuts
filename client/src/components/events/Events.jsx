@@ -24,9 +24,12 @@ class Events extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   componentDidMount() {
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
     this.props.getAllEventRequest().then(() => {
       this.setState({
         events: this.props.events,
@@ -64,6 +67,29 @@ class Events extends Component {
     });
   }
 
+  handleSelectChange(e) {
+    this.props.getAllEventRequest(e.target.value).then(() => {
+      this.setState({
+        events: this.props.events,
+        loading: false
+      }, () => {
+        const select = document.querySelectorAll('select');
+        M.FormSelect.init(select);
+        const collapsible = document.querySelectorAll('.collapsible');
+        M.Collapsible.init(collapsible);
+      });
+    }).catch(() => {
+      this.setState({
+        loading: false
+      }, () => {
+        const select = document.querySelectorAll('select');
+        M.FormSelect.init(select);
+        const collapsible = document.querySelectorAll('.collapsible');
+        M.Collapsible.init(collapsible);
+      });
+    });
+  }
+
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -76,11 +102,21 @@ class Events extends Component {
     return (
       <div className="events">
         <SubNav currentPage={'events'} />
+        <div className="bottom_margin" />
+        <div className="navSelect">
+          <div className="form-fields">
+            <select
+              className="size1"
+              onChange={this.handleSelectChange}
+            >
+              <option value="all">All Events</option>
+              <option value="mine">Created by Me</option>
+            </select>
+          </div>
+        </div>
         <div className="container">
-          <div className="row">
-            <div className="right createEvent">
-              <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
-            </div>
+          <div className="right createEvent">
+            <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
           </div>
           {
             loading ? <Loader /> :
@@ -95,6 +131,7 @@ class Events extends Component {
                             id={event._id}
                             key={event._id}
                             onChange={this.onChange}
+                            currentUser={this.props.user}
                           />)
                         }
                       </div> :
@@ -191,7 +228,8 @@ Events.propTypes = {
 const mapStateToProps = state => ({
   events: state.event.events,
   pagination: state.event.pagination,
-  loading: state.auth.loading
+  loading: state.auth.loading,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps,

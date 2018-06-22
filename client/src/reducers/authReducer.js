@@ -5,6 +5,7 @@ const initialState = {
   success: false,
   isAuthenticated: false,
   user: {},
+  pagination: {},
   users: [],
   userDetails: {},
   loc: {},
@@ -53,7 +54,8 @@ export default (state = initialState, action) => {
     case actionTypes.GET_ALL_EVENT_SUCCESS:
       return {
         ...state,
-        users: action.users,
+        users: [...state.users, ...action.users ],
+        pagination: action.pagination
       };
     case actionTypes.SET_USER_DETAILS:
       return {

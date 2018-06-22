@@ -30,5 +30,6 @@ module.exports = {
     details: Joi.string().required(),
     preference: Joi.string().required(),
     extra: Joi.string().required(),
+    interestedIn: Joi.string().required(),
   }),
 };

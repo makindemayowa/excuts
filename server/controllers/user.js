@@ -227,7 +227,7 @@ exports.getOne = (req, res) => {
 exports.getAll = (req, res) => {
   const long = parseFloat(req.query.long);
   const lat = parseFloat(req.query.lat);
-  const limit = req.query.limit || 5;
+  const limit = req.query.limit || 2;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
   const geoNear = {
@@ -252,6 +252,9 @@ exports.getAll = (req, res) => {
         return res.status(404).send({ message: 'No user found' });
       }
       User.aggregate(query2).exec((err, response) => {
+        if (!response) {
+          return res.status(400).send({ message: 'An error occured' });
+        }
         const count = response[0].total;
         if (err) return res.status(500).send({ err });
         return res.status(200).send({

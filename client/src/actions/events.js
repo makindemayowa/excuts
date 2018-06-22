@@ -80,8 +80,14 @@ export function createEventRequest(eventData) {
  * @export
  * @returns {object} dispatch object
  */
-export function getAllEventRequest() {
-  return dispatch => axios.get('/api/event').then((res) => {
+export function getAllEventRequest(query) {
+  let url;
+  if (query === 'mine') {
+    url = `/api/event/?q=${query}`
+  } else {
+    url = '/api/event'
+  }
+  return dispatch => axios.get(url).then((res) => {
     const events = res.data.events;
     const pagination = res.data.pagination;
     dispatch(getAllSuccess(events, pagination));
