@@ -18,7 +18,7 @@ function endAjax() {
 
 function getAllSucess(users, pagination) {
   return {
-    type: actionTypes.GET_ALL_EVENT_SUCCESS,
+    type: actionTypes.GET_ALL_USERS_SUCCESS,
     users,
     pagination
   };
