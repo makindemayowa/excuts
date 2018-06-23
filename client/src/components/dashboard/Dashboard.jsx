@@ -158,25 +158,6 @@ class Discover extends Component {
                               <option value="2">Other</option>
                             </select>
                           </div>
-
-                          <div className="form-fields">
-                            <label>Country</label>
-                            <select className="size1">
-                              <option value="">Nigeria</option>
-                              <option value="3">Norway</option>
-                              <option value="1">Oman</option>
-                              <option value="2">Pakistan</option>
-                            </select>
-                          </div>
-
-                          <div className="form-fields">
-                            <label>State</label>
-                            <select className="size1">
-                              <option value="">Lagos</option>
-                              <option value="1">Abuja</option>
-                              <option value="2">Abeokuta</option>
-                            </select>
-                          </div>
                           <form action="#">
                             Maximum Distance: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           <span id="maxDistance">{this.state.maxDistance}km</span>

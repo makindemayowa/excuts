@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import SubNav from '../common/SubNav';
 import EventsCard from './EventsCard'
+import countriesWithStates from '../../helpers/states'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Loader from '../common/Loader';
@@ -20,7 +21,10 @@ class Events extends Component {
     this.state = {
       startDate: moment(),
       events: [],
-      loading: true
+      loading: true,
+      country: '',
+      countryIndex: 0,
+      states: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -33,7 +37,8 @@ class Events extends Component {
     this.props.getAllEventRequest().then(() => {
       this.setState({
         events: this.props.events,
-        loading: false
+        loading: false,
+        states: countriesWithStates.countries[this.state.countryIndex].states
       }, () => {
         const select = document.querySelectorAll('select');
         M.FormSelect.init(select);
@@ -91,14 +96,23 @@ class Events extends Component {
   }
 
   onChange(e) {
+    const name = e.target.name
     this.setState({
-      [e.target.name]: e.target.value,
+      [name]: e.target.value,
       error: ''
+    }, () => {
+      if(name === "country") {
+        const index = countriesWithStates.countries.findIndex(countries => countries.country === this.state.country);
+        this.setState({
+          countryIndex: index,
+          states: countriesWithStates.countries[index].states
+        })
+      }
     });
   }
 
   render() {
-    const { loading } = this.state
+    const { loading, states } = this.state;
     return (
       <div className="events">
         <SubNav currentPage={'events'} />
@@ -152,20 +166,41 @@ class Events extends Component {
 
                     <div className="form-fields">
                       <label>Country</label>
-                      <select className="size1">
-                        <option value="">Nigeria</option>
-                        <option value="3">Norway</option>
-                        <option value="1">Oman</option>
-                        <option value="2">Pakistan</option>
+                      <select
+                        name="country"
+                        onChange={this.onChange}
+                        className="size1"
+                      >
+                        {
+                          countriesWithStates.countries.map((country) =>
+                            <option
+                              key={country.country}
+                              value={country.country}
+                            >
+                              {country.country}
+                            </option>
+                          )
+                        }
                       </select>
                     </div>
 
                     <div className="form-fields">
                       <label>State</label>
-                      <select className="size1">
-                        <option value="">Lagos</option>
-                        <option value="1">Abuja</option>
-                        <option value="2">Abeokuta</option>
+                      <select
+                        name="state"
+                        onChange={this.onChange}
+                        className="size1 browser-default"
+                      >
+                        {
+                          states.map((state) =>
+                            <option
+                              key={state}
+                              value={state}
+                            >
+                              {state}
+                            </option>
+                          )
+                        }
                       </select>
                     </div>
 
