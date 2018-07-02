@@ -9,8 +9,8 @@ export default props => {
     <div className="requestCard col s12 m6 l6">
       <div className="">
         <div className="card-panel eventCard">
-          <div className="requester">
-            <Link to={`/publicProfile/${requestersId}`}>
+          <div className="requester action">
+            <Link to={`/publicProfile/${requestersId}`} className="action">
               <span className="">
                 {`${props.daterequest.requester.firstName}`}
               </span>
@@ -47,13 +47,13 @@ export default props => {
             <div className="dateActions">
               <a
                 href={`#${currentRequestId}`}
-                className="decline modal-trigger"
+                className="decline action modal-trigger"
               >
                 <i className="fas actionicons fa-ban"></i>Decline
               </a>
               <a
                 href={`#${modalId}`}
-                className="accept modal-trigger"
+                className="accept action modal-trigger"
               >
                 <i className="far actionicons fa-check-circle"></i>Accept
               </a>
@@ -85,6 +85,7 @@ export default props => {
       {/* Reject modal */}
       <div id={currentRequestId} className="modal">
         <div className="">
+          <i className="right modal-close material-icons">close</i>
           <div className="modal-content">
             <p>Awww, please inform {`${props.daterequest.requester.firstName}${` `}`}
               why this date was declined</p>
@@ -119,6 +120,7 @@ export default props => {
       {/* Accept modal */}
       <div id={modalId} className="modal">
         <div className="">
+          <i className="right modal-close material-icons">close</i>
           <div className="modal-content">
             <p>Oh yeah!!! <br /> Anything you'll like {`${` `}${props.daterequest.requester.firstName}${` `}`}
               to know before the date?</p>

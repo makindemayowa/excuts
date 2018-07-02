@@ -11,7 +11,7 @@ export default props => {
             <span className="">
               {`${`You requested to take `}`}
             </span>
-            <Link to={`/publicProfile/${requestedsId}`}>
+            <Link to={`/publicProfile/${requestedsId}`} className="action">
               <span className="">
                 {`${props.daterequest.requested.firstName}`}
               </span>

@@ -3,6 +3,7 @@ import React from 'react';
 const Login = props => (
   <div id="loginModal" className="modal authModal">
     <div className="modal-content">
+      <i className="right modal-close material-icons">close</i>
       <div className="row">
         <form className="col s12" onSubmit={props.onSubmit}>
           <div className="input-field col s12">
