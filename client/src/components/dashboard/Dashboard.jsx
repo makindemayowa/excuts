@@ -78,7 +78,7 @@ class Discover extends Component {
         currentPage: currentPage,
         loading: false
       }
-    )
+      )
     }
   }
 
@@ -96,7 +96,7 @@ class Discover extends Component {
       document.getElementsByTagName("footer")[0].style.display = 'block'
     } else {
       this.setState({
-        currentPage: page+=1,
+        currentPage: page += 1,
         loadingText: 'please wait...'
       }, () => {
         this.getUsers(this.long, this.lat, this.state.currentPage)
@@ -133,12 +133,14 @@ class Discover extends Component {
                   {
                     <div className="col s12 m10 l10">
                       {
-                        this.props.users.map(user =>
-                          <UserCard
+                        this.props.users.map(user => {
+                          if(user.profilePhoto && user.occupation && user.state) {
+                            return <UserCard
                             key={user._id}
                             userInfo={user}
                           />
-                        )
+                          }
+                        })
                       }
                     </div>
                   }
@@ -158,6 +160,14 @@ class Discover extends Component {
                               <option value="2">Other</option>
                             </select>
                           </div>
+                          <div className="form-fields">
+                            <label>Here</label>
+                            <select className="size1">
+                              <option value="1"> To Hire</option>
+                              <option value="">For Fun</option>
+                              <option value="2">Professional Escort</option>
+                            </select>
+                          </div>
                           <form action="#">
                             Maximum Distance: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           <span id="maxDistance">{this.state.maxDistance}km</span>
@@ -175,7 +185,7 @@ class Discover extends Component {
                           </form>
                           <div className="">
                             <button className="waves-effect waves-light btn">
-                              Search
+                              Go
                           </button>
                           </div>
                         </div>

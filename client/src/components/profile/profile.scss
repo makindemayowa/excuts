@@ -1,6 +1,5 @@
 .emptyProfile {
   margin-top: 100px;
-  min-height: 50vh;
   a {
     color: #ff6666;
   }
@@ -150,6 +149,14 @@
   .cancel-btn {
     background-color: #e5e5e5;
     color: #000
+  }
+  .progress {
+    background-color: #f5f5f5;
+    margin: 0 auto;
+  }
+
+  .progress .indeterminate {
+    background-color: #ff6666;
   }
 }
 .publicProfileContainer {

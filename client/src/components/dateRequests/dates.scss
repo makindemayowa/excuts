@@ -1,5 +1,12 @@
 .daterequests {
   min-height: 80vh;
+  .a {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+  }
+  a.action:hover {
+    font-size: 16px;
+  }
   .requestCard {
     margin-top: 10px;
     .requester {

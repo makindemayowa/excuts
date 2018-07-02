@@ -225,6 +225,7 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
+    // const query2 = [geoNear, { photos: { $exists: true, $ne: [] }, firstName: { $exists: true, $ne: null }, occupation: { $exists: true, $ne: null } }];
   const long = parseFloat(req.query.long);
   const lat = parseFloat(req.query.lat);
   const limit = req.query.limit || 2;

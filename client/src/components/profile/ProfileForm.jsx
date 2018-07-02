@@ -7,7 +7,7 @@ const ProfileForm = props => {
   return (
     <div>
       {
-        props.user.profilePhoto ?
+        (props.user.profilePhoto) ?
           <div className="publicProfile container">
             <div className="bottom_margin" />
             <div className="row">
@@ -54,133 +54,136 @@ const ProfileForm = props => {
               </div>
             </div>
             <div className="row">
-              <div className="my_bold">
-                About
-            </div>
-              <p>
-                {props.user.about}
-              </p>
-            </div>
-            <div className="row">
-              <div className="my_bold">
-                Personal Details
-            </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  Age
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.age}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  Country
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.country}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  State
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.state}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  City
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.city}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  Phone No
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.phone_no}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  Best time to reach me
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.best_time}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  Occupation
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.occupation}
-                </p>
-              </div>
-              <div className="row">
-                <p className="col s6 m4 l3">
-                  Education
-              </p>
-                <p className="col s6 m4 l3">
-                  {props.user.education}
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="my_bold">
-                Rates
-            </div>
-              {props.user.here_to === 'here_for_fun' &&
-                <p>
-                  I'm just here to have fun
-              </p>
-              }
-              {props.user.here_to === 'here_to_hire' &&
-                <p>
-                  I'm here to hire
-              </p>
-              }
-              {props.user.here_to === 'professional' &&
-                <div>
-                  <div className="row">
-                    <p className="col s6 m4 l3">
-                      2 hours
-                    </p>
-                    <p className="col s6 m4 l3">
-                      #13,000
-                    </p>
-                  </div>
-                  <div className="row">
-                    <p className="col s6 m4 l3">
-                      8 hours
-                    </p>
-                    <p className="col s6 m4 l3">
-                      #25,000
-                    </p>
-                  </div>
-                  <div className="row">
-                    <p className="col s6 m4 l3">
-                      Weekend
-                    </p>
-                    <p className="col s6 m4 l3">
-                      #250,000
-                    </p>
-                  </div>
-                  <div className="row">
-                    <p className="col s6 m4 l3">
-                      Tour
-                    </p>
-                    <p className="col s6 m4 l3">
-                      #1,000,000
-                    </p>
-                  </div>
+              <div className="col s12 m6 l6">
+                <div className="my_bold">
+                  Personal Details
                 </div>
-              }
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Age
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.age}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Country
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.country}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    State
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.state}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    City
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.city}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Phone No
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.phone_no}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Best time to reach me
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.best_time}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Occupation
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.occupation}
+                  </p>
+                </div>
+                <div className="row">
+                  <p className="col s6 m4 l3">
+                    Education
+                  </p>
+                  <p className="col s6 m4 l3">
+                    {props.user.education}
+                  </p>
+                </div>
+              </div>
+              <div className="col s12 m6 l6">
+                <div className="my_bold">
+                  About
+                </div>
+                <p>
+                  {props.user.about}
+                </p>
+              </div>
+              <div className="col s12 m6 l6">
+                <div className="my_bold">
+                  Rates
+                </div>
+                {props.user.here_to === 'here_for_fun' &&
+                  <p>
+                    I'm just here to have fun
+                  </p>
+                }
+                {props.user.here_to === 'here_to_hire' &&
+                  <p>
+                    I'm here to hire
+                  </p>
+                }
+                {props.user.here_to === 'professional' &&
+                  <div>
+                    <div className="row">
+                      <p className="col s6 m4 l3">
+                        2 hours
+                    </p>
+                      <p className="col s6 m4 l3">
+                        #13,000
+                    </p>
+                    </div>
+                    <div className="row">
+                      <p className="col s6 m4 l3">
+                        8 hours
+                    </p>
+                      <p className="col s6 m4 l3">
+                        #25,000
+                    </p>
+                    </div>
+                    <div className="row">
+                      <p className="col s6 m4 l3">
+                        Weekend
+                    </p>
+                      <p className="col s6 m4 l3">
+                        #250,000
+                    </p>
+                    </div>
+                    <div className="row">
+                      <p className="col s6 m4 l3">
+                        Tour
+                    </p>
+                      <p className="col s6 m4 l3">
+                        #1,000,000
+                    </p>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
+
             <div className="row">
               <div className="my_bold">
                 Instagram
@@ -308,7 +311,8 @@ const ProfileForm = props => {
                               </div>
                             </div>
                           </div>
-                        )}
+                        )
+                      }
                       )}
                     </div>
                   </div>
@@ -317,9 +321,14 @@ const ProfileForm = props => {
             }
             <div className="bottom_margin" />
           </div> :
-          <h5 className="emptyProfile center">Please update your profile
-          <Link to="/profile">&nbsp;here</Link>
-          </h5>
+          <div>
+            <h5 className="emptyProfile center">Please complete your profile
+              <Link to="/profile">&nbsp;here</Link>
+            </h5>
+            <div className="center">
+              Your account won't be visible to others until your profile is completely set up.
+            </div>
+          </div>
       }
     </div>
   )

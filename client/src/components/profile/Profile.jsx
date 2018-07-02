@@ -55,6 +55,7 @@ class Profile extends Component {
       imageUrls: [],
       success: false,
       loading: true,
+      uploadInProgress: true
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -145,6 +146,9 @@ class Profile extends Component {
   }
 
   uploadFile() {
+    this.setState({
+      uploadInProgress: true
+    })
     const formData = new FormData();
     formData.append("file", this.state.myCroppedFile);
     formData.append("upload_preset", "umwse311");
@@ -152,6 +156,7 @@ class Profile extends Component {
     this.props.uploadPictureRequest(formData).then(() => {
       this.setState({
         imgurl: '',
+        uploadInProgress: false
       })
     })
     const token = localStorage.getItem('tmo_token');
@@ -243,7 +248,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { imageUrls, imgurl, src, loading } = this.state;
+    const { imageUrls, imgurl, src, loading, uploadInProgress } = this.state;
     if (this.state.success) {
       return <Redirect to="/publicprofile" />;
     }
@@ -258,7 +263,7 @@ class Profile extends Component {
                 <div className="container">
                   <div className="row">
                     <div className="my_bold">Profile Photo</div>
-                    <div className="col s6 m6 l6">
+                    <div className="col s12 m6 l6">
                       <div>
                         <div className="row">
                           <div className="col s12 m12 l8">
@@ -266,19 +271,23 @@ class Profile extends Component {
                               {
                                 imgurl ?
                                   <div className="row">
-                                    {/* {
-                                      loading &&
+                                    {
+                                      uploadInProgress &&
                                       <div className="progress">
                                         <div className="indeterminate"></div>
                                       </div>
-                                    } */}
+                                    }
                                     <Cropper
                                       ref='cropper'
                                       src={src}
+                                      viewMode={3}
+                                      dragMode={'move'}
                                       autoCropArea={1.0}
                                       style={{ maxHeight: 300, maxWidth: 340 }}
                                       aspectRatio={16 / 12}
                                       cropBoxResizable={false}
+                                      cropBoxMovable={false}
+                                      movable={true}
                                       crop={this._crop.bind(this)}
                                     />
                                     <button
@@ -313,7 +322,7 @@ class Profile extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="col s6 m6 l6 txt-bs">
+                    <div className="col s12 m6 l6 txt-bs">
                       <p className="img-txt">Upload images for your photos section and try to mix different photo styles <br />
                         Please try to upload high resolution images
                 </p>
@@ -496,8 +505,6 @@ class Profile extends Component {
                           placeholder="Tell us about yourself..."
                           id="about"
                           className="materialize-textarea"
-                          data-length="120"
-                          maxLength="120"
                           name="about"
                           value={this.state.about}
                           onChange={this.onChange}

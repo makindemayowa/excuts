@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Signup = props => (
-  <div id="signupModal" className="modal authModal">
+  <div id="signupModal" className="modal registerModal authModal">
     <div className="modal-content">
+      <i className="right modal-close material-icons">close</i>
       <div className="row">
         <form className="col s12" onSubmit={props.onSubmit}>
           <div className="input-field col s12">
@@ -22,7 +23,7 @@ const Signup = props => (
               type="password"
               className="validate"
               name="password"
-              required              
+              required
               onChange={props.onChange}
               value={props.state.password}
               id="signUpPassword"
@@ -34,7 +35,7 @@ const Signup = props => (
               id="signUpPassword2"
               className="validate"
               type="password"
-              required              
+              required
               name="confirmPassword"
               onChange={props.onChange}
               value={props.state.confirmPassword}
@@ -52,6 +53,17 @@ const Signup = props => (
             <i className="material-icons right">send</i>
           </button>
         </form>
+      </div>
+      <div className="row">
+        <div className="accoutAlready">
+          <a
+            className="modal-trigger"
+            href="#loginModal"
+            // onClick={props.closeModal}
+          >
+            Already have an account?
+          </a>
+        </div>
       </div>
     </div>
   </div>

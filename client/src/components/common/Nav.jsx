@@ -32,6 +32,7 @@ class NavBar extends Component {
     this.submitSignup = this.submitSignup.bind(this);
     this.submitLogin = this.submitLogin.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.sidenav = '';
   }
 
@@ -55,8 +56,8 @@ class NavBar extends Component {
     });
     const elems = document.querySelectorAll('.sidenav');
     this.sidenav = M.Sidenav.init(elems);
-    const dropdown = document.querySelectorAll('.dropdown-trigger');
-    M.Dropdown.init(dropdown);
+    // const dropdown = document.querySelectorAll('.dropdown-trigger');
+    // M.Dropdown.init(dropdown);
     socket.on('user_interested', (msg) => this.handleNotification(msg));
   }
 
@@ -73,6 +74,13 @@ class NavBar extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+  }
+
+  closeModal(e) {
+    e.preventDefault();
+    const signupModal = document.getElementById('signupModal');
+    const instance = M.Modal.getInstance(signupModal);
+    instance.close(signupModal);
   }
 
   submitLogin(e) {
@@ -135,7 +143,7 @@ class NavBar extends Component {
   render() {
     const { logged, loading } = this.state;
     // const notificationsCount = this.state.notifications.length;
-    const notificationsCount = 3;
+    // const notificationsCount = 3;
     if (!logged) {
       return <Redirect to="/" />
     }
@@ -159,17 +167,16 @@ class NavBar extends Component {
                       <ul className="right hide-on-med-and-down">
                         <li><Link to="#" onClick={this.logout}>Logout</Link></li>
                         <li><Link
-                          to="/"
-                          href="#"
-                          data-target='dropdown1'
+                          to="#"
+                          // data-target='dropdown1'
                           className="dropdown-trigger home-link"
-                          onKeyDown={() => this.setState({
-                            notifications: []
-                          })}
+                          // onKeyDown={() => this.setState({
+                          //   notifications: []
+                          // })}
                         >
                           <i className="far fa-bell"></i>
                         </Link>
-                          <span className="red-text">{notificationsCount > 0 && notificationsCount}</span>
+                          {/* <span className="red-text">{notificationsCount > 0 && notificationsCount}</span> */}
                         </li>
                       </ul>
                     ) :
@@ -180,13 +187,13 @@ class NavBar extends Component {
                   }
                 </div>
               </nav>
-              <ul id='dropdown1' className='dropdown-content'>
+              {/* <ul id='dropdown1' className='dropdown-content'>
                 {
                   this.state.notifications.map((notification) => <li key={notification.message}>
                     {notification.message}
                   </li>)
                 }
-              </ul>
+              </ul> */}
               <ul className="sidenav" id="mobile-demo">
                 {
                   this.props.user.status === 'verified' && (
@@ -294,6 +301,7 @@ class NavBar extends Component {
                   onChange={this.onChange}
                   onSubmit={this.submitSignup}
                   state={this.state}
+                  closeModal={this.closeModal}
                 />
               </div>
             </div>

@@ -249,14 +249,14 @@ export function uploadPictureRequest(formData) {
   const cloudName = 'mayowa'
   delete axios.defaults.headers.common['x-access-token'];
   return dispatch => {
-    dispatch(ajaxInProcess());
+    // dispatch(ajaxInProcess());
     return axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData).then((response) => {
       const data = response.data;
       const fileURL = {
         fileUrl: data.secure_url
       }
       axios.put('/api/user/photo', fileURL).then((res) => {
-        dispatch(endAjax());
+        // dispatch(endAjax());
         dispatch(setDetails(res.data.updatedUser));
       });
     }).catch((err) => { })
