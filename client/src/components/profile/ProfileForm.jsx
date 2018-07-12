@@ -184,7 +184,7 @@ const ProfileForm = props => {
               </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="my_bold">
                 Instagram
             </div>
@@ -206,7 +206,7 @@ const ProfileForm = props => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {
               props.currentUser.email !== props.user.email &&
               <ul className="collapsible">

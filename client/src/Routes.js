@@ -40,7 +40,7 @@ export default [
   },
   {
     name: 'dashboard',
-    path: '/dashboard',
+    path: '/people',
     secured: true,
     component: Dashboard,
     exact: true
@@ -68,7 +68,7 @@ export default [
   },
   {
     name: 'events',
-    path: '/events',
+    path: '/dashboard',
     secured: true,
     component: Events,
     exact: true

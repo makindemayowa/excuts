@@ -17,6 +17,20 @@ export function createSuccess(event) {
 }
 
 /**
+ * Create an action to set status of axios call
+ *
+ * @export
+ * @param {object} event
+ * @returns {object} type payload
+ */
+export function createReviewSuccess(reviews) {
+  return {
+    type: actionTypes.CREATE_REVIEW_SUCCESS,
+    reviews,
+  };
+}
+
+/**
  * Create an action to set all events
  *
  * @export
@@ -115,10 +129,9 @@ export function getOneEventRequest(id) {
  */
 export function postReviewRequest(id, review) {
   return dispatch => axios.post(`/api/user/${id}/review`, {review}).then((res) => {
-    // console.log('response from API', res)
-    // const events = res.data.events;
-    // const pagination = res.data.pagination;
-    // dispatch(getAllSuccess(events, pagination));
+    // const reviews = res.data.updatedUser.reviews;
+    // console.log('response from API', reviews)
+    // dispatch(createReviewSuccess(reviews));
   });
 }
 
@@ -132,5 +145,26 @@ export function postInterestedRequest(id) {
   return dispatch => axios.put(`/api/event/${id}/interested`).then((res) => {
     const event = res.data.event;
     dispatch(interestedSuccess(event));
+  });
+}
+
+/**
+ * Request to the API to get post a review
+ *
+ * @export
+ * @returns {object} dispatch object
+ */
+export function searchEventRequest(queryParam) {
+  const queryParams = Object.keys(queryParam);
+  const firstIndex = queryParams[0]
+  let url = `/api/event?${firstIndex}=${queryParam[firstIndex]}`
+  for (let index = 1; index < queryParams.length; index += 1) {
+    const otherIndex = queryParams[index]
+    url += `&${otherIndex}=${`${queryParam[otherIndex]}`}`;
+  }
+  return dispatch => axios.get(url).then((res) => {
+    const events = res.data.events;
+    const pagination = res.data.pagination;
+    dispatch(getAllSuccess(events, pagination));
   });
 }

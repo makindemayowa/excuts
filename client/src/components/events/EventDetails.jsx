@@ -25,8 +25,6 @@ class Events extends Component {
       },
     };
     this.eventId = '';
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
     this.showInterest = this.showInterest.bind(this);
   }
 
@@ -45,6 +43,8 @@ class Events extends Component {
         loading: false
       });
     })
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
   }
   componentWillReceiveProps(nextProps) {
     const event = nextProps.event;
@@ -52,13 +52,6 @@ class Events extends Component {
     this.setState({
       event,
       // loading
-    });
-  }
-
-  onChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-      error: ''
     });
   }
 
@@ -80,18 +73,6 @@ class Events extends Component {
     );
   }
 
-  onSubmit(e) {
-    this.props.getOneEventRequest().then((res) => {
-      this.setState({
-        success: true
-      })
-    }).catch((err) => {
-      this.setState({
-        error: err.response.data
-      });
-    })
-  }
-
   render() {
     const { event, loading } = this.state
     return (
@@ -108,7 +89,7 @@ class Events extends Component {
                       <span className="showinterest">
                         Interested?
                   </span>
-                      <a onClick={this.showInterest}>
+                      <a className="interestedC" onClick={this.showInterest}>
                         <i className="far fa-thumbs-up interested"></i>
                       </a>
                     </div>
@@ -145,21 +126,6 @@ class Events extends Component {
                           <div className="col s6 m4 l4 push-up">
                             <DatePicker
                               selected={this.state.date}
-                            />
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className=" col s6 m4 l4">
-                            Time
-                        </div>
-                          <div className="col s6 m4 l4 push-up">
-                            <DatePicker
-                              selected={this.state.date}
-                              showTimeSelect
-                              showTimeSelectOnly
-                              timeIntervals={15}
-                              dateFormat="LT"
-                              timeCaption="Time"
                             />
                           </div>
                         </div>
@@ -208,19 +174,18 @@ class Events extends Component {
                           </div>
                         </div>
                         <div className="row">
-                          <div className=" col s6 m4 l4">
-                            Interested in
-                          </div>
-                          <div className="col s6 m4 l3 push-up">
-                            <input
-                              placeholder="male/female/others"
-                              name="interestedIn"
-                              type="text"
-                              className=""
-                              required
-                              onChange={this.onChange}
-                              value={event.interestedIn}
-                            />
+                          <div className="form-fields">
+                            <div className=" col s6 m4 l4">
+                              Interested in
+                            </div>
+                            <div className="col s6 m4 l3 push-up">
+                              <select name="interestedIn" disabled value={event.interestedIn} className="interestedSelect browser-default size1">
+                                <option disabled value="">choose one</option>
+                                <option value="female">female</option>
+                                <option value="male">male</option>
+                                <option value="others">others</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                         <div className="row reduce-margin">

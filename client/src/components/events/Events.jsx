@@ -13,7 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Loader from '../common/Loader';
 import moment from 'moment';
 import './event.scss';
-import { getAllEventRequest } from '../../actions/events';
+import { getAllEventRequest, searchEventRequest } from '../../actions/events';
 
 class Events extends Component {
   constructor(props) {
@@ -22,12 +22,16 @@ class Events extends Component {
       startDate: moment(),
       events: [],
       loading: true,
-      country: '',
+      country: countriesWithStates.countries[0].country,
+      sex: 'female',
+      state: 'lagos',
       countryIndex: 0,
       states: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.onSexStateChange = this.onSexStateChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
@@ -69,7 +73,7 @@ class Events extends Component {
   handleChange(date) {
     this.setState({
       startDate: date
-    });
+    })
   }
 
   handleSelectChange(e) {
@@ -111,11 +115,35 @@ class Events extends Component {
     });
   }
 
+  onSearchSubmit() {
+    const eventDetail = {
+      sex: this.state.sex,
+      state: this.state.state,
+      startDate: this.state.startDate.format("YYYY-MM-DDT00:00:00.000") + "Z",
+    }
+    // ensure you cannot create an event for past days    
+    this.props.searchEventRequest(eventDetail).then((res) => {
+      this.setState({
+        success: true
+      })
+    }).catch((err) => {
+      this.setState({
+        error: err.response.data
+      });
+    })
+  }
+
+  onSexStateChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   render() {
     const { loading, states } = this.state;
     return (
       <div className="events">
-        <SubNav currentPage={'events'} />
+        <SubNav />
         <div className="bottom_margin" />
         <div className="navSelect">
           <div className="form-fields">
@@ -158,12 +186,12 @@ class Events extends Component {
                   <div className="flex">
                     <div className="form-fields">
                       <label>Interested in</label>
-                      <select className="size1">
-                        <option value="1">Female</option>
-                        <option value="">Male</option>
+                      <select name="sex" onChange={this.onSexStateChange} className="size1">
+                        <option value="female">female</option>
+                        <option value="male">male</option>
+                        <option value="others">others</option>
                       </select>
                     </div>
-
                     <div className="form-fields">
                       <label>Country</label>
                       <select
@@ -188,7 +216,7 @@ class Events extends Component {
                       <label>State</label>
                       <select
                         name="state"
-                        onChange={this.onChange}
+                        onChange={this.onSexStateChange}
                         className="size1 browser-default"
                       >
                         {
@@ -205,32 +233,17 @@ class Events extends Component {
                     </div>
 
                     <div className="form-fields">
-                      Date Range
-                    <div className="bottom_margin" />
                       <div className="row">
                         <div className="col s12">
                           <div>
                             From
-                      </div>
-                        </div>
-                        <div className="col s10 m9 l8">
-                          <div className="dtpcker">
-                            <DatePicker
-                              selected={this.state.startDate}
-                              onChange={this.handleChange}
-                            />
                           </div>
                         </div>
-                      </div>
-                      <div className="row">
-                        <div className="col s12">
-                          To
-                    </div>
                         <div className="col s10 m9 l8">
                           <div className="dtpcker">
                             <DatePicker
                               selected={this.state.startDate}
-                              onChange={this.handleChange}
+                              onChange={(e) => this.handleChange(e)}
                             />
                           </div>
                         </div>
@@ -238,9 +251,12 @@ class Events extends Component {
                     </div>
 
                     <div className="row">
-                      <button className="waves-effect right waves-light btn">
+                      <button
+                        className="waves-effect right waves-light btn"
+                        onClick={this.onSearchSubmit}
+                      >
                         Search
-                  </button>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -268,4 +284,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps,
-  { getAllEventRequest })(Events);
+  { getAllEventRequest, searchEventRequest })(Events);

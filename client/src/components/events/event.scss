@@ -259,10 +259,16 @@
 .showinterest {
   font-size: 14px
 }
-.interested {
-  font-size: 20px;
-  margin-right: 10px;
-  margin-left: 10px;
+.interestedC {
+  cursor: pointer;
+  .interested {
+    font-size: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
+.interestedSelect {
+  background: #f5f5f5
 }
 .notinterested {
   font-size: 20px;
