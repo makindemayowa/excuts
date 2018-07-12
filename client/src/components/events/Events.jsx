@@ -77,6 +77,9 @@ class Events extends Component {
   }
 
   handleSelectChange(e) {
+    this.setState({
+      loading: true
+    })
     this.props.getAllEventRequest(e.target.value).then(() => {
       this.setState({
         events: this.props.events,
@@ -116,6 +119,9 @@ class Events extends Component {
   }
 
   onSearchSubmit() {
+    this.setState({
+      loading: true
+    })
     const eventDetail = {
       sex: this.state.sex,
       state: this.state.state,
@@ -124,11 +130,13 @@ class Events extends Component {
     // ensure you cannot create an event for past days    
     this.props.searchEventRequest(eventDetail).then((res) => {
       this.setState({
-        success: true
+        success: true,
+        loading: false
       })
     }).catch((err) => {
       this.setState({
-        error: err.response.data
+        error: err.response.data,
+        loading: false
       });
     })
   }
