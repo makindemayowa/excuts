@@ -5,9 +5,11 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
 import UserCard from '../common/UserCard';
+import NotFound from '../common/NotFound'
 import SubNav from '../common/SubNav';
+import storage from '../../actions/storage'
 import {
-  getAllUsers
+  getAllUsers, searchAllUsers
 } from '../../actions/auth';
 import './dashboard.scss';
 import Loader from '../common/Loader'
@@ -22,9 +24,12 @@ class Discover extends Component {
       value: { min: 2, max: 10 },
       maxDistance: 5,
       maxAge: 40,
+      sex: 'female',
+      here_to: 'here_to_hire',
       loadingText: '',
       currentPage: 1,
     };
+    this.searchUsers = this.searchUsers.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.changeEvent = this.changeEvent.bind(this);
     window.onscroll = () => {
@@ -47,6 +52,44 @@ class Discover extends Component {
     })
   }
 
+  searchUsers() {
+    this.setState({
+      loading: true
+    })
+    const searchParams = {
+      maxDistance: this.state.maxDistance,
+      maxAge: this.state.maxAge,
+      here_to: this.state.here_to,
+      sex: this.state.sex,
+    }
+    this.props.searchAllUsers(this.long, this.lat, searchParams).then((res) => {
+      this.setState({
+        loading: false,
+        maxDistance: 5,
+        maxAge: 40,
+        sex: 'female',
+        here_to: 'here_to_hire',
+      }, () => {
+        const materialboxed = document.querySelectorAll('.materialboxed');
+        M.Materialbox.init(materialboxed);
+        const elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+      })
+    }).catch(() => {
+      this.setState({
+        loading: false,
+        maxDistance: 5,
+        maxAge: 40,
+        sex: 'female',
+        here_to: 'here_to_hire',
+      })
+      const materialboxed = document.querySelectorAll('.materialboxed');
+      M.Materialbox.init(materialboxed);
+      const elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+    })
+  }
+
   componentDidMount() {
     const materialboxed = document.querySelectorAll('.materialboxed');
     M.Materialbox.init(materialboxed);
@@ -55,30 +98,26 @@ class Discover extends Component {
     this.setState({
       loading: true
     })
-    var geoOptions = {
-      timeout: 10 * 1000
-    }
     document.getElementsByTagName("footer")[0].style.display = 'none'
     const prevLong = this.props.user.location.coordinates[0];
     const prevLat = this.props.user.location.coordinates[1];
-    const geoError = () => {
-      this.long = prevLong;
-      this.lat = prevLat;
-      this.getUsers(this.long, this.lat)
-    };
     if (!this.props.users.length) {
-      window.navigator.geolocation.getCurrentPosition((pos) => {
-        this.long = pos.coords.longitude;
-        this.lat = pos.coords.latitude;
+      const locData = storage.getItem('locdata')
+      if (locData) {
+        this.long = locData.long;
+        this.lat = locData.lat;
         this.getUsers(this.long, this.lat)
-      }, geoError, geoOptions);
+      } else {
+        this.long = prevLong;
+        this.lat = prevLat;
+        this.getUsers(this.long, this.lat)
+      }
     } else {
       let currentPage = Number(this.props.pagination.currentPage)
       this.setState({
         currentPage: currentPage,
         loading: false
-      }
-      )
+      })
     }
   }
 
@@ -120,7 +159,7 @@ class Discover extends Component {
     const { loading } = this.state
     return (
       <div>
-        <SubNav currentPage={'people'}/>
+        <SubNav currentPage={'people'} />
         {
           loading && <Loader />
         }
@@ -133,14 +172,19 @@ class Discover extends Component {
                   {
                     <div className="col s12 m10 l10">
                       {
-                        this.props.users.map(user => {
-                          if(user.profilePhoto && user.occupation && user.state) {
-                            return <UserCard
-                            key={user._id}
-                            userInfo={user}
-                          />
-                          }
-                        })
+                        this.props.users.length ?
+                          <div>
+                            {
+                              this.props.users.map(user => {
+                                if (user.profilePhoto && user.occupation && user.state) {
+                                  return <UserCard
+                                    key={user._id}
+                                    userInfo={user}
+                                  />
+                                }
+                              })
+                            }
+                          </div> : <NotFound type="user" />
                       }
                     </div>
                   }
@@ -148,29 +192,28 @@ class Discover extends Component {
                     {this.state.loadingText}
                   </div>
                   {
-                    !loading &&
                     <div className="col m2 l2">
                       <div className="searchForm">
                         <div className="flex">
                           <div className="form-fields">
                             <label>Gender</label>
-                            <select className="size1">
-                              <option value="1">Female</option>
-                              <option value="">Male</option>
-                              <option value="2">Other</option>
+                            <select onChange={this.changeEvent} name="sex" className="size1">
+                              <option value="female">Female</option>
+                              <option value="male">Male</option>
+                              <option value="others">Others</option>
                             </select>
                           </div>
                           <div className="form-fields">
                             <label>Here</label>
-                            <select className="size1">
-                              <option value="1"> To Hire</option>
-                              <option value="">For Fun</option>
-                              <option value="2">Professional Escort</option>
+                            <select onChange={this.changeEvent} name="here_to" className="size1">
+                              <option value="here_to_hire"> To Hire</option>
+                              <option value="here_for_fun">For Fun</option>
+                              <option value="professsional">Professional Escort</option>
                             </select>
                           </div>
                           <form action="#">
                             Maximum Distance: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          <span id="maxDistance">{this.state.maxDistance}km</span>
+                          <span id="maxDistance">{`${this.state.maxDistance} km`}</span>
                             <p className="range-field">
                               <input type="range" name="maxDistance" value={this.state.maxDistance} onChange={this.changeEvent} min="0" max="100" />
                             </p>
@@ -184,7 +227,7 @@ class Discover extends Component {
                             </p>
                           </form>
                           <div className="">
-                            <button className="waves-effect waves-light btn">
+                            <button onClick={this.searchUsers} className="waves-effect waves-light btn">
                               Go
                           </button>
                           </div>
@@ -212,5 +255,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps,
   {
-    getAllUsers,
+    getAllUsers, searchAllUsers
   })(Discover);

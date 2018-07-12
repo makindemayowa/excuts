@@ -9,6 +9,7 @@ import Login from '../landingPage/Login';
 import Signup from '../landingPage/Signup';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/auth';
+import storage from '../../actions/storage'
 import Loader from './Loader'
 import { userSignUpRequest, userLoginRequest } from '../../actions/auth';
 
@@ -40,6 +41,11 @@ class NavBar extends Component {
     window.navigator.geolocation.getCurrentPosition((pos) => {
       this.long = parseFloat(pos.coords.longitude);
       this.lat = parseFloat(pos.coords.latitude);
+      const locData = {
+        long: parseFloat(pos.coords.longitude),
+        lat: parseFloat(pos.coords.latitude)
+      }
+      storage.setItem('locdata' , locData)
     });
     const authModals = document.querySelectorAll('.authModal');
     M.Modal.init(authModals, {
