@@ -49,8 +49,9 @@ class SearchEvent extends Component {
               <div className="form-fields">
                 <label>Interested in</label>
                 <select className="size1">
-                  <option value="1">Female</option>
-                  <option value="">Male</option>
+                  <option value="female">female</option>
+                  <option value="male">male</option>
+                  <option value="others">others</option>
                 </select>
               </div>
 

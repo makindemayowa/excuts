@@ -116,10 +116,21 @@ exports.getAll = (req, res) => {
       created_by: req.user.email
     };
   } else {
-    query = {
-      created_by: { $ne: req.user.email },
-      // date: { $gte: new Date('2018-05-05') },
-    };
+    if (Object.keys(req.query).length) {
+      query = {
+        created_by: { $ne: req.user.email },
+        interestedIn: req.query.sex,
+        state: req.query.state,
+        date: { $gte: req.query.startDate }
+      };
+    } else {
+      const today = new Date();
+      const yesterday = new Date(today);
+      query = {
+        created_by: { $ne: req.user.email },
+        date: { $gte: yesterday.setDate(today.getDate() - 3) },
+      };
+    }
   }
   Events
     .find(query)

@@ -1,4 +1,5 @@
 /* eslint-env jquery */
+/*global M*/
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -8,15 +9,12 @@ import moment from 'moment';
 import SubNav from '../common/SubNav';
 import { createEventRequest } from '../../actions/events';
 
-
-
 class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
       title: '',
       date: moment(),
-      time: moment(),
       location: '',
       state: '',
       city: '',
@@ -33,6 +31,8 @@ class Events extends Component {
   }
 
   componentDidMount() {
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
     $('textarea#textarea1, textarea#textarea2, textarea#textarea3')
       .characterCounter();
   }
@@ -54,7 +54,6 @@ class Events extends Component {
     const eventDetail = {
       title: this.state.title,
       date: this.state.date,
-      time: this.state.time,
       location: this.state.location,
       state: this.state.state,
       city: this.state.city,
@@ -77,7 +76,7 @@ class Events extends Component {
 
   render() {
     if (this.state.success) {
-      return <Redirect to="/events" />;
+      return <Redirect to="/dashboard" />;
     }
     return (
       <div>
@@ -117,22 +116,6 @@ class Events extends Component {
                         <DatePicker
                           selected={this.state.date}
                           onChange={this.handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className=" col s6 m4 l4">
-                        Time
-                        </div>
-                      <div className="col s6 m4 l4 push-up">
-                        <DatePicker
-                          selected={this.state.date}
-                          onChange={this.handleChange}
-                          showTimeSelect
-                          showTimeSelectOnly
-                          timeIntervals={15}
-                          dateFormat="LT"
-                          timeCaption="Time"
                         />
                       </div>
                     </div>
@@ -184,19 +167,18 @@ class Events extends Component {
                       </div>
                     </div>
                     <div className="row">
-                      <div className=" col s6 m4 l4">
-                        Interested in
+                      <div className="form-fields">
+                        <div className=" col s6 m4 l4">
+                          Interested in
+                      </div>
+                        <div className="col s6 m4 l3 push-up">
+                          <select name="interestedIn" defaultValue="" onChange={this.onChange} className="size1">
+                            <option disabled value="">choose one</option>
+                            <option value="female">female</option>
+                            <option value="male">male</option>
+                            <option value="others">others</option>
+                          </select>
                         </div>
-                      <div className="col s6 m4 l3 push-up">
-                        <input
-                          placeholder="male/female/others"
-                          name="interestedIn"
-                          type="text"
-                          className=""
-                          required
-                          onChange={this.onChange}
-                          value={this.state.interestedIn}
-                        />
                       </div>
                     </div>
                     <div className="row reduce-margin">

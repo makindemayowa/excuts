@@ -120,7 +120,7 @@ class Discover extends Component {
     const { loading } = this.state
     return (
       <div>
-        <SubNav />
+        <SubNav currentPage={'people'}/>
         {
           loading && <Loader />
         }

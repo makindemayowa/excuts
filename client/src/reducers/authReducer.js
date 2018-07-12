@@ -8,6 +8,7 @@ const initialState = {
   pagination: {},
   users: [],
   userDetails: {},
+  reviews: [],
   loc: {},
   loading: false,
   photos: ['http://res.cloudinary.com/mayowa/image/upload/v1528715613/pbsvdzf8fnboydysjenx.png'],
@@ -62,6 +63,11 @@ export default (state = initialState, action) => {
         ...state,
         userDetails: action.userDetails,
       };
+    // case actionTypes.CREATE_REVIEW_SUCCESS:
+    //   return {
+    //     ...state,
+    //     userDetails: [...state.userDetails.reviews, ...action.reviews ],
+    //   };
     case actionTypes.SET_UPLOADED_PHOTO:
       return {
         ...state,

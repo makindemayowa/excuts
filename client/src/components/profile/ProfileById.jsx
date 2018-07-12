@@ -99,6 +99,22 @@ class ProfileById extends Component {
       user,
       loading
     });
+    const carousel = document.querySelectorAll('.carousel');
+    const materialboxed = document.querySelectorAll('.materialboxed');
+    const collapsible = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(collapsible);
+    M.Carousel.init(carousel, {
+      duration: 100,
+      indicators: true,
+      onCycleTo: (data) => {
+        const currentImg = data.getElementsByTagName('img')[0];
+        this.setState({
+          currentImg: currentImg.src
+        });
+      }
+    });
+    M.Materialbox.init(materialboxed);
+    $('input#input_text, textarea#textarea1').characterCounter();
   }
 
   handleChange(date, name) {
@@ -120,10 +136,7 @@ class ProfileById extends Component {
   createReview() {
     const review = this.state.review
     this.props.postReviewRequest(this.profileId, review).then((res) => {
-      this.props.getUserById(this.profileId).then(() => {
-        const collapsible = document.querySelectorAll('.collapsible');
-        M.Collapsible.init(collapsible);
-      });
+      this.props.getUserById(this.profileId);
       this.setState({
         review: ''
       });

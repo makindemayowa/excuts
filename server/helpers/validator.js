@@ -23,7 +23,6 @@ module.exports = {
   createEvent: Joi.object({
     title: Joi.string().required(),
     date: Joi.string().required(),
-    time: Joi.string().required(),
     location: Joi.string().required(),
     state: Joi.string().required(),
     city: Joi.string().required(),
