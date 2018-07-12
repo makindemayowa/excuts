@@ -169,28 +169,30 @@ class Events extends Component {
             <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
           </div>
           <div className="row">
-            {
-              loading ? <Loader /> :
-                <div className="col s12 m8 l10">
-                  {
-                    this.state.events.length ?
-                      <div className="row">
-                        {
-                          this.state.events.map((event) => <EventsCard
-                            event={event}
-                            id={event._id}
-                            key={event._id}
-                            onChange={this.onChange}
-                            currentUser={this.props.user}
-                          />)
-                        }
-                      </div> :
-                      <h5 className="notFound">
-                        No event found
+            <div className="col s12 m8 l10">
+              {
+                loading ? <Loader /> :
+                  <div>
+                    {
+                      this.state.events.length ?
+                        <div className="row">
+                          {
+                            this.state.events.map((event) => <EventsCard
+                              event={event}
+                              id={event._id}
+                              key={event._id}
+                              onChange={this.onChange}
+                              currentUser={this.props.user}
+                            />)
+                          }
+                        </div> :
+                        <h5 className="notFound">
+                          No event found
                       </h5>
-                  }
-                </div>
-            }
+                    }
+                  </div>
+              }
+            </div>
             <div className="col s12 m4 l2 searchForm">
               <div className="flex">
                 <div className="form-fields">

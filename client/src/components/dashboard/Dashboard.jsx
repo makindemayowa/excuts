@@ -160,9 +160,6 @@ class Discover extends Component {
     return (
       <div>
         <SubNav currentPage={'people'} />
-        {
-          loading && <Loader />
-        }
         <div className="discover bg-3">
           <div className="bottom_margin" />
           <div className="content-div bg-3">
@@ -172,19 +169,24 @@ class Discover extends Component {
                   {
                     <div className="col s12 m10 l10">
                       {
-                        this.props.users.length ?
+                        loading ? <Loader /> :
                           <div>
                             {
-                              this.props.users.map(user => {
-                                if (user.profilePhoto && user.occupation && user.state) {
-                                  return <UserCard
-                                    key={user._id}
-                                    userInfo={user}
-                                  />
-                                }
-                              })
+                              this.props.users.length ?
+                                <div>
+                                  {
+                                    this.props.users.map(user => {
+                                      if (user.profilePhoto && user.occupation && user.state) {
+                                        return <UserCard
+                                          key={user._id}
+                                          userInfo={user}
+                                        />
+                                      }
+                                    })
+                                  }
+                                </div> : <NotFound type="user" />
                             }
-                          </div> : <NotFound type="user" />
+                          </div>
                       }
                     </div>
                   }
