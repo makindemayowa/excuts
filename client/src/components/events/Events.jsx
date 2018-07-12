@@ -108,7 +108,7 @@ class Events extends Component {
       [name]: e.target.value,
       error: ''
     }, () => {
-      if(name === "country") {
+      if (name === "country") {
         const index = countriesWithStates.countries.findIndex(countries => countries.country === this.state.country);
         this.setState({
           countryIndex: index,
@@ -168,9 +168,9 @@ class Events extends Component {
           <div className="right createEvent">
             <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
           </div>
-          {
-            loading ? <Loader /> :
-              <div className="row">
+          <div className="row">
+            {
+              loading ? <Loader /> :
                 <div className="col s12 m8 l10">
                   {
                     this.state.events.length ?
@@ -190,86 +190,86 @@ class Events extends Component {
                       </h5>
                   }
                 </div>
-                <div className="col s12 m4 l2 searchForm">
-                  <div className="flex">
-                    <div className="form-fields">
-                      <label>Interested in</label>
-                      <select name="sex" onChange={this.onSexStateChange} className="size1">
-                        <option value="female">female</option>
-                        <option value="male">male</option>
-                        <option value="others">others</option>
-                      </select>
-                    </div>
-                    <div className="form-fields">
-                      <label>Country</label>
-                      <select
-                        name="country"
-                        onChange={this.onChange}
-                        className="size1"
-                      >
-                        {
-                          countriesWithStates.countries.map((country) =>
-                            <option
-                              key={country.country}
-                              value={country.country}
-                            >
-                              {country.country}
-                            </option>
-                          )
-                        }
-                      </select>
-                    </div>
+            }
+            <div className="col s12 m4 l2 searchForm">
+              <div className="flex">
+                <div className="form-fields">
+                  <label>Interested in</label>
+                  <select name="sex" onChange={this.onSexStateChange} className="size1">
+                    <option value="female">female</option>
+                    <option value="male">male</option>
+                    <option value="others">others</option>
+                  </select>
+                </div>
+                <div className="form-fields">
+                  <label>Country</label>
+                  <select
+                    name="country"
+                    onChange={this.onChange}
+                    className="size1"
+                  >
+                    {
+                      countriesWithStates.countries.map((country) =>
+                        <option
+                          key={country.country}
+                          value={country.country}
+                        >
+                          {country.country}
+                        </option>
+                      )
+                    }
+                  </select>
+                </div>
 
-                    <div className="form-fields">
-                      <label>State</label>
-                      <select
-                        name="state"
-                        onChange={this.onSexStateChange}
-                        className="size1 browser-default"
-                      >
-                        {
-                          states.map((state) =>
-                            <option
-                              key={state}
-                              value={state}
-                            >
-                              {state}
-                            </option>
-                          )
-                        }
-                      </select>
-                    </div>
+                <div className="form-fields">
+                  <label>State</label>
+                  <select
+                    name="state"
+                    onChange={this.onSexStateChange}
+                    className="size1 browser-default"
+                  >
+                    {
+                      states.map((state) =>
+                        <option
+                          key={state}
+                          value={state}
+                        >
+                          {state}
+                        </option>
+                      )
+                    }
+                  </select>
+                </div>
 
-                    <div className="form-fields">
-                      <div className="row">
-                        <div className="col s12">
-                          <div>
-                            From
+                <div className="form-fields">
+                  <div className="row">
+                    <div className="col s12">
+                      <div>
+                        From
                           </div>
-                        </div>
-                        <div className="col s10 m9 l8">
-                          <div className="dtpcker">
-                            <DatePicker
-                              selected={this.state.startDate}
-                              onChange={(e) => this.handleChange(e)}
-                            />
-                          </div>
-                        </div>
+                    </div>
+                    <div className="col s10 m9 l8">
+                      <div className="dtpcker">
+                        <DatePicker
+                          selected={this.state.startDate}
+                          onChange={(e) => this.handleChange(e)}
+                        />
                       </div>
-                    </div>
-
-                    <div className="row">
-                      <button
-                        className="waves-effect right waves-light btn"
-                        onClick={this.onSearchSubmit}
-                      >
-                        Search
-                      </button>
                     </div>
                   </div>
                 </div>
+
+                <div className="row">
+                  <button
+                    className="waves-effect right waves-light btn"
+                    onClick={this.onSearchSubmit}
+                  >
+                    Search
+                      </button>
+                </div>
               </div>
-          }
+            </div>
+          </div>
         </div>
       </div>
     );
