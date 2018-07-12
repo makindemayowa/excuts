@@ -47,6 +47,12 @@ export default (state = initialState, action) => {
         user: action.loggedInUser,
         loc: action.loc
       };
+    case actionTypes.GET_ALL_FAILURE:
+      return {
+        ...state,
+        users: [],
+        pagination: {}
+      };
     case actionTypes.SET_CURRENT_USER_LOC:
       return {
         ...state,
@@ -56,6 +62,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         users: [...state.users, ...action.users ],
+        pagination: action.pagination
+      };
+    case actionTypes.SEARCH_USERS_SUCCESS:
+      return {
+        ...state,
+        users: action.users,
         pagination: action.pagination
       };
     case actionTypes.SET_USER_DETAILS:

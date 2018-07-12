@@ -24,6 +24,20 @@ function getAllSucess(users, pagination) {
   };
 }
 
+function getAllFailure() {
+  return {
+    type: actionTypes.GET_ALL_FAILURE,
+  };
+}
+
+function searchSucess(users, pagination) {
+  return {
+    type: actionTypes.SEARCH_USERS_SUCCESS,
+    users,
+    pagination
+  };
+}
+
 export function setUser(loggedInUser, isAuthenticated) {
   return {
     type: actionTypes.SET_CURRENT_USER,
@@ -163,7 +177,32 @@ export function getAllUsers(long, lat, page) {
       const pagination = res.data.pagination;
       const users = res.data.users;
       dispatch(getAllSucess(users, pagination));
-    });
+    }).catch(() => {
+      dispatch(getAllFailure())
+    })
+  }
+}
+
+/**
+ * Request to the API to update an existing user
+ *
+ * @export
+ * @param {number} id
+ * @param {object} userDetails
+ * @returns {object} dispatch object
+ */
+export function searchAllUsers(long, lat, searchParams) {
+  const url = `/api/user/?long=${long}&lat=${lat}&maxDistance=${searchParams.maxDistance}&maxAge=${searchParams.maxAge}&here_to=${searchParams.here_to}&sex=${searchParams.sex}`
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.get(url).then((res) => {
+      dispatch(endAjax());
+      const pagination = res.data.pagination;
+      const users = res.data.users;
+      dispatch(searchSucess(users, pagination));
+    }).catch(() => {
+      dispatch(getAllFailure())
+    })
   }
 }
 

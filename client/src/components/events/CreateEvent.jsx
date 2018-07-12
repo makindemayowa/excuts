@@ -93,160 +93,164 @@ class Events extends Component {
                   <div className="container push-right">
                     <div className="bottom_margin" />
                     <div className="bottom_padding" />
-                    <div className="row">
-                      <div className=" col s6 m4 l4">
-                        Title
-                        </div>
-                      <div className="col s6 m4 l3 push-up">
-                        <input
-                          placeholder="title"
-                          name="title"
-                          type="text"
-                          className=""
-                          value={this.state.title}
-                          onChange={this.onChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col s6 m4 l4">
-                        Date
-                      </div>
-                      <div className="col s6 m4 l4 push-up">
-                        <DatePicker
-                          selected={this.state.date}
-                          onChange={this.handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className=" col s6 m4 l4">
-                        Location (Event place name)
-                        </div>
-                      <div className="col s6 m4 l3 push-up">
-                        <input
-                          placeholder="location"
-                          name="location"
-                          type="text"
-                          className=""
-                          value={this.state.location}
-                          onChange={this.onChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className=" col s6 m4 l4">
-                        State
-                        </div>
-                      <div className="col s6 m4 l3 push-up">
-                        <input
-                          placeholder="state"
-                          name="state"
-                          type="text"
-                          className=""
-                          required
-                          onChange={this.onChange}
-                          value={this.state.state}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className=" col s6 m4 l4">
-                        City
-                        </div>
-                      <div className="col s6 m4 l3 push-up">
-                        <input
-                          placeholder="city"
-                          name="city"
-                          type="text"
-                          className=""
-                          required
-                          onChange={this.onChange}
-                          value={this.state.city}
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="form-fields">
+                    <form>
+                      <div className="row">
                         <div className=" col s6 m4 l4">
-                          Interested in
-                      </div>
+                          Title
+                        </div>
                         <div className="col s6 m4 l3 push-up">
-                          <select name="interestedIn" defaultValue="" onChange={this.onChange} className="size1">
-                            <option disabled value="">choose one</option>
-                            <option value="female">female</option>
-                            <option value="male">male</option>
-                            <option value="others">others</option>
-                          </select>
+                          <input
+                            placeholder="title"
+                            name="title"
+                            type="text"
+                            className=""
+                            value={this.state.title}
+                            onChange={this.onChange}
+                          />
                         </div>
                       </div>
-                    </div>
-                    <div className="row reduce-margin">
-                      <div className="col s12 m12 l12">
-                        Details
-                        </div>
-                      <div className="col s12">
-                        <textarea
-                          placeholder="Describe this event in brief..."
-                          id="textarea1"
-                          className="materialize-textarea"
-                          data-length="120"
-                          name="details"
-                          maxLength="120"
-                          required
-                          onChange={this.onChange}
-                          value={this.state.details}
-                        />
+                      <div className="row">
+                        <div className="col s6 m4 l4">
+                          Date
                       </div>
-                    </div>
-                    <div className="row reduce-margin">
-                      <div className="col s12 m12 l12">
-                        Preference
+                        <div className="col s6 m4 l4 push-up">
+                          <DatePicker
+                            selected={this.state.date}
+                            onChange={this.handleChange}
+                          />
                         </div>
-                      <div className="col s12">
-                        <textarea
-                          placeholder="Who would you rather go out with..."
-                          id="textarea2"
-                          className="materialize-textarea"
-                          name="preference"
-                          data-length="120"
-                          maxLength="120"
-                          required
-                          onChange={this.onChange}
-                          value={this.state.preference}
-                        />
                       </div>
-                    </div>
-                    <div className="row reduce-margin">
-                      <div className="col s12 m12 l12">
-                        Extra
+                      <div className="row">
+                        <div className=" col s6 m4 l4">
+                          Location (Event place name)
                         </div>
-                      <div className="col s12">
-                        <textarea
-                          placeholder="Any other thing we should know..."
-                          id="textarea3"
-                          className="materialize-textarea"
-                          name="extra"
-                          data-length="120"
-                          maxLength="120"
-                          required
-                          onChange={this.onChange}
-                          value={this.state.extra}
-                        />
+                        <div className="col s6 m4 l3 push-up">
+                          <input
+                            placeholder="location"
+                            name="location"
+                            type="text"
+                            className=""
+                            value={this.state.location}
+                            onChange={this.onChange}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="submitContainer">
-                      <a
-                        className="waves-effect waves-light btn save-btn"
-                        onClick={this.onSubmit}
-                      >Create</a>
-                      <a className="waves-effect waves-light btn cancel-btn">Cancel</a>
-                    </div>
-                    <div className="error_message">
+                      <div className="row">
+                        <div className=" col s6 m4 l4">
+                          State
+                        </div>
+                        <div className="col s6 m4 l3 push-up">
+                          <input
+                            placeholder="state"
+                            name="state"
+                            type="text"
+                            className=""
+                            required
+                            onChange={this.onChange}
+                            value={this.state.state}
+                          />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className=" col s6 m4 l4">
+                          City
+                        </div>
+                        <div className="col s6 m4 l3 push-up">
+                          <input
+                            placeholder="city"
+                            name="city"
+                            type="text"
+                            className=""
+                            required
+                            onChange={this.onChange}
+                            value={this.state.city}
+                          />
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="form-fields">
+                          <div className=" col s6 m4 l4">
+                            Interested in
+                      </div>
+                          <div className="col s6 m4 l3 push-up">
+                            <select name="interestedIn" defaultValue="" onChange={this.onChange} className="size1">
+                              <option disabled value="">choose one</option>
+                              <option value="female">female</option>
+                              <option value="male">male</option>
+                              <option value="others">others</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row reduce-margin">
+                        <div className="col s12 m12 l12">
+                          Details
+                        </div>
+                        <div className="col s12">
+                          <textarea
+                            placeholder="Describe this event in brief..."
+                            id="textarea1"
+                            className="materialize-textarea"
+                            data-length="120"
+                            name="details"
+                            maxLength="120"
+                            required
+                            onChange={this.onChange}
+                            value={this.state.details}
+                          />
+                        </div>
+                      </div>
+                      <div className="row reduce-margin">
+                        <div className="col s12 m12 l12">
+                          Preference
+                        </div>
+                        <div className="col s12">
+                          <textarea
+                            placeholder="Who would you rather go out with..."
+                            id="textarea2"
+                            className="materialize-textarea"
+                            name="preference"
+                            data-length="120"
+                            maxLength="120"
+                            required
+                            onChange={this.onChange}
+                            value={this.state.preference}
+                          />
+                        </div>
+                      </div>
+                      <div className="row reduce-margin">
+                        <div className="col s12 m12 l12">
+                          Extra
+                        </div>
+                        <div className="col s12">
+                          <textarea
+                            placeholder="Any other thing we should know..."
+                            id="textarea3"
+                            className="materialize-textarea"
+                            name="extra"
+                            data-length="120"
+                            maxLength="120"
+                            required
+                            onChange={this.onChange}
+                            value={this.state.extra}
+                          />
+                        </div>
+                      </div>
+                      <div className="submitContainer">
+                        <a
+                          className="waves-effect waves-light btn save-btn"
+                          // type="submit"
+                          // name="action"
+                          onClick={this.onSubmit}
+                        >Create</a>
+                        <a className="waves-effect waves-light btn cancel-btn">Cancel</a>
+                      </div>
+                      <div className="error_message">
+                        <div className="bottom_margin" />
+                        {this.state.error}
+                      </div>
                       <div className="bottom_margin" />
-                      {this.state.error}
-                    </div>
-                    <div className="bottom_margin" />
+                    </form>
                   </div>
                 </div>
               </div>

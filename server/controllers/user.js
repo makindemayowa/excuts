@@ -225,38 +225,59 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-    // const query2 = [geoNear, { photos: { $exists: true, $ne: [] }, firstName: { $exists: true, $ne: null }, occupation: { $exists: true, $ne: null } }];
   const long = parseFloat(req.query.long);
   const lat = parseFloat(req.query.lat);
-  const limit = req.query.limit || 2;
+  const limit = req.query.limit || 5;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
-  const geoNear = {
-    $geoNear: {
-      near: {
-        type: 'Point',
-        coordinates:
-          [long, lat]
-      },
-      distanceField: 'distance',
-      spherical: true,
-      maxDistance: 10000000
-    },
-  };
-  const query2 = [geoNear, { $count: 'total' }];
+  let geoNear;
+  if (req.query.maxDistance) {
+    geoNear = {
+      $and: [
+        { sex: req.query.sex },
+        { here_to: req.query.here_to },
+        { age: { $lte: req.query.maxAge } },
+        {
+          loc: {
+            $near: {
+              $geometry: {
+                type: 'Point',
+                coordinates: [long, lat]
+              },
+              $maxDistance: 10000
+            }
+          }
+        }
+      ],
+    };
+  } else {
+    geoNear = {
+      loc: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat]
+          },
+          $maxDistance: 10000
+        }
+      }
+    };
+  }
   User
-    .aggregate(geoNear)
+    .find(geoNear)
     .skip(offset)
     .limit(limit)
     .exec((err, users) => {
+      if (err) {
+        return res.status(400).send({ message: 'An error occured', err });
+      }
       if (!users.length) {
         return res.status(404).send({ message: 'No user found' });
       }
-      User.aggregate(query2).exec((err, response) => {
-        if (!response) {
+      User.count(geoNear).exec((err, count) => {
+        if (!count) {
           return res.status(400).send({ message: 'An error occured' });
         }
-        const count = response[0].total;
         if (err) return res.status(500).send({ err });
         return res.status(200).send({
           users,
