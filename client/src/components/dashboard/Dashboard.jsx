@@ -98,7 +98,7 @@ class Discover extends Component {
     this.setState({
       loading: true
     })
-    document.getElementsByTagName("footer")[0].style.display = 'none'
+    // document.getElementsByTagName("footer")[0].style.display = 'none'
     const prevLong = this.props.user.location.coordinates[0];
     const prevLat = this.props.user.location.coordinates[1];
     if (!this.props.users.length) {
@@ -132,7 +132,7 @@ class Discover extends Component {
       this.setState({
         loadingText: ''
       });
-      document.getElementsByTagName("footer")[0].style.display = 'block'
+      // document.getElementsByTagName("footer")[0].style.display = 'block'
     } else {
       this.setState({
         currentPage: page += 1,
@@ -158,10 +158,9 @@ class Discover extends Component {
   render() {
     const { loading } = this.state
     return (
-      <div>
+      <div className="discover bg-3">
         <SubNav currentPage={'people'} />
-        <div className="discover bg-3">
-          <div className="bottom_margin" />
+        <div>
           <div className="content-div bg-3">
             <section className="new-idols">
               <div className="smaller-container">
@@ -196,6 +195,7 @@ class Discover extends Component {
                   {
                     <div className="col m2 l2">
                       <div className="searchForm">
+                        <div className="bottom_margin" />
                         <div className="flex">
                           <div className="form-fields">
                             <label>Gender</label>

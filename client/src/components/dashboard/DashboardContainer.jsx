@@ -16,12 +16,12 @@ class App extends Component {
             <div>
               <NavBar {...this.props} isLogged={this.props.auth.isLogged}/>
               <Comp {...this.props}/>
-              <Footer />
+              {/* <Footer /> */}
             </div> :
             <div>
               <NavBar />
               <Comp />
-              <Footer />
+              {/* <Footer /> */}
             </div>
         }
       </div>

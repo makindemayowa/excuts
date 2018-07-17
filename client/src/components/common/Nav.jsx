@@ -1,3 +1,4 @@
+/* eslint-env jquery */
 /*global M*/
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -11,6 +12,8 @@ import { logout } from '../../actions/auth';
 import storage from '../../actions/storage'
 import Loader from './Loader'
 import { userSignUpRequest, userLoginRequest } from '../../actions/auth';
+
+const imgUrl = require('../../images/noavatar.png')
 
 class NavBar extends Component {
   constructor() {
@@ -26,6 +29,7 @@ class NavBar extends Component {
       success: false,
       isLogged: false,
       loading: false,
+      profilePhoto: imgUrl
     }
     this.logout = this.logout.bind(this);
     this.handleNotification = this.handleNotification.bind(this);
@@ -44,7 +48,7 @@ class NavBar extends Component {
         long: parseFloat(pos.coords.longitude),
         lat: parseFloat(pos.coords.latitude)
       }
-      storage.setItem('locdata' , locData)
+      storage.setItem('locdata', locData)
     });
     const authModals = document.querySelectorAll('.authModal');
     M.Modal.init(authModals, {
@@ -58,6 +62,7 @@ class NavBar extends Component {
     });
     this.setState({
       loading: false,
+      profilePhoto: this.props.user.profilePhoto
     });
     const elems = document.querySelectorAll('.sidenav');
     this.sidenav = M.Sidenav.init(elems);
@@ -146,7 +151,7 @@ class NavBar extends Component {
   }
 
   render() {
-    const { logged, loading } = this.state;
+    const { logged, loading, profilePhoto } = this.state;
     // const notificationsCount = this.state.notifications.length;
     // const notificationsCount = 3;
     if (!logged) {
@@ -159,14 +164,19 @@ class NavBar extends Component {
             <div className="">
               <nav className="nav-extended">
                 <div className="nav-wrapper">
-                  <Link to="/" className="brand-logo">
-                    <img
+                  <Link to="/" className="brand-logo companyLogo">
+                    {/* <img
                       alt=""
                       className="companyLogo"
                       src={require('../../images/takemeout.png')}
-                    />
+                    /> */}
+                    eXcuts
                   </Link>
-                  <Link to="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></Link>
+                  <a to="/publicprofile" data-target="slide-out" className="sidenav-trigger">
+                    <div className="imageContainer">
+                      <img className="circle profileImage" src={profilePhoto} alt="" />
+                    </div>
+                  </a>
                   {
                     this.props.isAuthenticated ? (
                       <ul className="right hide-on-med-and-down">
@@ -175,9 +185,9 @@ class NavBar extends Component {
                           to="#"
                           // data-target='dropdown1'
                           className="dropdown-trigger home-link"
-                          // onKeyDown={() => this.setState({
-                          //   notifications: []
-                          // })}
+                        // onKeyDown={() => this.setState({
+                        //   notifications: []
+                        // })}
                         >
                           <i className="far fa-bell"></i>
                         </Link>
@@ -199,7 +209,7 @@ class NavBar extends Component {
                   </li>)
                 }
               </ul> */}
-              <ul className="sidenav" id="mobile-demo">
+              <ul className="sidenav" id="slide-out">
                 {
                   this.props.user.status === 'verified' && (
                     <div>
@@ -207,49 +217,16 @@ class NavBar extends Component {
                         <NavLink
                           to="/"
                           activeClassName="clicked"
-                        ><i className="fas fa-home nav-icon" /><span>Home</span>
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          to="/search-event"
-                          activeClassName="clicked"
-                        ><i className="fas fa-search nav-icon" /><span>Search Events</span>
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          to="/search-escort"
-                          activeClassName="clicked"
-                        ><i className="fas fa-search nav-icon" /><span>Search Escorts</span>
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          to="/notifications"
-                          activeClassName="clicked"
-                        ><i className="far fa-bell nav-icon"></i><span>Notifications</span>
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          to="/events"
-                          activeClassName="clicked"
-                        ><i className="fas fa-suitcase nav-icon" /><span>Events</span>
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink
-                          to="/new-event"
-                          activeClassName="clicked"
-                        ><i className="fas fa-tag nav-icon" /><span>Create Event</span>
+                          className="sidenav-close"
+                        ><i className="button-collapse fas fa-home nav-icon" /><span>Home</span>
                         </NavLink>
                       </li>
                       <li>
                         <NavLink
                           to="/publicprofile"
                           activeClassName="clicked"
-                        ><i className="fas fa-rss nav-icon" /><span>Profile</span>
+                          className="sidenav-close"
+                        ><i className="button-collapse fas fa-user nav-icon" /><span>Profile</span>
                         </NavLink>
                       </li>
                     </div>
@@ -260,8 +237,25 @@ class NavBar extends Component {
                     <div>
                       <li>
                         <NavLink
+                          to="/contact"
+                          activeClassName="clicked"
+                          className="sidenav-close"
+                        ><i className="far fa-comment nav-icon"></i><span>Contact Us</span>
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/safety"
+                          className="sidenav-close"
+                          activeClassName="clicked"
+                        ><i className="fas fa-user-secret nav-icon"></i><span>Safety</span>
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
                           onClick={this.logout}
                           to="#"
+                          className="sidenav-close"
                           activeClassName="clicked"
                         ><i className="fas fa-sign-out-alt nav-icon"></i><span>Logout</span>
                         </NavLink>
@@ -273,13 +267,14 @@ class NavBar extends Component {
                           <NavLink
                             to="/"
                             activeClassName="clicked"
+                            className="sidenav-close"
                           ><i className="fas fa-home nav-icon" /><span>Home</span>
                           </NavLink>
                         </li>
                         <li>
                           <NavLink
                             to="#loginModal"
-                            className="modal-trigger"
+                            className="modal-trigger sidenav-close"
                             activeClassName="clicked"
                           ><i className="fas fa-sign-in-alt nav-icon" /><span>Login</span>
                           </NavLink>
@@ -287,7 +282,7 @@ class NavBar extends Component {
                         <li>
                           <NavLink
                             to="#signupModal"
-                            className="modal-trigger"
+                            className="modal-trigger sidenav-close"
                             activeClassName="clicked"
                           ><i className="fas fa-user-plus nav-icon" /><span>Signup</span>
                           </NavLink>

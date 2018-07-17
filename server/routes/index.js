@@ -1,6 +1,7 @@
 const user = require('../controllers/user');
 const event = require('../controllers/events');
 const review = require('../controllers/reviews');
+const interest = require('../controllers/interest');
 const date = require('../controllers/dates');
 const Validator = require('express-joi-validation');
 const dataValidators = require('../helpers/validator');
@@ -89,6 +90,14 @@ module.exports = (app) => {
   );
   app.put('/api/event/:id/interested',
     auth.checkToken,
-    event.interested
+    interest.showInterest
+  );
+  app.get('/api/event/:id/interested',
+    auth.checkToken,
+    interest.getEventInterest
+  );
+  app.get('/api/user/:id/interested',
+    auth.checkToken,
+    interest.getMyInterests
   );
 };

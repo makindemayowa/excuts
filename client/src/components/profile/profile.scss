@@ -9,6 +9,9 @@
 }
 .profile {
   min-height: 80vh;
+  .row .col {
+    padding: 0 0.75em
+  }
   .col .image_container {
     max-height: 350px;
     max-width: 362px;

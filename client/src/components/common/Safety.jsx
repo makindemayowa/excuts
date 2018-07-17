@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 const Safety = () => (
   <div className="safety">
@@ -87,9 +88,9 @@ const Safety = () => (
       </div>
       <div className="">
         If you are aware of anyone who violates our terms of use please report them &nbsp;
-        <a href="">
+        <Link to="/contact">
           here.
-        </a>
+        </Link>
       </div>
     </div>
   </div>

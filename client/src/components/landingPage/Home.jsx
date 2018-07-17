@@ -20,7 +20,7 @@ const event = {
 };
 
 const App = () => (
-  <div className="App">
+  <div className="homehome">
   <NavBar />
   <div id="homepage">
     <div className="background-wrap gradient">

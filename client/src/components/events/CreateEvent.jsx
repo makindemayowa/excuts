@@ -82,46 +82,55 @@ class Events extends Component {
       <div>
         <SubNav />
         <div className="create_event">
-          <div className="container">
-            <div className="container">
+          <div>
+            <div className="center">
+              <h3 className="my_bold">
+                Create an Event
+              </h3>
+            </div>
+            <div className="bottom_margin" />
+            <div className="newEventContainer">
               <div className="container">
-                <h3 className="my_bold">
-                  Create an Event
-                </h3>
                 <div className="bottom_margin" />
-                <div className="newEventContainer">
-                  <div className="container push-right">
-                    <div className="bottom_margin" />
-                    <div className="bottom_padding" />
-                    <form>
-                      <div className="row">
-                        <div className=" col s6 m4 l4">
-                          Title
-                        </div>
-                        <div className="col s6 m4 l3 push-up">
-                          <input
-                            placeholder="title"
-                            name="title"
-                            type="text"
-                            className=""
-                            value={this.state.title}
-                            onChange={this.onChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col s6 m4 l4">
-                          Date
-                      </div>
-                        <div className="col s6 m4 l4 push-up">
-                          <DatePicker
-                            selected={this.state.date}
-                            onChange={this.handleChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className=" col s6 m4 l4">
+                <div className="bottom_padding" />
+                <form>
+                  <div className="row push-up">
+                    <div className="input-field col s12">
+                      <input
+                        name="title"
+                        type="text"
+                        className=""
+                        value={this.state.title}
+                        onChange={this.onChange}
+                      />
+                      <label for="title">Title</label>
+                    </div>
+                    {/* <div className=" col s6 m4 l4">
+                            Title
+                          </div>
+                          <div className="col s12 m4 l3 push-up">
+                            <input
+                              placeholder="title"
+                              name="title"
+                              type="text"
+                              className=""
+                              value={this.state.title}
+                              onChange={this.onChange}
+                            />
+                          </div> */}
+                  </div>
+                  <div className="row push-up">
+                    <div class="input-field col s12">
+                      <input
+                        name="location"
+                        type="text"
+                        className=""
+                        value={this.state.location}
+                        onChange={this.onChange}
+                      />
+                      <label for="location">Location</label>
+                    </div>
+                    {/* <div className=" col s6 m4 l4">
                           Location (Event place name)
                         </div>
                         <div className="col s6 m4 l3 push-up">
@@ -133,10 +142,21 @@ class Events extends Component {
                             value={this.state.location}
                             onChange={this.onChange}
                           />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className=" col s6 m4 l4">
+                        </div> */}
+                  </div>
+                  <div className="row push-up">
+                    <div class="input-field col s12">
+                      <input
+                        name="state"
+                        type="text"
+                        className=""
+                        required
+                        onChange={this.onChange}
+                        value={this.state.state}
+                      />
+                      <label for="state">State</label>
+                    </div>
+                    {/* <div className=" col s6 m4 l4">
                           State
                         </div>
                         <div className="col s6 m4 l3 push-up">
@@ -149,10 +169,21 @@ class Events extends Component {
                             onChange={this.onChange}
                             value={this.state.state}
                           />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className=" col s6 m4 l4">
+                        </div> */}
+                  </div>
+                  <div className="row push-up">
+                    <div class="input-field col s12">
+                      <input
+                        name="city"
+                        type="text"
+                        className=""
+                        required
+                        onChange={this.onChange}
+                        value={this.state.city}
+                      />
+                      <label for="city">City</label>
+                    </div>
+                    {/* <div className=" col s6 m4 l4">
                           City
                         </div>
                         <div className="col s6 m4 l3 push-up">
@@ -165,94 +196,100 @@ class Events extends Component {
                             onChange={this.onChange}
                             value={this.state.city}
                           />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="form-fields">
-                          <div className=" col s6 m4 l4">
-                            Interested in
-                      </div>
-                          <div className="col s6 m4 l3 push-up">
-                            <select name="interestedIn" defaultValue="" onChange={this.onChange} className="size1">
-                              <option disabled value="">choose one</option>
-                              <option value="female">female</option>
-                              <option value="male">male</option>
-                              <option value="others">others</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row reduce-margin">
-                        <div className="col s12 m12 l12">
-                          Details
-                        </div>
-                        <div className="col s12">
-                          <textarea
-                            placeholder="Describe this event in brief..."
-                            id="textarea1"
-                            className="materialize-textarea"
-                            data-length="120"
-                            name="details"
-                            maxLength="120"
-                            required
-                            onChange={this.onChange}
-                            value={this.state.details}
-                          />
-                        </div>
-                      </div>
-                      <div className="row reduce-margin">
-                        <div className="col s12 m12 l12">
-                          Preference
-                        </div>
-                        <div className="col s12">
-                          <textarea
-                            placeholder="Who would you rather go out with..."
-                            id="textarea2"
-                            className="materialize-textarea"
-                            name="preference"
-                            data-length="120"
-                            maxLength="120"
-                            required
-                            onChange={this.onChange}
-                            value={this.state.preference}
-                          />
-                        </div>
-                      </div>
-                      <div className="row reduce-margin">
-                        <div className="col s12 m12 l12">
-                          Extra
-                        </div>
-                        <div className="col s12">
-                          <textarea
-                            placeholder="Any other thing we should know..."
-                            id="textarea3"
-                            className="materialize-textarea"
-                            name="extra"
-                            data-length="120"
-                            maxLength="120"
-                            required
-                            onChange={this.onChange}
-                            value={this.state.extra}
-                          />
-                        </div>
-                      </div>
-                      <div className="submitContainer">
-                        <a
-                          className="waves-effect waves-light btn save-btn"
-                          // type="submit"
-                          // name="action"
-                          onClick={this.onSubmit}
-                        >Create</a>
-                        <a className="waves-effect waves-light btn cancel-btn">Cancel</a>
-                      </div>
-                      <div className="error_message">
-                        <div className="bottom_margin" />
-                        {this.state.error}
-                      </div>
-                      <div className="bottom_margin" />
-                    </form>
+                        </div> */}
                   </div>
-                </div>
+                  <div className="row">
+                    <div className="form-fields">
+                      <div className="col s12 m4 l3 push-up">
+                        <select name="interestedIn" defaultValue="" onChange={this.onChange} className="size1">
+                          <option disabled value="">Interested in</option>
+                          <option value="female">female</option>
+                          <option value="male">male</option>
+                          <option value="others">others</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col s12 m4 l4">
+                      Date
+                    </div>
+                    <div className="col s12 m4 l4">
+                      <DatePicker
+                        selected={this.state.date}
+                        onChange={this.handleChange}
+                        className="myDatePicker"
+                      />
+                    </div>
+                  </div>
+                  <div className="row reduce-margin">
+                    <div className="col s12 m12 l12">
+                      Details
+                    </div>
+                    <div className="col s12">
+                      <textarea
+                        placeholder="Describe this event in brief..."
+                        id="textarea1"
+                        className="materialize-textarea"
+                        data-length="120"
+                        name="details"
+                        maxLength="120"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.details}
+                      />
+                    </div>
+                  </div>
+                  <div className="row reduce-margin">
+                    <div className="col s12 m12 l12">
+                      Preference
+                        </div>
+                    <div className="col s12">
+                      <textarea
+                        placeholder="Who would you rather go out with..."
+                        id="textarea2"
+                        className="materialize-textarea"
+                        name="preference"
+                        data-length="120"
+                        maxLength="120"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.preference}
+                      />
+                    </div>
+                  </div>
+                  <div className="row reduce-margin">
+                    <div className="col s12 m12 l12">
+                      Extra
+                        </div>
+                    <div className="col s12">
+                      <textarea
+                        placeholder="Any other thing we should know..."
+                        id="textarea3"
+                        className="materialize-textarea"
+                        name="extra"
+                        data-length="120"
+                        maxLength="120"
+                        required
+                        onChange={this.onChange}
+                        value={this.state.extra}
+                      />
+                    </div>
+                  </div>
+                  <div className="submitContainer">
+                    <a
+                      className="waves-effect waves-light btn save-btn"
+                      // type="submit"
+                      // name="action"
+                      onClick={this.onSubmit}
+                    >save</a>
+                  </div>
+                  <div className="error_message">
+                    <div className="bottom_margin" />
+                    {this.state.error}
+                  </div>
+                  <div className="bottom_margin" />
+                </form>
               </div>
             </div>
           </div>

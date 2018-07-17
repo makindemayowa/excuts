@@ -31,6 +31,8 @@ class DateRequests extends Component {
 
   componentDidMount() {
     const elems = document.querySelectorAll('select');
+    var dropdown = document.querySelectorAll('#datesDropdown');
+    M.Dropdown.init(dropdown);
     M.FormSelect.init(elems);
     this.props.getDateRequest().then(() => {
       this.setState({
@@ -62,40 +64,44 @@ class DateRequests extends Component {
     });
   }
 
-  handleChange(e) {
+  handleChange(selected) {
     this.setState({
       loading: true,
-      selectedTab: e.target.value,
+      selectedTab: selected,
       dateRequests: []
-    });
-    if (e.target.value === 'mine') {
-      this.props.getMyDateRequest(e.target.value).then(() => {
-        this.setState({
-          myCreatedRequests: this.props.myCreatedRequests,
-          loading: false
-        })
-        const elems = document.querySelectorAll('.modal');
-        M.Modal.init(elems);
-      }).catch(() => {
-        this.setState({
-          loading: false
-        })
-      });;
-    } else {
-      this.props.getDateRequest(e.target.value).then(() => {
-        this.setState({
-          dateRequests: this.props.dateRequests,
-          loading: false
-        }, () => {
-          const elems = document.querySelectorAll('.modal');
-          M.Modal.init(elems);
+    }, () => {
+      if (selected === 'mine') {
+        this.props.getMyDateRequest(selected).then(() => {
+          this.setState({
+            myCreatedRequests: this.props.myCreatedRequests,
+            loading: false
+          }, () => {
+            const elems = document.querySelectorAll('.modal');
+            M.Modal.init(elems);
+          })
+        }).catch(() => {
+          this.setState({
+            loading: false,
+            dateRequests: []
+          })
         });
-      }).catch(() => {
-        this.setState({
-          loading: false
-        })
-      });
-    }
+      } else {
+        this.props.getDateRequest(selected).then(() => {
+          this.setState({
+            dateRequests: this.props.dateRequests,
+            loading: false
+          }, () => {
+            const elems = document.querySelectorAll('.modal');
+            M.Modal.init(elems);
+          });
+        }).catch(() => {
+          this.setState({
+            loading: false,
+            dateRequests: []
+          })
+        });
+      }
+    });
   }
 
   onChange(e) {
@@ -125,7 +131,7 @@ class DateRequests extends Component {
     return (
       <div className="daterequests">
         <SubNav currentPage={'daterequests'} />
-        <div className="form-fields">
+        {/* <div className="form-fields">
           <select
             className="size1"
             onChange={this.handleChange}
@@ -136,8 +142,8 @@ class DateRequests extends Component {
             <option value="declined">Declined</option>
             <option value="accepted">Accepted</option>
           </select>
-        </div>
-        <div className="container">
+        </div> */}
+        <div className="">
           {loading ? <Loader /> :
             <div>
               {this.state.selectedTab !== 'mine' &&
@@ -176,6 +182,20 @@ class DateRequests extends Component {
                 />)
               }
             </div>}
+        </div>
+        <div>
+          <div className="dateDropdownContainer">
+            <a className="btn-floating btn-large waves-effect waves-light" id="datesDropdown" data-target='dropdown1'><i className="fas pointUp fa-chevron-circle-up"></i></a>
+          </div>
+          <div>
+            <ul id='dropdown1' className='datesul dropdown-content'>
+              <li value=""><a onClick={() => this.handleChange('')}>My requests</a></li>
+              <li value="mine"><a onClick={() => this.handleChange('mine')}>Created by Me</a></li>
+              <li value="pending"><a onClick={() => this.handleChange('pending')}>Pending</a></li>
+              <li value="declined"><a onClick={() => this.handleChange('declined')}>Declined</a></li>
+              <li value="accepted"><a onClick={() => this.handleChange('accepted')}>Accepted</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     );

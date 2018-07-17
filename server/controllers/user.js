@@ -109,7 +109,8 @@ exports.verifyToken = (req, res) => {
         firstName: user.firstName,
         id: updateduser._id,
         status: updateduser.status,
-        location: updateduser.loc
+        location: updateduser.loc,
+        profilePhoto: updateduser.profilePhoto,
       };
       const jsonToken = helper.createToken({ userDetails }, '24h');
       return res.status(200)
@@ -138,6 +139,7 @@ exports.login = (req, res) => {
       firstName: user.firstName,
       status: user.status,
       location: user.loc,
+      profilePhoto: user.profilePhoto,
     };
     const jsonToken = helper.createToken({ userDetails }, '24h');
     return res.status(200).send({ message: 'login successful', jsonToken });

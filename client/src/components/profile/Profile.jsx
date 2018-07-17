@@ -69,6 +69,12 @@ class Profile extends Component {
 
   componentDidMount() {
     this.props.getUserDetails().then(() => {
+      if (this.props.user.here_to) {
+        this.setState({
+          [this.props.user.here_to]: true
+        })
+      }
+      const rates = this.props.user.rates || {}
       this.setState({
         loading: false,
         age: this.props.user.age || '',
@@ -86,6 +92,14 @@ class Profile extends Component {
         imageUrls: this.props.user.photos || [],
         firstName: this.props.user.firstName || '',
         lastName: this.props.user.lastName || '',
+        time1: rates.time1 || '',
+        rate1: rates.rate1 || '',
+        time2: rates.time2 || '',
+        rate2: rates.rate2 || '',
+        time3: rates.time3 || '',
+        rate3: rates.rate3 || '',
+        time4: rates.time4 || '',
+        rate4: rates.rate4 || '',
       }, () => {
         const select = document.querySelectorAll('select');
         M.FormSelect.init(select);
@@ -99,6 +113,7 @@ class Profile extends Component {
   componentWillReceiveProps(nextProps) {
     const loading = nextProps.loading;
     const user = nextProps.user
+    const rates = user.rates || {}
     this.setState({
       loading,
       imageUrls: user.photos || [],
@@ -116,6 +131,14 @@ class Profile extends Component {
       here_to: user.here_to || '',
       firstName: user.firstName || '',
       lastName: user.lastName || '',
+      time1: rates.time1 || '',
+      rate1: rates.rate1 || '',
+      time2: rates.time2 || '',
+      rate2: rates.rate2 || '',
+      time3: rates.time3 || '',
+      rate3: rates.rate3 || '',
+      time4: rates.time4 || '',
+      rate4: rates.rate4 || ''
     });
   }
 
@@ -227,17 +250,19 @@ class Profile extends Component {
       occupation: this.state.occupation,
       education: this.state.education,
       phone_no: this.state.phone_no,
-      public: true,
+      public: this.state.public,
       about: this.state.about,
       here_to: this.state.here_to,
-      time1: this.state.time1,
-      rate1: this.state.rate1,
-      time2: this.state.time2,
-      rate2: this.state.rate2,
-      time3: this.state.time3,
-      rate3: this.state.rate3,
-      time4: this.state.time4,
-      rate4: this.state.rate4,
+      rates: {
+        time1: this.state.time1,
+        rate1: this.state.rate1,
+        time2: this.state.time2,
+        rate2: this.state.rate2,
+        time3: this.state.time3,
+        rate3: this.state.rate3,
+        time4: this.state.time4,
+        rate4: this.state.rate4,
+      },
       imgurls: this.state.imageUrls,
     }
     this.props.updateUserDetails(userDetails).then(() => {
@@ -355,7 +380,7 @@ class Profile extends Component {
                       <span className="my_bold">PERSONAL DETAILS</span>
                     </div>
                     <div className="row">
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="First name"
                           name="firstName"
@@ -366,7 +391,7 @@ class Profile extends Component {
                           value={this.state.firstName}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Last name"
                           name="lastName"
@@ -377,7 +402,7 @@ class Profile extends Component {
                           value={this.state.lastName}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Age"
                           name="age"
@@ -388,7 +413,7 @@ class Profile extends Component {
                           value={this.state.age}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Sex"
                           name="sex"
@@ -399,7 +424,7 @@ class Profile extends Component {
                           value={this.state.sex}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Country"
                           name="country"
@@ -410,7 +435,7 @@ class Profile extends Component {
                           value={this.state.country}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="State"
                           name="state"
@@ -421,7 +446,7 @@ class Profile extends Component {
                           value={this.state.state}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="City"
                           name="city"
@@ -432,7 +457,7 @@ class Profile extends Component {
                           value={this.state.city}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Best time to reach you"
                           name="best_time"
@@ -443,7 +468,7 @@ class Profile extends Component {
                           value={this.state.best_time}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Occupation"
                           name="occupation"
@@ -454,7 +479,7 @@ class Profile extends Component {
                           value={this.state.occupation}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Education"
                           name="education"
@@ -467,7 +492,7 @@ class Profile extends Component {
                       </div>
                     </div>
                     <div className="row">
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Phone No"
                           name="phone_no"
@@ -525,6 +550,7 @@ class Profile extends Component {
                             className="filled-in checkbox-color"
                             id="here_for_fun"
                             name="1"
+                            checked={this.state.here_for_fun}
                             onClick={this.toggleChange}
                           />
                           <span>I'm just here to have fun</span>
@@ -537,6 +563,7 @@ class Profile extends Component {
                             className="filled-in checkbox-color"
                             id="here_to_hire"
                             name="1"
+                            checked={this.state.here_to_hire}
                             onClick={this.toggleChange}
                           />
                           <span>I'm here to hire</span>
@@ -548,6 +575,7 @@ class Profile extends Component {
                             type="checkbox"
                             className="filled-in checkbox-color"
                             id="professional"
+                            checked={this.state.professional}
                             name="1"
                             onClick={this.toggleChange}
                           />

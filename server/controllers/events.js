@@ -118,7 +118,6 @@ exports.getAll = (req, res) => {
   } else {
     if (Object.keys(req.query).length) {
       query = {
-        created_by: { $ne: req.user.email },
         interestedIn: req.query.sex,
         state: req.query.state,
         date: { $gte: req.query.startDate }
@@ -127,8 +126,7 @@ exports.getAll = (req, res) => {
       const today = new Date();
       const yesterday = new Date(today);
       query = {
-        created_by: { $ne: req.user.email },
-        date: { $gte: yesterday.setDate(today.getDate() - 3) },
+        // date: { $gte: yesterday.setDate(today.getDate() - 3) },
       };
     }
   }
@@ -137,7 +135,7 @@ exports.getAll = (req, res) => {
     .skip(offset)
     .limit(limit)
     .sort({
-      created_at: -1,
+      date: -1,
     })
     .exec((err, events) => {
       if (!events) {

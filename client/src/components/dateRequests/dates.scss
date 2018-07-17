@@ -1,5 +1,8 @@
 .daterequests {
   min-height: 80vh;
+  .row .col {
+    padding: 10px;
+  }
   .a {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
@@ -9,6 +12,9 @@
   }
   .requestCard {
     margin-top: 10px;
+    .card-panel {
+      max-height: 198px
+    }
     .requester {
       font-style: italic;
       a {
@@ -86,9 +92,8 @@
     margin-left: 30px;
   }
   .select-wrapper {
-    margin-top: 10px;
-    width: 35%;
-    margin-left: 62%;
+    // width: 35%;
+    // margin-left: 62%;
     span.caret {
       color: rgb(116, 117, 118);
       z-index: 2;
@@ -120,10 +125,62 @@
   }
 }
 
+.dateDropdownContainer {
+  background: #fafafa;
+  width: 100%;
+  border-top: solid 1px #ccc;
+  position: fixed;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  bottom: 0;
+  text-align: center;
+  .btn-floating.btn-large {
+    width: 40px;
+    height: 40px;
+  }
+  .pointUp {
+    font-size: 40px;
+  }
+
+  .eventul {
+    top: -92px !important;
+  }
+  .datesul {
+    top: -240px !important;
+  }
+  ul{
+    z-index: 2;
+    width: 150px !important;
+  }
+  .dropdown-content li > a,
+  .dropdown-content li > span {
+    font-size: 12px;
+  }
+  .dropdown-content {
+    li {
+      // padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+  .btn-floating {
+    background-color: #ff6666;
+  }
+}
+
 @media only screen and (max-width: 530px) {
   .daterequests {
     .modal {
       width: 80%
+    }
+    .row .col {
+      padding: 0;
+      margin: auto !important
+    }
+    .card {
+      margin: 0;
+    }
+    .card-panel {
+      margin: 0;
     }
   }
 }

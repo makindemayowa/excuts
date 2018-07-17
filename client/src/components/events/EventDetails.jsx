@@ -1,9 +1,7 @@
 /* eslint-env jquery */
 /*global M*/
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DatePicker from 'react-datepicker';
 import { Link } from 'react-router-dom'
 import 'react-datepicker/dist/react-datepicker.css';
 import toastr from 'toastr';
@@ -81,14 +79,14 @@ class Events extends Component {
         <div className="create_event">
           {
             loading ? <Loader /> :
-              <div className="container">
-                <div className="container">
-                  <div className="container">
+              <div className="">
+                <div className="">
+                  <div className="">
                     <div className="bottom_margin" />
                     <div>
                       <span className="showinterest">
                         Interested?
-                  </span>
+                      </span>
                       <a className="interestedC" onClick={this.showInterest}>
                         <i className="far fa-thumbs-up interested"></i>
                       </a>
@@ -96,81 +94,51 @@ class Events extends Component {
                     <div className="bottom_margin" />
                     <div className="newEventContainer">
                       <div className="bottom_margin" />
-                      <div className="right created_by red-text">
+                      <div className="created_by red-text">
                         <Link className="red-text" to={`/publicProfile/${event.created_by_id}`}>
                           By:&nbsp;&nbsp;&nbsp;{event.created_by}
                         </Link>
-                        <div className="bottom_margin" />
                       </div>
                       <div className="container push-right">
-                        <div className="bottom_margin" />
                         <div className="bottom_padding" />
                         <div className="row">
                           <div className=" col s6 m4 l4">
                             Title
-                        </div>
-                          <div className="col s6 m4 l3 push-up">
-                            <input
-                              placeholder="title"
-                              name="title"
-                              type="text"
-                              className=""
-                              value={event.title}
-                            />
+                          </div>
+                          <div className="col s6 m4 l3">
+                            {event.title}
                           </div>
                         </div>
                         <div className="row">
                           <div className="col s6 m4 l4">
                             Date
                           </div>
-                          <div className="col s6 m4 l4 push-up">
-                            <DatePicker
-                              selected={this.state.date}
-                            />
+                          <div className="col s6 m4 l4">
+                            {`${new Date(event.date).toDateString()}`}
                           </div>
                         </div>
                         <div className="row">
                           <div className=" col s6 m4 l4">
-                            Location (Event place name)
-                        </div>
-                          <div className="col s6 m4 l3 push-up">
-                            <input
-                              placeholder="location"
-                              name="location"
-                              type="text"
-                              className=""
-                              value={event.location}
-                            />
+                            Event venue
+                          </div>
+                          <div className="col s6 m4 l3">
+                            {event.location}
                           </div>
                         </div>
                         <div className="row">
                           <div className=" col s6 m4 l4">
                             State
-                        </div>
-                          <div className="col s6 m4 l3 push-up">
-                            <input
-                              placeholder="state"
-                              name="state"
-                              type="text"
-                              className=""
-                              required
-                              value={event.state}
-                            />
+                          </div>
+                          <div className="col s6 m4 l3">
+                            {event.state}
                           </div>
                         </div>
                         <div className="row">
                           <div className=" col s6 m4 l4">
                             City
-                        </div>
-                          <div className="col s6 m4 l3 push-up">
-                            <input
-                              placeholder="city"
-                              name="city"
-                              type="text"
-                              className=""
-                              required
-                              value={event.city}
-                            />
+                          </div>
+                          <div className="col s6 m4 l3">
+                            {event.city}
                           </div>
                         </div>
                         <div className="row">
@@ -178,20 +146,15 @@ class Events extends Component {
                             <div className=" col s6 m4 l4">
                               Interested in
                             </div>
-                            <div className="col s6 m4 l3 push-up">
-                              <select name="interestedIn" disabled value={event.interestedIn} className="interestedSelect browser-default size1">
-                                <option disabled value="">choose one</option>
-                                <option value="female">female</option>
-                                <option value="male">male</option>
-                                <option value="others">others</option>
-                              </select>
+                            <div className="col s6 m4 l3">
+                              {event.interestedIn}
                             </div>
                           </div>
                         </div>
                         <div className="row reduce-margin">
                           <div className="col s12 m12 l12">
                             Details
-                        </div>
+                          </div>
                           <div className="col s12">
                             <textarea
                               placeholder="Describe this event in brief..."
@@ -208,7 +171,7 @@ class Events extends Component {
                         <div className="row reduce-margin">
                           <div className="col s12 m12 l12">
                             Preference
-                        </div>
+                          </div>
                           <div className="col s12">
                             <textarea
                               placeholder="Who would you rather go out with..."
@@ -225,7 +188,7 @@ class Events extends Component {
                         <div className="row reduce-margin">
                           <div className="col s12 m12 l12">
                             Extra
-                      </div>
+                          </div>
                           <div className="col s12">
                             <textarea
                               placeholder="Any other thing we should know..."

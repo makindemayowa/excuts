@@ -3446,11 +3446,6 @@ table span.badge {
   }
 }
 
-.col .row {
-  margin-left: -0.75rem;
-  margin-right: -0.75rem;
-}
-
 .section {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -3484,7 +3479,6 @@ table span.badge {
   float: left;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  padding: 0 0.75rem;
   min-height: 1px;
 }
 
@@ -5076,7 +5070,7 @@ small {
 }
 
 .tabs .tab a {
-  color: rgba(238, 110, 115, 0.7);
+  color: #3d3d3d;
   display: block;
   width: 100%;
   height: 100%;
@@ -5089,7 +5083,6 @@ small {
 }
 
 .tabs .tab a:focus, .tabs .tab a:focus.active {
-  background-color: rgba(246, 178, 181, 0.2);
   outline: none;
 }
 
@@ -5107,8 +5100,8 @@ small {
 .tabs .indicator {
   position: absolute;
   bottom: 0;
-  height: 2px;
-  background-color: #f6b2b5;
+  height: 1px;
+  background-color: #ccc;
   will-change: left, right;
 }
 
@@ -5247,7 +5240,7 @@ small {
 
 .btn:focus, .btn-large:focus, .btn-small:focus,
 .btn-floating:focus {
-  background-color: #1d7d74;
+  background-color: #ff6666;
 }
 
 .btn, .btn-large, .btn-small {
@@ -5262,7 +5255,7 @@ small {
 }
 
 .btn:hover, .btn-large:hover, .btn-small:hover {
-  background-color: #2bbbad;
+  background-color: #ff6666;
 }
 
 .btn-floating {
@@ -6075,7 +6068,7 @@ select:focus {
 
 button:focus {
   outline: none;
-  background-color: #2ab7a9;
+  background-color: #ff6666;
 }
 
 label {
@@ -6497,7 +6490,7 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 }
 
 .input-field.col label {
-  left: 0.75rem;
+  /* left: 0.75rem; */
 }
 
 .input-field.col .prefix ~ label,
@@ -7578,7 +7571,7 @@ input[type=range].focused:focus:not(.active)::-ms-thumb {
 }
 
 .sidenav li > a.btn:hover, .sidenav li > a.btn-large:hover, .sidenav li > a.btn-small:hover, .sidenav li > a.btn-large:hover {
-  background-color: #2bbbad;
+  background-color: #ff6666;
 }
 
 .sidenav li > a.btn-floating:hover {
