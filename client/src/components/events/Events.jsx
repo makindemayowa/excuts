@@ -24,7 +24,7 @@ class Events extends Component {
       loading: true,
       country: countriesWithStates.countries[0].country,
       sex: 'female',
-      state: 'lagos',
+      state: countriesWithStates.countries[0].states[0],
       countryIndex: 0,
       states: []
     };
@@ -36,13 +36,17 @@ class Events extends Component {
   }
 
   componentDidMount() {
+    var dropdown = document.querySelectorAll('#eventsDropdown');
+    M.Dropdown.init(dropdown);
     const elems = document.querySelectorAll('select');
     M.FormSelect.init(elems);
+    this.setState({
+      states: countriesWithStates.countries[this.state.countryIndex].states
+    })
     this.props.getAllEventRequest().then(() => {
       this.setState({
         events: this.props.events,
         loading: false,
-        states: countriesWithStates.countries[this.state.countryIndex].states
       }, () => {
         const select = document.querySelectorAll('select');
         M.FormSelect.init(select);
@@ -76,30 +80,33 @@ class Events extends Component {
     })
   }
 
-  handleSelectChange(e) {
+  handleSelectChange(selected) {
     this.setState({
-      loading: true
+      loading: true,
+      events: [],
+    }, () => {
+      this.props.getAllEventRequest(selected).then(() => {
+        this.setState({
+          events: this.props.events,
+          loading: false
+        }, () => {
+          const select = document.querySelectorAll('select');
+          M.FormSelect.init(select);
+          const collapsible = document.querySelectorAll('.collapsible');
+          M.Collapsible.init(collapsible);
+        });
+      }).catch(() => {
+        this.setState({
+          loading: false,
+          events: [],
+        }, () => {
+          const select = document.querySelectorAll('select');
+          M.FormSelect.init(select);
+          const collapsible = document.querySelectorAll('.collapsible');
+          M.Collapsible.init(collapsible);
+        });
+      });
     })
-    this.props.getAllEventRequest(e.target.value).then(() => {
-      this.setState({
-        events: this.props.events,
-        loading: false
-      }, () => {
-        const select = document.querySelectorAll('select');
-        M.FormSelect.init(select);
-        const collapsible = document.querySelectorAll('.collapsible');
-        M.Collapsible.init(collapsible);
-      });
-    }).catch(() => {
-      this.setState({
-        loading: false
-      }, () => {
-        const select = document.querySelectorAll('select');
-        M.FormSelect.init(select);
-        const collapsible = document.querySelectorAll('.collapsible');
-        M.Collapsible.init(collapsible);
-      });
-    });
   }
 
   onChange(e) {
@@ -151,9 +158,8 @@ class Events extends Component {
     const { loading, states } = this.state;
     return (
       <div className="events">
-        <SubNav />
-        <div className="bottom_margin" />
-        <div className="navSelect">
+        <SubNav currentPage={'home'} />
+        {/* <div className="navSelect">
           <div className="form-fields">
             <select
               className="size1"
@@ -163,11 +169,11 @@ class Events extends Component {
               <option value="mine">Created by Me</option>
             </select>
           </div>
-        </div>
-        <div className="container">
-          <div className="right createEvent">
+        </div> */}
+        <div className="">
+          {/* <div className="right createEvent">
             <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
-          </div>
+          </div> */}
           <div className="row">
             <div className="col s12 m8 l10">
               {
@@ -194,6 +200,7 @@ class Events extends Component {
               }
             </div>
             <div className="col s12 m4 l2 searchForm">
+              <div className="bottom_margin" />
               <div className="flex">
                 <div className="form-fields">
                   <label>Interested in</label>
@@ -271,6 +278,18 @@ class Events extends Component {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div>
+          <div className="dateDropdownContainer">
+            <a className="btn-floating btn-large waves-effect waves-light" id="eventsDropdown" data-target='dropdown2'><i className="fas pointUp fa-chevron-circle-up"></i></a>
+          </div>
+          <div>
+            <ul id='dropdown2' className='eventul dropdown-content'>
+              <li value="mine"><Link to="/new-event">Create event</Link></li>
+              <li value="declined"><a onClick={() => this.handleSelectChange('mine')}>Created by me</a></li>
+              <li value="accepted"><a onClick={() => this.handleSelectChange('all')}>All events</a></li>
+            </ul>
           </div>
         </div>
       </div>

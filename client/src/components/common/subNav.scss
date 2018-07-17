@@ -1,12 +1,11 @@
 .m-nav {
-  background-color: #e5e5e5;
-  height: 50px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
   ul {
     margin: 0 auto;
     margin-left: -40px;
     text-align: center;
     li {
-      max-width: 76px;
       text-transform: uppercase;
       font-size: 12px;
       display: inline-block;
@@ -29,16 +28,22 @@
           margin-left: 3px;
         }
       }
-      a.home-link {
-        font-size: 16px;
-        min-width: 100px;
+      .people-link,
+      .profile-link,
+      .search-link,
+      .request-link {
+        font-size: 15px;
+        margin-left: 50px
+      }
+      .home-link {
+        margin-left: 30px
       }
     }
   }
 }
 
 .active-nav {
-  border-bottom: 3px solid #000 !important;
+  border-bottom: 1px solid #aaa !important;
 }
 
 

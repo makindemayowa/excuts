@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionType';
 
 const initialState = {
+  interested: [],
   events: {},
   event: {},
   pagination: {},
@@ -24,6 +25,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         event: action.event,
+      };
+    case actionTypes.GET_ALL_INTERESTS_SUCCESS:
+      return {
+        ...state,
+        interested: action.interests,
       };
     case actionTypes.GET_ALL_EVENT_SUCCESS:
       return {

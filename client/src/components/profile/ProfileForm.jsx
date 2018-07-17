@@ -90,14 +90,17 @@ const ProfileForm = props => {
                     {props.user.city}
                   </p>
                 </div>
-                <div className="row">
-                  <p className="col s6 m4 l3">
-                    Phone No
-                  </p>
-                  <p className="col s6 m4 l3">
-                    {props.user.phone_no}
-                  </p>
-                </div>
+                {
+                  props.user.public &&
+                  <div className="row">
+                    <p className="col s6 m4 l3">
+                      Phone No
+                    </p>
+                    <p className="col s6 m4 l3">
+                      {props.user.phone_no}
+                    </p>
+                  </div>
+                }
                 <div className="row">
                   <p className="col s6 m4 l3">
                     Best time to reach me
@@ -149,35 +152,35 @@ const ProfileForm = props => {
                   <div>
                     <div className="row">
                       <p className="col s6 m4 l3">
-                        2 hours
-                    </p>
+                        {props.user.rates.time1}
+                      </p>
                       <p className="col s6 m4 l3">
-                        #13,000
-                    </p>
+                        {props.user.rates.rate1}
+                      </p>
                     </div>
                     <div className="row">
                       <p className="col s6 m4 l3">
-                        8 hours
-                    </p>
+                        {props.user.rates.time2}
+                      </p>
                       <p className="col s6 m4 l3">
-                        #25,000
-                    </p>
+                        {props.user.rates.rate2}
+                      </p>
                     </div>
                     <div className="row">
                       <p className="col s6 m4 l3">
-                        Weekend
-                    </p>
+                        {props.user.rates.time3}
+                      </p>
                       <p className="col s6 m4 l3">
-                        #250,000
-                    </p>
+                        {props.user.rates.rate3}
+                      </p>
                     </div>
                     <div className="row">
                       <p className="col s6 m4 l3">
-                        Tour
-                    </p>
+                        {props.user.rates.time4}
+                      </p>
                       <p className="col s6 m4 l3">
-                        #1,000,000
-                    </p>
+                        {props.user.rates.rate4}
+                      </p>
                     </div>
                   </div>
                 }

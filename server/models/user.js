@@ -61,6 +61,9 @@ const UserSchema = new Schema({
     type: String,
     default: 'availableForRent'
   },
+  rates: {
+    type: Object,
+  },
   loc: {
     type: { type: String },
     coordinates: [],

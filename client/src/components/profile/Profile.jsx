@@ -69,6 +69,12 @@ class Profile extends Component {
 
   componentDidMount() {
     this.props.getUserDetails().then(() => {
+      if (this.props.user.here_to) {
+        this.setState({
+          [this.props.user.here_to]: true
+        })
+      }
+      const rates = this.props.user.rates || {}
       this.setState({
         loading: false,
         age: this.props.user.age || '',
@@ -86,6 +92,14 @@ class Profile extends Component {
         imageUrls: this.props.user.photos || [],
         firstName: this.props.user.firstName || '',
         lastName: this.props.user.lastName || '',
+        time1: rates.time1 || '',
+        rate1: rates.rate1 || '',
+        time2: rates.time2 || '',
+        rate2: rates.rate2 || '',
+        time3: rates.time3 || '',
+        rate3: rates.rate3 || '',
+        time4: rates.time4 || '',
+        rate4: rates.rate4 || '',
       }, () => {
         const select = document.querySelectorAll('select');
         M.FormSelect.init(select);
@@ -99,6 +113,7 @@ class Profile extends Component {
   componentWillReceiveProps(nextProps) {
     const loading = nextProps.loading;
     const user = nextProps.user
+    const rates = user.rates || {}
     this.setState({
       loading,
       imageUrls: user.photos || [],
@@ -116,6 +131,14 @@ class Profile extends Component {
       here_to: user.here_to || '',
       firstName: user.firstName || '',
       lastName: user.lastName || '',
+      time1: rates.time1 || '',
+      rate1: rates.rate1 || '',
+      time2: rates.time2 || '',
+      rate2: rates.rate2 || '',
+      time3: rates.time3 || '',
+      rate3: rates.rate3 || '',
+      time4: rates.time4 || '',
+      rate4: rates.rate4 || ''
     });
   }
 
@@ -227,17 +250,19 @@ class Profile extends Component {
       occupation: this.state.occupation,
       education: this.state.education,
       phone_no: this.state.phone_no,
-      public: true,
+      public: this.state.public,
       about: this.state.about,
       here_to: this.state.here_to,
-      time1: this.state.time1,
-      rate1: this.state.rate1,
-      time2: this.state.time2,
-      rate2: this.state.rate2,
-      time3: this.state.time3,
-      rate3: this.state.rate3,
-      time4: this.state.time4,
-      rate4: this.state.rate4,
+      rates: {
+        time1: this.state.time1,
+        rate1: this.state.rate1,
+        time2: this.state.time2,
+        rate2: this.state.rate2,
+        time3: this.state.time3,
+        rate3: this.state.rate3,
+        time4: this.state.time4,
+        rate4: this.state.rate4,
+      },
       imgurls: this.state.imageUrls,
     }
     this.props.updateUserDetails(userDetails).then(() => {
@@ -525,6 +550,7 @@ class Profile extends Component {
                             className="filled-in checkbox-color"
                             id="here_for_fun"
                             name="1"
+                            checked={this.state.here_for_fun}
                             onClick={this.toggleChange}
                           />
                           <span>I'm just here to have fun</span>
@@ -537,6 +563,7 @@ class Profile extends Component {
                             className="filled-in checkbox-color"
                             id="here_to_hire"
                             name="1"
+                            checked={this.state.here_to_hire}
                             onClick={this.toggleChange}
                           />
                           <span>I'm here to hire</span>
@@ -548,6 +575,7 @@ class Profile extends Component {
                             type="checkbox"
                             className="filled-in checkbox-color"
                             id="professional"
+                            checked={this.state.professional}
                             name="1"
                             onClick={this.toggleChange}
                           />

@@ -60,6 +60,20 @@ export function getOneSuccess(event) {
 }
 
 /**
+ * Create an action to set all interests
+ *
+ * @export
+ * @param {object} event
+ * @returns {object} type payload
+ */
+export function getInterestSuccess(interests) {
+  return {
+    type: actionTypes.GET_ALL_INTERESTS_SUCCESS,
+    interests
+  };
+}
+
+/**
  * Create an action to show interested users in an event
  *
  * @export
@@ -118,6 +132,19 @@ export function getOneEventRequest(id) {
   return dispatch => axios.get(`/api/event/${id}`).then((res) => {
     const event = res.data.event;
     dispatch(getOneSuccess(event));
+  });
+}
+
+/**
+ * Request to the API to get available events
+ *
+ * @export
+ * @returns {object} dispatch object
+ */
+export function getEventInterests(id) {
+  return dispatch => axios.get(`/api/event/${id}/interested`).then((res) => {
+    const interests = res.data.interestedUsers;
+    dispatch(getInterestSuccess(interests));
   });
 }
 

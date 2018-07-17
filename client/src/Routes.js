@@ -15,6 +15,7 @@ import Contact from './components/common/Contact';
 import Safety from './components/common/Safety';
 import DateRequests from './components/dateRequests/DateRequests';
 import Interests from './components/events/Interests';
+import Search from './components/search/Search';
 
 export default [
   {
@@ -29,6 +30,13 @@ export default [
     path: '/contact',
     secured: false,
     component: Contact,
+    exact: true
+  },
+  {
+    name: 'search',
+    path: '/search',
+    secured: true,
+    component: Search,
     exact: true
   },
   {
@@ -95,14 +103,14 @@ export default [
     exact: true
   },
   {
-    name: 'search',
+    name: 'searchEvent',
     path: '/search-event',
     secured: true,
     component: SearchEvents,
     exact: true
   },
   {
-    name: 'search',
+    name: 'searchEscort',
     path: '/search-escort',
     secured: true,
     component: SearchEscorts,

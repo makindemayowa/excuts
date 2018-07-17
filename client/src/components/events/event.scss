@@ -6,6 +6,7 @@
   select:focus {
     outline: 1px solid #f2f2f2;
   }
+
   .navSelect {
     margin-left: 10px;
     margin-top: 10px;
@@ -44,11 +45,6 @@
   .notFound {
     text-align: center;
     font-weight: bolder
-  }
-  .btn-floating {
-    background-color: #ff6666;
-    margin-right: 10px;
-    margin-top: -85px;
   }
   .searchForm {
     font-size: 12px;    
@@ -115,7 +111,7 @@
     background-color: #fff;
     color: #000;
     border: 0.3px solid #cccccc;
-    max-height: 200px;
+    min-height: 140px;
     .cardfooter {
       font-style: italic;
       font-size: 12px;
@@ -123,10 +119,19 @@
       text-align: right;
     }
     .action_container {
-      text-align: center;
-      .edit, .delete, .more {
-        margin-right: 15px !important;
+      margin-left: 56%;
+    }
+    .imageContainer {
+      margin: 20px;
+      position: absolute;
+      .profileImage {
+        width: 50px;
+        height: 50px;
       }
+    }
+    .detailsContainer {
+      margin-left: 100px;
+      margin-top: 0px;
     }
   }
   .collapsible {
@@ -284,7 +289,14 @@
 }
 .interests {
   min-height: 70vh;
-
+  a.link, a {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    color: #ff6666;
+  }
+  a.link:hover {
+    font-size: 18px;
+  }
 }
 
 @media only screen and (max-width: 530px) {
@@ -312,6 +324,13 @@
 
 @media only screen and (max-width: 530px) {
   .events {
+    .row .col {
+      padding: 0;
+      margin: auto !important
+    }
+    .card {
+      margin: 0;
+    }
     .searchForm {
       display: none;
     }

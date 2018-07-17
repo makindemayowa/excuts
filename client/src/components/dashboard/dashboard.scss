@@ -1,7 +1,6 @@
 .bg-3 {
-  background-color: rgb(244, 245, 246)
+  background-color: #fafafa
 }
-
 ul.pagination {
   text-align: center;
   li {
@@ -119,6 +118,16 @@ ul.pagination {
   .discover {
     .searchForm {
       display: none;
+    }
+    .row .col {
+      padding: 0;
+      margin: auto !important
+    }
+    .card {
+      margin: 0;
+    }
+    .username {
+      font-size: 18px;
     }
   }
 }
