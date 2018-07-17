@@ -1,5 +1,16 @@
 .events {
   min-height: 70vh;
+  .containerOnBigscreen {
+    padding-left: 50px;
+    padding-top: 10px;
+    padding-right: 50px;
+  }
+  .cardsContainer {
+    margin-right: 50px;
+  }
+  .card {
+    margin: 0;
+  }
   select {
     background-color: #f5f5f5;
   }
@@ -94,7 +105,7 @@
     .dtpcker{
       input[type=text]:not(.browser-default) {
         font-size: 12px;
-        width: 134%;;
+        width: 134%;
       }
     }
   }
@@ -183,16 +194,17 @@
 }
 .create_event {
   .newEventContainer {
-    border: solid 0.3px #E3E3E3;
+    border-top: solid 1px #ccc;
+  }
+  input[type=text]:not(.browser-default) {
+    max-width: 720px;
+    padding-left: 5px;
   }
   .push-up {
     margin-top: -20px;
   }
   .bottom_padding {
     padding-bottom: 20px;
-  }
-  #textarea1 {
-    height: 100px;
   }
    /* label focus color */
    textarea.materialize-textarea:focus + label {
@@ -243,26 +255,22 @@
     padding-right: 14px;
   }
   .submitContainer {
-    text-align: right;
+    text-align: center;
   }
-  .cancel-btn, .save-btn {
-    margin-left: 30px;
-    margin-right: 25px;
+  .save-btn {
     display: inline-block;
     width: 132px;
-  }
-  .cancel-btn {
-    background-color: #e5e5e5;
-    color: #000
+    border-radius: 50px 50px;
   }
   .created_by {
-    margin-right: 14px;
-    margin-bottom: 10px;
     font-style: italic;
+    text-align: right;
+    margin-right: 20px;
   }
 }
 .showinterest {
-  font-size: 14px
+  font-size: 14px;
+  margin-left: 10px;
 }
 .interestedC {
   cursor: pointer;
@@ -307,16 +315,19 @@
     .submitContainer {
       text-align: center;
     }
-    .cancel-btn, .save-btn {
-      margin-left: 0px;
-      margin-right: 12px;
-      width: 100px
+    input[type=text]:not(.browser-default).myDatePicker {
+      min-width: 300px;
+      padding-left: 5px;
+    }
+    .save-btn {
+      width: 100px;
+      border-radius: 50px 50px;
     }
   }
   .events {
     .searchForm .dtpcker{
       input[type=text]:not(.browser-default) {
-        width: 244%;
+        // width: 244%;
       }
     }
   }
@@ -324,6 +335,9 @@
 
 @media only screen and (max-width: 530px) {
   .events {
+    .containerOnBigscreen {
+      padding: 0;
+    }
     .row .col {
       padding: 0;
       margin: auto !important

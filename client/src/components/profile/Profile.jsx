@@ -380,7 +380,7 @@ class Profile extends Component {
                       <span className="my_bold">PERSONAL DETAILS</span>
                     </div>
                     <div className="row">
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="First name"
                           name="firstName"
@@ -391,7 +391,7 @@ class Profile extends Component {
                           value={this.state.firstName}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Last name"
                           name="lastName"
@@ -402,7 +402,7 @@ class Profile extends Component {
                           value={this.state.lastName}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Age"
                           name="age"
@@ -413,7 +413,7 @@ class Profile extends Component {
                           value={this.state.age}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Sex"
                           name="sex"
@@ -424,7 +424,7 @@ class Profile extends Component {
                           value={this.state.sex}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Country"
                           name="country"
@@ -435,7 +435,7 @@ class Profile extends Component {
                           value={this.state.country}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="State"
                           name="state"
@@ -446,7 +446,7 @@ class Profile extends Component {
                           value={this.state.state}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="City"
                           name="city"
@@ -457,7 +457,7 @@ class Profile extends Component {
                           value={this.state.city}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Best time to reach you"
                           name="best_time"
@@ -468,7 +468,7 @@ class Profile extends Component {
                           value={this.state.best_time}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Occupation"
                           name="occupation"
@@ -479,7 +479,7 @@ class Profile extends Component {
                           value={this.state.occupation}
                         />
                       </div>
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Education"
                           name="education"
@@ -492,7 +492,7 @@ class Profile extends Component {
                       </div>
                     </div>
                     <div className="row">
-                      <div className="col s4 m4 l3">
+                      <div className="col s6 m6 l4">
                         <input
                           placeholder="Phone No"
                           name="phone_no"

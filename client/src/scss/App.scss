@@ -46,6 +46,7 @@ nav {
 }
 .btn, .btn:hover {
   background-color: #ff6666;
+  border-radius: 50px 50px; 
 }
 .tabs .tab {
   text-transform: none;
@@ -115,8 +116,7 @@ textarea.materialize-textarea.valid:focus,
 
 .contact {
   min-height: 80vh;
-  padding-left: 30%;
-  padding-right: 30%;
+  padding: 5%;
   .contactText {
     text-align: center
   }

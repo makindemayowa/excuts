@@ -6,7 +6,7 @@ export default props => {
   const currentId = `${props.userInfo._id}`;
   const noAvatar = require('../../images/noavatar.png')
   return (
-    <div className="col s12 m6 l3">
+    <div className="col s12 m4 l4">
       <div className="card">
         <div className="card-image">
           <img className="materialboxed" width="650" alt={props.userInfo.firstName} src={props.userInfo.profilePhoto || noAvatar} />

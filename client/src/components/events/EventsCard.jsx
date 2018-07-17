@@ -5,7 +5,7 @@ const imgUrl = "https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_128
 export default props => {
   const currentId = `${props.id}`;
   return (
-    <div className="col s12 m7 l4">
+    <div className="col s12 m12 l12">
       <div className="eventsContainer">
         <div className="card eventCard">
           <div className="bottom_margin" />

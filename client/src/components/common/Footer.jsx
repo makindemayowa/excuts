@@ -20,26 +20,14 @@ const Footer = () => (
             </span>
           </div>
         </div>
-        <div className="col l4 m4 s4">
-          <h6 className="white-text">COMPANY</h6>
+        <div className="col l6 m6 s6">
           <ul>
             <li><a className="grey-text text-lighten-3" href="/contact">Contact</a></li>
           </ul>
         </div>
-        <div className="col l4 m4 s4">
-          <h6 className="white-text">COMMUNITY</h6>
+        <div className="col l6 m6 s6">
           <ul>
-            <li><a className="grey-text text-lighten-3" href="#!">Blog</a></li>
-            <li><a className="grey-text text-lighten-3" href="#!">Support</a></li>
-          </ul>
-        </div>
-        <div className="col l4 m4 s4">
-          <h6 className="white-text">LEGAL</h6>
-          <ul>
-            <li><a className="grey-text text-lighten-3" href="#!">Privacy</a></li>
-            <li><a className="grey-text text-lighten-3" href="#!">Terms</a></li>
             <li><a className="grey-text text-lighten-3" href="/safety">Safety</a></li>
-            <li><a className="grey-text text-lighten-3" href="#!">Cookie Policy</a></li>
           </ul>
         </div>
       </div>

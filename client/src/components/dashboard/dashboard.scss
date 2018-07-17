@@ -46,6 +46,10 @@ ul.pagination {
 }
 
 .discover {
+  .smaller-container {
+    padding-top: 10px;
+    padding-right: 50px;
+  }
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     border: none;
@@ -113,9 +117,34 @@ ul.pagination {
   }
 }
 
+@media only screen and (min-width: 993px) {
+  .discover {
+    .row .col.l4 {
+      padding: 10px;
+    }
+    .searchForm {
+      padding-left: 20px;
+    }
+  }
+}
+
+
+@media only screen and (min-width: 601px) {
+  .discover {
+    .row .col.m4 {
+      padding: 10px;
+    }
+    .searchForm {
+      padding-left: 20px;
+    }
+  }
+}
 
 @media only screen and (max-width: 530px) {
   .discover {
+    .smaller-container {
+      padding: 0
+    }
     .searchForm {
       display: none;
     }

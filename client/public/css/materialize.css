@@ -6490,7 +6490,7 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 }
 
 .input-field.col label {
-  left: 0.75rem;
+  /* left: 0.75rem; */
 }
 
 .input-field.col .prefix ~ label,

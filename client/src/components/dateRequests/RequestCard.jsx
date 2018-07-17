@@ -111,7 +111,7 @@ export default props => {
               href="#!"
               onClick={(e) => props.updateDateStatus(e, currentRequestId, 'declined')}
               className="modal-close waves-effect waves-green btn-flat">
-              Agree
+              Submit
           </a>
           </div>
         </div>

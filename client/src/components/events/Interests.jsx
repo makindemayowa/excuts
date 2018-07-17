@@ -48,15 +48,15 @@ class Interests extends Component {
             loading ? <Loader /> :
               <ul className="collection with-header">
                 <li className="collection-header">
-                  <h4>
+                  <h6>
                     {`${interests.length}${` `}`}interest(s) was shown for your event
-                  </h4>
+                  </h6>
                 </li>
                 {
                   interests.map((interested) => {
                     const userId = interested.interestedUser._id
                     return <li className="collection-item row">
-                      <span className="col 6 l8 m8">
+                      <span className="col s6 l8 m8">
                         <Link
                           to={`/publicProfile/${userId}`}
                           className="link"

@@ -79,9 +79,9 @@ class Events extends Component {
         <div className="create_event">
           {
             loading ? <Loader /> :
-              <div className="container">
-                <div className="container">
-                  <div className="container">
+              <div className="">
+                <div className="">
+                  <div className="">
                     <div className="bottom_margin" />
                     <div>
                       <span className="showinterest">
@@ -94,14 +94,12 @@ class Events extends Component {
                     <div className="bottom_margin" />
                     <div className="newEventContainer">
                       <div className="bottom_margin" />
-                      <div className="right created_by red-text">
+                      <div className="created_by red-text">
                         <Link className="red-text" to={`/publicProfile/${event.created_by_id}`}>
                           By:&nbsp;&nbsp;&nbsp;{event.created_by}
                         </Link>
-                        <div className="bottom_margin" />
                       </div>
                       <div className="container push-right">
-                        <div className="bottom_margin" />
                         <div className="bottom_padding" />
                         <div className="row">
                           <div className=" col s6 m4 l4">
@@ -121,7 +119,7 @@ class Events extends Component {
                         </div>
                         <div className="row">
                           <div className=" col s6 m4 l4">
-                            Location (Event place name)
+                            Event venue
                           </div>
                           <div className="col s6 m4 l3">
                             {event.location}

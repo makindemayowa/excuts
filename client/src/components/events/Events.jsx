@@ -174,107 +174,110 @@ class Events extends Component {
           {/* <div className="right createEvent">
             <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
           </div> */}
-          <div className="row">
-            <div className="col s12 m8 l10">
-              {
-                loading ? <Loader /> :
-                  <div>
-                    {
-                      this.state.events.length ?
-                        <div className="row">
-                          {
-                            this.state.events.map((event) => <EventsCard
-                              event={event}
-                              id={event._id}
-                              key={event._id}
-                              onChange={this.onChange}
-                              currentUser={this.props.user}
-                            />)
-                          }
-                        </div> :
-                        <h5 className="notFound">
-                          No event found
+          <div className="containerOnBigscreen">
+            <div className="row">
+
+              <div className="col s12 m8 l8 cardsContainer">
+                {
+                  loading ? <Loader /> :
+                    <div>
+                      {
+                        this.state.events.length ?
+                          <div className="row">
+                            {
+                              this.state.events.map((event) => <EventsCard
+                                event={event}
+                                id={event._id}
+                                key={event._id}
+                                onChange={this.onChange}
+                                currentUser={this.props.user}
+                              />)
+                            }
+                          </div> :
+                          <h5 className="notFound">
+                            No event found
                       </h5>
-                    }
-                  </div>
-              }
-            </div>
-            <div className="col s12 m4 l2 searchForm">
-              <div className="bottom_margin" />
-              <div className="flex">
-                <div className="form-fields">
-                  <label>Interested in</label>
-                  <select name="sex" onChange={this.onSexStateChange} className="size1">
-                    <option value="female">female</option>
-                    <option value="male">male</option>
-                    <option value="others">others</option>
-                  </select>
-                </div>
-                <div className="form-fields">
-                  <label>Country</label>
-                  <select
-                    name="country"
-                    onChange={this.onChange}
-                    className="size1"
-                  >
-                    {
-                      countriesWithStates.countries.map((country) =>
-                        <option
-                          key={country.country}
-                          value={country.country}
-                        >
-                          {country.country}
-                        </option>
-                      )
-                    }
-                  </select>
-                </div>
-
-                <div className="form-fields">
-                  <label>State</label>
-                  <select
-                    name="state"
-                    onChange={this.onSexStateChange}
-                    className="size1 browser-default"
-                  >
-                    {
-                      states.map((state) =>
-                        <option
-                          key={state}
-                          value={state}
-                        >
-                          {state}
-                        </option>
-                      )
-                    }
-                  </select>
-                </div>
-
-                <div className="form-fields">
-                  <div className="row">
-                    <div className="col s12">
-                      <div>
-                        From
-                          </div>
+                      }
                     </div>
-                    <div className="col s10 m9 l8">
-                      <div className="dtpcker">
-                        <DatePicker
-                          selected={this.state.startDate}
-                          onChange={(e) => this.handleChange(e)}
-                        />
+                }
+              </div>
+              <div className="col s12 m4 l2 searchForm">
+                <div className="bottom_margin" />
+                <div className="flex">
+                  <div className="form-fields">
+                    <label>Interested in</label>
+                    <select name="sex" onChange={this.onSexStateChange} className="size1">
+                      <option value="female">female</option>
+                      <option value="male">male</option>
+                      <option value="others">others</option>
+                    </select>
+                  </div>
+                  <div className="form-fields">
+                    <label>Country</label>
+                    <select
+                      name="country"
+                      onChange={this.onChange}
+                      className="size1"
+                    >
+                      {
+                        countriesWithStates.countries.map((country) =>
+                          <option
+                            key={country.country}
+                            value={country.country}
+                          >
+                            {country.country}
+                          </option>
+                        )
+                      }
+                    </select>
+                  </div>
+
+                  <div className="form-fields">
+                    <label>State</label>
+                    <select
+                      name="state"
+                      onChange={this.onSexStateChange}
+                      className="size1 browser-default"
+                    >
+                      {
+                        states.map((state) =>
+                          <option
+                            key={state}
+                            value={state}
+                          >
+                            {state}
+                          </option>
+                        )
+                      }
+                    </select>
+                  </div>
+
+                  <div className="form-fields">
+                    <div className="row">
+                      <div className="col s12">
+                        <div>
+                          From
+                          </div>
+                      </div>
+                      <div className="col s10 m9 l8">
+                        <div className="dtpcker">
+                          <DatePicker
+                            selected={this.state.startDate}
+                            onChange={(e) => this.handleChange(e)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <button
-                    className="waves-effect right waves-light btn"
-                    onClick={this.onSearchSubmit}
-                  >
-                    Search
+                  <div className="row">
+                    <button
+                      className="waves-effect right waves-light btn"
+                      onClick={this.onSearchSubmit}
+                    >
+                      Go
                       </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -286,7 +289,6 @@ class Events extends Component {
           </div>
           <div>
             <ul id='dropdown2' className='eventul dropdown-content'>
-              <li value="mine"><Link to="/new-event">Create event</Link></li>
               <li value="declined"><a onClick={() => this.handleSelectChange('mine')}>Created by me</a></li>
               <li value="accepted"><a onClick={() => this.handleSelectChange('all')}>All events</a></li>
             </ul>
