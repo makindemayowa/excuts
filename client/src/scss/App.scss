@@ -154,6 +154,20 @@ textarea.materialize-textarea.valid:focus,
   .hide_small_screen {
     display: none;
   }
+  body {
+    -webkit-text-size-adjust: none;
+  }
+  input[type=text],
+  input[type=number],
+  input[type=email],
+  input[type=password],
+  textarea.materialize-textarea
+  input:focus
+  select:focus,
+  textarea.materialize-textarea:focus,
+ {
+    font-size:16px !important;
+  }
 }
 
 
