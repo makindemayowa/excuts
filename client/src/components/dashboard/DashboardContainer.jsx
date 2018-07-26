@@ -21,7 +21,7 @@ class App extends Component {
             <div>
               <NavBar />
               <Comp />
-              {/* <Footer /> */}
+              <Footer />
             </div>
         }
       </div>

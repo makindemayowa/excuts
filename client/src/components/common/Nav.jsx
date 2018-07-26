@@ -2,16 +2,12 @@
 /*global M*/
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink, Redirect } from 'react-router-dom';
-import toastr from 'toastr';
+import { NavLink } from 'react-router-dom';
 import socket from '../../index';
-import Login from '../landingPage/Login';
-import Signup from '../landingPage/Signup';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/auth';
 import storage from '../../actions/storage'
 import Loader from './Loader'
-import { userSignUpRequest, userLoginRequest } from '../../actions/auth';
 
 const imgUrl = require('../../images/noavatar.png')
 
@@ -23,9 +19,6 @@ class NavBar extends Component {
       notifications: [{
         message: `is interested in your event`
       }],
-      email: '',
-      password: '',
-      confirmPassword: '',
       success: false,
       isLogged: false,
       loading: false,
@@ -33,10 +26,6 @@ class NavBar extends Component {
     }
     this.logout = this.logout.bind(this);
     this.handleNotification = this.handleNotification.bind(this);
-    this.submitSignup = this.submitSignup.bind(this);
-    this.submitLogin = this.submitLogin.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.sidenav = '';
   }
 
@@ -50,22 +39,17 @@ class NavBar extends Component {
       }
       storage.setItem('locdata', locData)
     });
-    const authModals = document.querySelectorAll('.authModal');
-    M.Modal.init(authModals, {
-      onCloseEnd: () => {
-        this.setState({
-          email: '',
-          password: '',
-          confirmPassword: '',
-        });
-      }
-    });
     this.setState({
       loading: false,
-      profilePhoto: this.props.user.profilePhoto
+      profilePhoto: this.props.user.profilePhoto || imgUrl
     });
     const elems = document.querySelectorAll('.sidenav');
     this.sidenav = M.Sidenav.init(elems);
+    $('.dropdown-trigger').dropdown({
+      inDuration: 600,
+      outDuration: 225,
+      hover: true
+    });
     // const dropdown = document.querySelectorAll('.dropdown-trigger');
     // M.Dropdown.init(dropdown);
     socket.on('user_interested', (msg) => this.handleNotification(msg));
@@ -80,68 +64,6 @@ class NavBar extends Component {
     }
   }
 
-  onChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  closeModal(e) {
-    e.preventDefault();
-    const signupModal = document.getElementById('signupModal');
-    const instance = M.Modal.getInstance(signupModal);
-    instance.close(signupModal);
-  }
-
-  submitLogin(e) {
-    const elem = document.querySelector('#loginModal');
-    const instance = M.Modal.getInstance(elem);
-    e.preventDefault();
-    const userdata = {
-      email: this.state.email,
-      password: this.state.password,
-    };
-    this.props
-      .userLoginRequest(userdata)
-      .then(() => {
-        instance.close();
-        toastr.success('login successful')
-        this.setState({ isLogged: this.props.isLogged });
-      })
-      .catch((errorData) => {
-        toastr.error(errorData.response.data.message)
-      });
-  }
-
-  submitSignup(e) {
-    const elem = document.querySelector('#signupModal');
-    const instance = M.Modal.getInstance(elem);
-    e.preventDefault();
-
-    if (this.state.password !== this.state.confirmPassword) {
-      return toastr.error('passwords do not match')
-    }
-    const userdata = {
-      email: this.state.email,
-      password: this.state.password,
-      confirmPassword: this.state.confirmPassword,
-      loc: {
-        type: "Point",
-        coordinates: [this.long, this.lat]
-      }
-    };
-    this.props
-      .userSignUpRequest(userdata)
-      .then(() => {
-        toastr.success('signup successful')
-        instance.close()
-        this.setState({ success: this.props.success })
-      })
-      .catch((errorData) => {
-        toastr.error(errorData.response.data.message)
-      });
-  }
-
   logout() {
     this.props.logout().then(() => {
       this.setState({
@@ -154,9 +76,6 @@ class NavBar extends Component {
     const { logged, loading, profilePhoto } = this.state;
     // const notificationsCount = this.state.notifications.length;
     // const notificationsCount = 3;
-    if (!logged) {
-      return <Redirect to="/" />
-    }
     return (
       <div>
         {
@@ -165,39 +84,47 @@ class NavBar extends Component {
               <nav className="nav-extended">
                 <div className="nav-wrapper">
                   <Link to="/" className="brand-logo companyLogo">
-                    {/* <img
-                      alt=""
-                      className="companyLogo"
-                      src={require('../../images/takemeout.png')}
-                    /> */}
                     eXcuts
                   </Link>
-                  <a to="/publicprofile" data-target="slide-out" className="sidenav-trigger">
+                  <a data-target="slide-out" className="sidenav-trigger">
                     <div className="imageContainer">
                       <img className="circle profileImage" src={profilePhoto} alt="" />
                     </div>
                   </a>
+                  <ul id="navDropdown" className="dropdown-content">
+                    {/* <li><Link
+                      to="#"
+                    data-target='dropdown1'
+                    className="dropdown-trigger home-link"
+                    onKeyDown={() => this.setState({
+                      notifications: []
+                    })}
+                    >
+                      <i className="far fa-bell"></i>
+                    </Link>
+                      <span className="red-text">{notificationsCount > 0 && notificationsCount}</span>
+                    </li> */}
+                    <li><Link to="/publicprofile"><i className="button-collapse fas fa-user nav-icon" />Profile</Link></li>
+                    <li><Link to="/safety"><i className="fas fa-user-secret nav-icon"></i>Safety</Link></li>
+                    <li><Link to="/contact"><i className="far fa-comment nav-icon"></i>Contact us</Link></li>
+                    <li><Link to="#" onClick={this.logout}><i className="fas fa-sign-out-alt nav-icon"></i>Logout</Link></li>
+                  </ul>
                   {
                     this.props.isAuthenticated ? (
                       <ul className="right hide-on-med-and-down">
-                        <li><Link to="#" onClick={this.logout}>Logout</Link></li>
-                        <li><Link
-                          to="#"
-                          // data-target='dropdown1'
-                          className="dropdown-trigger home-link"
-                        // onKeyDown={() => this.setState({
-                        //   notifications: []
-                        // })}
-                        >
-                          <i className="far fa-bell"></i>
-                        </Link>
-                          {/* <span className="red-text">{notificationsCount > 0 && notificationsCount}</span> */}
+
+                        <li>
+                          <a className="dropdown-trigger" data-beloworigin="true" data-target="navDropdown">
+                            <div className="b-s-imageContainer">
+                              <img className="circle profileImage" src={profilePhoto} alt="" />
+                            </div>
+                          </a>
                         </li>
                       </ul>
                     ) :
                       <ul className="right hide-on-med-and-down">
-                        <li><a className="modal-trigger" href="#loginModal">Login</a></li>
-                        <li><a className="modal-trigger" href="#signupModal">Register</a></li>
+                        <li><Link className="modal-trigger" to="/login">Login</Link></li>
+                        <li><Link className="modal-trigger" to="/signup">Register</Link></li>
                       </ul>
                   }
                 </div>
@@ -273,7 +200,7 @@ class NavBar extends Component {
                         </li>
                         <li>
                           <NavLink
-                            to="#loginModal"
+                            to="/login"
                             className="modal-trigger sidenav-close"
                             activeClassName="clicked"
                           ><i className="fas fa-sign-in-alt nav-icon" /><span>Login</span>
@@ -281,29 +208,32 @@ class NavBar extends Component {
                         </li>
                         <li>
                           <NavLink
-                            to="#signupModal"
+                            to="/signup"
                             className="modal-trigger sidenav-close"
                             activeClassName="clicked"
                           ><i className="fas fa-user-plus nav-icon" /><span>Signup</span>
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to="/contact"
+                            activeClassName="clicked"
+                            className="sidenav-close"
+                          ><i className="far fa-comment nav-icon"></i><span>Contact Us</span>
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to="/safety"
+                            className="sidenav-close"
+                            activeClassName="clicked"
+                          ><i className="fas fa-user-secret nav-icon"></i><span>Safety</span>
                           </NavLink>
                         </li>
                       </div>
                     )
                 }
               </ul>
-              <div>
-                <Login
-                  onChange={this.onChange}
-                  onSubmit={this.submitLogin}
-                  state={this.state}
-                />
-                <Signup
-                  onChange={this.onChange}
-                  onSubmit={this.submitSignup}
-                  state={this.state}
-                  closeModal={this.closeModal}
-                />
-              </div>
             </div>
         }
       </div>
@@ -318,4 +248,4 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { logout, userSignUpRequest, userLoginRequest })(NavBar);
+export default connect(mapStateToProps, { logout })(NavBar);

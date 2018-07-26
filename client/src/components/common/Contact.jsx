@@ -10,31 +10,31 @@ class Contact extends Component {
               Send Us A Note
             </h4>
           </div>
-          <form class="col s12">
-            <div class="row">
-              <div class="input-field col s12">
-                <input placeholder="" required id="first_name" type="text" class="validate" />
-                <label for="first_name">First Name</label>
+          <form className="col s12">
+            <div className="row">
+              <div className="input-field col s12">
+                <input placeholder="" required id="first_name" type="text" className="validate" />
+                <label htmlFor="first_name">First Name</label>
               </div>
-              <div class="input-field col s12">
-                <input placeholder="" required id="last_name" type="text" class="validate" />
-                <label for="first_name">Last Name</label>
+              <div className="input-field col s12">
+                <input placeholder="" required id="last_name" type="text" className="validate" />
+                <label htmlFor="first_name">Last Name</label>
               </div>
-              <div class="input-field col s12">
-                <input placeholder="" required id="mail" type="email" class="validate" />
-                <label for="mail">Email</label>
+              <div className="input-field col s12">
+                <input placeholder="" required id="mail" type="email" className="validate" />
+                <label htmlFor="mail">Email</label>
               </div>
-              <div class="input-field col s12">
-                <input placeholder="" required id="phone" type="number" class="validate" />
-                <label for="phone no">Phone Number</label>
+              <div className="input-field col s12">
+                <input placeholder="" required id="phone" type="number" className="validate" />
+                <label htmlFor="phone no">Phone Number</label>
               </div>
-              <div class="input-field col s12">
-                <textarea id="icon_prefix2" required class="materialize-textarea"></textarea>
-                <label for="icon_prefix2">Message</label>
+              <div className="input-field col s12">
+                <textarea id="icon_prefix2" required className="materialize-textarea"></textarea>
+                <label htmlFor="icon_prefix2">Message</label>
               </div>
             </div>
             <div>
-              <button type="submit" class="waves-effect waves-light btn right">Submit</button>
+              <button type="submit" className="waves-effect waves-light btn right">Submit</button>
             </div>
           </form>
         </div>

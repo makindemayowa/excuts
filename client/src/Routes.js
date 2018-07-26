@@ -1,6 +1,8 @@
 import Home from './components/landingPage/Home';
 import Dashboard from './components/dashboard/Dashboard';
 import Profile from './components/profile/Profile';
+import Login from './components/landingPage/Login';
+import Signup from './components/landingPage/Signup';
 import PublicProfile from './components/profile/PublicProfile';
 import ProfileById from './components/profile/ProfileById';
 import Events from './components/events/Events';
@@ -26,6 +28,20 @@ export default [
     exact: true
   },
   {
+    name: 'login',
+    path: '/login',
+    secured: false,
+    component: Login,
+    exact: true
+  },
+  {
+    name: 'signup',
+    path: '/signup',
+    secured: false,
+    component: Signup,
+    exact: true
+  },
+  {
     name: 'contact',
     path: '/contact',
     secured: false,
@@ -40,7 +56,7 @@ export default [
     exact: true
   },
   {
-    name: 'contact',
+    name: 'safety',
     path: '/safety',
     secured: false,
     component: Safety,

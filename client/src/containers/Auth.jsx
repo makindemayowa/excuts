@@ -51,11 +51,11 @@ class AuthContainer extends Component {
     if (this.props.secured && !isAuthenticated) {
       return <Redirect to="/" />
     }
-  
+
     if (isAuthenticated && this.props.name === 'home') {
       return <Redirect to="/dashboard" />
     }
-  
+    
     return <Route
       path={this.props.path}
       render={(props) => {
