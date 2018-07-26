@@ -7,21 +7,9 @@ export default props => (
       <div className="card-panel eventCard">
         <div className="">
           <span>
-            <strong>Time: &nbsp;&nbsp;</strong>
-          </span>
-          {props.event.time}
-        </div>
-        <div className="">
-          <span>
             <strong>Date: &nbsp;&nbsp;</strong>
           </span>
           {props.event.date}
-        </div>
-        <div className="">
-          <span>
-            <strong>Details: &nbsp;&nbsp;</strong>
-          </span>
-          {props.event.details}
         </div>
         <div className="">
           <span>
@@ -31,9 +19,9 @@ export default props => (
         </div>
         <div className="">
           <span>
-            <strong>Preference: &nbsp;&nbsp;</strong>
+            <strong>Details: &nbsp;&nbsp;</strong>
           </span>
-          {props.event.preference}
+          {props.event.details}
         </div>
         <div className="">
           <span>
@@ -41,6 +29,7 @@ export default props => (
           </span>
           {props.event.extra}
         </div>
+        <br/>
         <div className="cardfooter">{'Created By: Anonymous'}</div>
       </div>
     </div>

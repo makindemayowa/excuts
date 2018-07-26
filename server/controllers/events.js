@@ -125,6 +125,7 @@ exports.getAll = (req, res) => {
     } else {
       const today = new Date();
       const yesterday = new Date(today);
+      // const sevenDaysAgo = new Date(new Date() - (7 * 60 * 60 * 24 * 1000));
       query = {
         // date: { $gte: yesterday.setDate(today.getDate() - 3) },
       };

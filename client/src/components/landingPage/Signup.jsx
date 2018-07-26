@@ -1,72 +1,132 @@
-import React from 'react';
+/* eslint-env jquery */
+/*global M*/
 
-const Signup = props => (
-  <div id="signupModal" className="modal registerModal authModal">
-    <div className="modal-content">
-      <i className="right modal-close material-icons">close</i>
-      <div className="row">
-        <form className="col s12" onSubmit={props.onSubmit}>
-          <div className="input-field col s12">
-            <input
-              id="signUpemail"
-              type="email"
-              className="validate"
-              name="email"
-              required
-              onChange={props.onChange}
-              value={props.state.email}
-            />
-            <label htmlFor="signUpemail">Email</label>
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import storage from '../../actions/storage'
+import { Redirect, Link } from 'react-router-dom';
+import toastr from 'toastr';
+import { userSignUpRequest } from '../../actions/auth';
+
+class Signup extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    }
+    this.submitSignup = this.submitSignup.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    window.navigator.geolocation.getCurrentPosition((pos) => {
+      this.long = parseFloat(pos.coords.longitude);
+      this.lat = parseFloat(pos.coords.latitude);
+      const locData = {
+        long: parseFloat(pos.coords.longitude),
+        lat: parseFloat(pos.coords.latitude)
+      }
+      storage.setItem('locdata', locData)
+    });
+  }
+
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  submitSignup(e) {
+    e.preventDefault();
+    if (this.state.password !== this.state.confirmPassword) {
+      return toastr.error('passwords do not match')
+    }
+    const userdata = {
+      email: this.state.email,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword,
+      loc: {
+        type: "Point",
+        coordinates: [this.long, this.lat]
+      }
+    };
+    this.props
+      .userSignUpRequest(userdata)
+      .then(() => {
+        toastr.success('signup successful')
+        this.setState({ success: this.props.success })
+      })
+      .catch((errorData) => {
+        toastr.error(errorData.response.data.message)
+      });
+  }
+
+  render() {
+    const { success } = this.state;
+    if (success) {
+      return <Redirect to="/dashboard" />
+    }
+    return (
+      <div className="container">
+        <div className="">
+          <div className="signup row">
+            <form className="signupForm col s12" onSubmit={this.submitSignup}>
+              <div className="input-field col s12">
+                <input
+                  id="signUpemail"
+                  type="email"
+                  className="validate"
+                  name="email"
+                  required
+                  onChange={this.onChange}
+                  value={this.state.email}
+                />
+                <label htmlFor="signUpemail">Email</label>
+              </div>
+              <div className="input-field col s12">
+                <input
+                  type="password"
+                  className="validate"
+                  name="password"
+                  required
+                  onChange={this.onChange}
+                  value={this.state.password}
+                  id="signUpPassword"
+                />
+                <label htmlFor="signUpPassword">Password</label>
+              </div>
+              <div className="input-field col s12">
+                <input
+                  id="signUpPassword2"
+                  className="validate"
+                  type="password"
+                  required
+                  name="confirmPassword"
+                  onChange={this.onChange}
+                  value={this.state.confirmPassword}
+                />
+                <label htmlFor="signUpPassword2">Confirm Password</label>
+              </div>
+              <button
+                className="btn waves-effect waves-light col s12"
+                type="submit"
+                name="action"
+              >Sign Up
+              <i className="material-icons right">send</i>
+              </button>
+            </form>
           </div>
-          <div className="input-field col s12">
-            <input
-              type="password"
-              className="validate"
-              name="password"
-              required
-              onChange={props.onChange}
-              value={props.state.password}
-              id="signUpPassword"
-            />
-            <label htmlFor="signUpPassword">Password</label>
-          </div>
-          <div className="input-field col s12">
-            <input
-              id="signUpPassword2"
-              className="validate"
-              type="password"
-              required
-              name="confirmPassword"
-              onChange={props.onChange}
-              value={props.state.confirmPassword}
-            />
-            <label htmlFor="signUpPassword2">Confirm Password</label>
-          </div>
-          <div className="error_message">
-            {props.state.error}
-          </div>
-          <button
-            className="btn waves-effect waves-light col s12"
-            type="submit"
-            name="action"
-          >Sign Up
-            <i className="material-icons right">send</i>
-          </button>
-        </form>
-      </div>
-      <div className="row">
-        <div className="accoutAlready">
-          <a
-            className="modal-trigger"
-            href="#loginModal"
-            // onClick={props.closeModal}
-          >
-            Already have an account?
-          </a>
         </div>
       </div>
-    </div>
-  </div>
-);
+    );
+  }
+}
 
-export default Signup;
+const mapStateToProps = state => ({
+  success: state.auth.success,
+});
+
+export default connect(mapStateToProps, { userSignUpRequest })(Signup);
+
