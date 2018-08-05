@@ -3,9 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 import SubNav from '../common/SubNav';
 import { createEventRequest } from '../../actions/events';
 
@@ -14,7 +12,7 @@ class Events extends Component {
     super(props)
     this.state = {
       title: '',
-      date: moment(),
+      eventDate: '',
       location: '',
       state: '',
       city: '',
@@ -25,7 +23,6 @@ class Events extends Component {
       interestedIn: '',
       error: ''
     };
-    this.handleChange = this.handleChange.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -35,12 +32,6 @@ class Events extends Component {
     M.FormSelect.init(elems);
     $('textarea#textarea1, textarea#textarea2, textarea#textarea3')
       .characterCounter();
-  }
-
-  handleChange(date) {
-    this.setState({
-      date
-    });
   }
 
   onChange(e) {
@@ -53,7 +44,7 @@ class Events extends Component {
   onSubmit(e) {
     const eventDetail = {
       title: this.state.title,
-      date: this.state.date,
+      date: this.state.eventDate,
       location: this.state.location,
       state: this.state.state,
       city: this.state.city,
@@ -215,11 +206,7 @@ class Events extends Component {
                       Date
                     </div>
                     <div className="col s12 m4 l4">
-                      <DatePicker
-                        selected={this.state.date}
-                        onChange={this.handleChange}
-                        className="myDatePicker"
-                      />
+                      <input onChange={this.onChange} type="date" name="eventDate" />
                     </div>
                   </div>
                   <div className="row reduce-margin">

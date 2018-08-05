@@ -313,7 +313,7 @@ export function uploadPictureRequest(formData) {
 export function deletePictureRequest(imgUrl) {
   return dispatch => {
     dispatch(ajaxInProcess());
-    return axios.delete(`/api/user/photo`, imgUrl).then((response) => {
+    return axios.delete(`/api/user/photo/?q=${imgUrl}`).then((response) => {
       dispatch(endAjax());
       dispatch(setDetails(response.data.updatedUser));
     }).catch((err) => { })

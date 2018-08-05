@@ -8,6 +8,9 @@
   min-height: 70vh;
 }
 .profile {
+  a {
+    color: #ff6666;
+  }
   min-height: 80vh;
   .row .col {
     padding: 0 0.75em
@@ -20,9 +23,50 @@
     border-radius: 2px 2px 0 0;
     overflow: hidden;
   }
+  .setDp {
+    margin-left: 60%;
+    margin-right: 10%;
+  }
+  .img__card {
+    max-height: 228px;
+  }
   .upload_card {
     cursor: pointer;
     max-width: 300px;
+  }
+  .upload__buttons {
+    margin-top: 10px;
+    display: flex;
+  }
+  .imageActions {
+    display: flex;
+  }
+  .uploadButton {
+    flex: 0 0 35%;
+  }
+  .inputWrapper {
+    .input__text {
+      color: white !important;
+    }
+    margin-right: 45%;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    padding-top: 5px;
+    background-color: #ff6666;
+    border-radius: 50px 50px;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+  .fileInput {
+      cursor: pointer;
+      height: 100%;
+      position:absolute;
+      top: 0;
+      right: 0;
+      z-index: 99;
+      opacity: 0;
   }
   .txt-bs {
     margin-left: -100px !important;
@@ -54,7 +98,8 @@
     left: 0;
     right: 0;
     cursor: pointer;
-    background-image: url('../../images/profileImg.png');
+    background-image: url('../../images/profilepishure.jpg');
+    background-color: #ff6666;
     background-repeat: no-repeat;
     background-position: 50% 30%;
     background-size: cover;
@@ -67,9 +112,6 @@
   .img__wrap:hover .img__description {
     visibility: visible;
     opacity: 1;
-  }
-  .profile-image {
-    // height: 250px;
   }
   .makePublic {
     margin-top: 25px;
@@ -87,8 +129,6 @@
   .upload-more-button {
     padding-top: 10px;
     border: solid 1.3px #E3E3D8;
-    height: 60px;
-    width: 283px;
     font-size: 14px;
     color: #ff6666;
     background-color: #fff !important;

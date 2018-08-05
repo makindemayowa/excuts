@@ -33,7 +33,7 @@ class Profile extends Component {
       occupation: '',
       education: '',
       phone_no: '',
-      public: true,
+      public: false,
       about: '',
       here_to: '',
       here_for_fun: false,
@@ -55,7 +55,7 @@ class Profile extends Component {
       imageUrls: [],
       success: false,
       loading: true,
-      uploadInProgress: true
+      uploadInProgress: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -86,7 +86,7 @@ class Profile extends Component {
         occupation: this.props.user.occupation || '',
         education: this.props.user.education || '',
         phone_no: this.props.user.phone_no || '',
-        public: this.props.user.public || true,
+        public: this.props.user.public,
         about: this.props.user.about || '',
         here_to: this.props.user.here_to || '',
         imageUrls: this.props.user.photos || [],
@@ -126,7 +126,6 @@ class Profile extends Component {
       occupation: user.occupation || '',
       education: user.education || '',
       phone_no: user.phone_no || '',
-      public: user.public || true,
       about: user.about || '',
       here_to: user.here_to || '',
       firstName: user.firstName || '',
@@ -181,6 +180,7 @@ class Profile extends Component {
         imgurl: '',
         uploadInProgress: false
       })
+      return toastr.success('upload successful')
     })
     const token = localStorage.getItem('tmo_token');
     setAuthorisation(token)
@@ -189,7 +189,7 @@ class Profile extends Component {
   deleteFile(e, imgurl) {
     e.preventDefault()
     this.props.deletePictureRequest(imgurl).then((res) => {
-      console.log(res)
+      return toastr.success('success')
     })
   }
 
@@ -199,7 +199,7 @@ class Profile extends Component {
       profilePhoto: imgurl
     }
     this.props.updateUserDetails(dp).then((res) => {
-      console.log(res)
+      return toastr.success('success')
     })
   }
 
@@ -236,7 +236,7 @@ class Profile extends Component {
   onSubmit(e) {
     e.preventDefault();
     if (this.state.sex !== 'male' && this.state.sex !== 'female') {
-      return toastr.error('sex should be male or female')
+      return toastr.error('sex should be male/female/others')
     }
     const userDetails = {
       age: this.state.age,
@@ -311,23 +311,27 @@ class Profile extends Component {
                                       style={{ maxHeight: 300, maxWidth: 340 }}
                                       aspectRatio={16 / 12}
                                       cropBoxResizable={false}
-                                      cropBoxMovable={false}
                                       movable={true}
                                       crop={this._crop.bind(this)}
                                     />
-                                    <button
-                                      className="waves-effect waves-light btn"
-                                      type="submit"
-                                      onClick={this.uploadFile}
-                                      name="action"
-                                    >Done</button>
-                                    <div>
-                                      <input
-                                        name="imgurl"
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={this.fileChangeHandler}
-                                      />
+                                    <div className="upload__buttons">
+                                      <div className="inputWrapper left">
+                                        <label for="filess" className="input__text"><i className="fas fa-camera"></i></label>
+                                        <input
+                                          name="imgurl"
+                                          type="file"
+                                          id="filess"
+                                          className="fileInput"
+                                          accept="image/*"
+                                          onChange={this.fileChangeHandler}
+                                        />
+                                      </div>
+                                      <button
+                                        className="right uploadButton waves-effect waves-light btn"
+                                        type="submit"
+                                        onClick={this.uploadFile}
+                                        name="action"
+                                      >Save</button>
                                     </div>
                                   </div> :
                                   <div className="card upload_card">
@@ -337,6 +341,7 @@ class Profile extends Component {
                                         name="imgurl"
                                         type="file"
                                         id="file"
+                                        accept="image/*"
                                         onChange={this.fileChangeHandler}
                                       />
                                     </div>
@@ -514,6 +519,10 @@ class Profile extends Component {
                             onChange={this.handleChange}
                           />
                           <span>Make Public</span>
+                          {!this.state.public &&
+                          <div>
+                            Only owners of events you're interested in can see your phone number.
+                          </div>}
                         </label>
                       </span>
                     </div>
@@ -684,16 +693,13 @@ class Profile extends Component {
                         </div>
                       </div>
                     }
-                  </div>
-                  <div className="submitContainer">
-                    <button
-                      className="waves-effect waves-light btn save-btn"
-                      type="submit"
-                      name="action"
-                    >Save</button>
-                    <button
-                      className="waves-effect waves-light btn cancel-btn"
-                    >Cancel</button>
+                    <div className="submitContainer">
+                      <button
+                        className="waves-effect waves-light btn save-btn"
+                        type="submit"
+                        name="action"
+                      >Save</button>
+                    </div>
                   </div>
                 </form>
                 <div className="bottom_margin" />

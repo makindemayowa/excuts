@@ -3,10 +3,10 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer';
 import jwtDecode from 'jwt-decode';
 import {
-  setUser,
+  setUser, logout,
   // setLoc
 } from './actions/auth';
-import setAuthorisation from './setAuthorisation'
+import setAuthorisation from './setAuthorisation';
 
 export default function configureStore(initialState = {}) {
   const store = createStore(
@@ -36,6 +36,9 @@ export default function configureStore(initialState = {}) {
     const isAuthenticated = decoded.exp > Date.now() / 1000;
     setAuthorisation(localStorage.tmo_token)
     store.dispatch(setUser(user, isAuthenticated));
+    if(!isAuthenticated) {
+      store.dispatch(logout());
+    }
   }
   return store;
 }

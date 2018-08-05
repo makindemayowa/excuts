@@ -8,6 +8,7 @@ exports.create = (req, res) => {
     if (!existingEvent) {
       req.body.created_by = req.user.email;
       req.body.created_by_id = req.user.id;
+      req.body.imgUrl = req.user.profilePhoto;
       const event = new Events(req.body);
       event.save((err, newEvent) => {
         if (err) {
@@ -107,7 +108,7 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  const limit = req.query.limit || 5;
+  const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
   let query;

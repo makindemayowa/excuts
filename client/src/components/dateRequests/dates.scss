@@ -1,7 +1,11 @@
 .daterequests {
   min-height: 80vh;
+  .request__container {
+    padding-bottom: 30px
+  }
   .row .col {
-    padding: 10px;
+    padding: 0;
+    margin: auto !important
   }
   .a {
     -webkit-transition-duration: 0.4s; /* Safari */
@@ -13,7 +17,7 @@
   .requestCard {
     margin-top: 10px;
     .card-panel {
-      max-height: 198px
+      margin: 0
     }
     .requester {
       font-style: italic;

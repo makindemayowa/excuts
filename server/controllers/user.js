@@ -183,6 +183,7 @@ exports.updatePhoto = (req, res) => {
 };
 
 exports.deletePhoto = (req, res) => {
+  const fileurl = req.query.q;
   User.findOne({
     email: req.user.email,
   }).then((user) => {
@@ -190,7 +191,7 @@ exports.deletePhoto = (req, res) => {
       res.status(404)
         .send({ message: 'User not found' });
     } else {
-      const index = user.photos.indexOf(req.body.fileUrl);
+      const index = user.photos.indexOf(fileurl);
       if (index > -1) {
         user.photos.splice(index, 1);
       }

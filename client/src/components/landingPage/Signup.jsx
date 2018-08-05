@@ -1,10 +1,9 @@
 /* eslint-env jquery */
-/*global M*/
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import storage from '../../actions/storage'
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import toastr from 'toastr';
 import { userSignUpRequest } from '../../actions/auth';
 

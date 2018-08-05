@@ -1,5 +1,8 @@
 .events {
   min-height: 70vh;
+  .event__container {
+    padding-bottom: 20px;
+  }
   .containerOnBigscreen {
     padding-left: 50px;
     padding-top: 10px;
@@ -245,9 +248,6 @@
     border: solid 0.3px #E3E3E3;
     padding-left: 10px;
   }
-  .character-counter {
-    // display: none;
-  }
   .reduce-margin {
     margin-bottom: 0;
   }
@@ -322,13 +322,6 @@
     .save-btn {
       width: 100px;
       border-radius: 50px 50px;
-    }
-  }
-  .events {
-    .searchForm .dtpcker{
-      input[type=text]:not(.browser-default) {
-        // width: 244%;
-      }
     }
   }
 }

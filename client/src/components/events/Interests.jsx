@@ -37,7 +37,7 @@ class Interests extends Component {
   }
 
   render() {
-    const { event, loading } = this.state
+    const { loading } = this.state
     const { interests } = this.props
     return (
       <div>

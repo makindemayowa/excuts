@@ -10,7 +10,7 @@ export default props => {
         <div className="card eventCard">
           <div className="bottom_margin" />
           <div className="imageContainer">
-            <img className="circle profileImage" src={imgUrl} alt="" />
+            <img className="circle profileImage" src={props.event.imgUrl || imgUrl} alt="" />
           </div>
           <div className="detailsContainer">
             {

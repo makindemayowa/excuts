@@ -136,6 +136,7 @@ class ProfileById extends Component {
   createReview() {
     const review = this.state.review
     this.props.postReviewRequest(this.profileId, review).then((res) => {
+      toastr.success('success')
       this.props.getUserById(this.profileId);
       this.setState({
         review: ''
