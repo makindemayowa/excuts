@@ -42,7 +42,6 @@ const ProfileForm = props => {
                       props.user.photos.map(url =>
                         <a
                           className="carousel-item"
-                          href={url}
                           key={url}
                         >
                           <img alt="" src={url} />

@@ -46,6 +46,9 @@ const eventSchema = new Schema({
     type: String,
     enum: ['male', 'female', 'others']
   },
+  imgUrl: {
+    type: String,
+  },
   interested: [{
     type: Schema.Types.ObjectId,
     ref: 'User'

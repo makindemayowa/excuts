@@ -6,7 +6,7 @@ export default props => {
   const currentRequestId = `${props.daterequest._id}`;
   const modalId = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 9);
   return (
-    <div className="requestCard col s12 m6 l6">
+    <div className="requestCard col s12 m12 l12">
       <div className="">
         <div className="card-panel eventCard">
           <div className="requester action">

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default props => {
   const requestedsId = `${props.daterequest.requested._id}`;
   return (
-    <div className="requestCard col s12 m6 l6">
+    <div className="requestCard container col s12 m12 l12">
       <div className="">
         <div className="card-panel eventCard">
           <div className="requester">

@@ -2,14 +2,11 @@
 /*global M*/
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import SubNav from '../common/SubNav';
 import EventsCard from './EventsCard'
 import countriesWithStates from '../../helpers/states'
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import Loader from '../common/Loader';
 import moment from 'moment';
 import './event.scss';
@@ -28,7 +25,6 @@ class Events extends Component {
       countryIndex: 0,
       states: []
     };
-    this.handleChange = this.handleChange.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onSexStateChange = this.onSexStateChange.bind(this);
@@ -72,12 +68,6 @@ class Events extends Component {
       events,
       loading
     });
-  }
-
-  handleChange(date) {
-    this.setState({
-      startDate: date
-    })
   }
 
   handleSelectChange(selected) {
@@ -132,7 +122,7 @@ class Events extends Component {
     const eventDetail = {
       sex: this.state.sex,
       state: this.state.state,
-      startDate: this.state.startDate.format("YYYY-MM-DDT00:00:00.000") + "Z",
+      startDate: moment(this.state.startDate).format("YYYY-MM-DDT00:00:00.000") + "Z",
     }
     // ensure you cannot create an event for past days    
     this.props.searchEventRequest(eventDetail).then((res) => {
@@ -170,7 +160,7 @@ class Events extends Component {
             </select>
           </div>
         </div> */}
-        <div className="">
+        <div className="event__container">
           {/* <div className="right createEvent">
             <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
           </div> */}
@@ -259,13 +249,8 @@ class Events extends Component {
                           From
                           </div>
                       </div>
-                      <div className="col s10 m9 l8">
-                        <div className="dtpcker">
-                          <DatePicker
-                            selected={this.state.startDate}
-                            onChange={(e) => this.handleChange(e)}
-                          />
-                        </div>
+                      <div className="col s12">
+                          <input onChange={this.onChange} type="date" name="startDate" />
                       </div>
                     </div>
                   </div>

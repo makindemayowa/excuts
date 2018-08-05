@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import { connect } from 'react-redux'
-import 'react-datepicker/dist/react-datepicker.css';
 import Loader from '../common/Loader'
 import EventsCard from '../events/EventsCard'
 import NotFound from '../common/NotFound'

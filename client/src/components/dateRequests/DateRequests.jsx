@@ -143,7 +143,7 @@ class DateRequests extends Component {
             <option value="accepted">Accepted</option>
           </select>
         </div> */}
-        <div className="">
+        <div className="request__container">
           {loading ? <Loader /> :
             <div>
               {this.state.selectedTab !== 'mine' &&

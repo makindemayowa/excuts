@@ -73,7 +73,7 @@ class NavBar extends Component {
   }
 
   render() {
-    const { logged, loading, profilePhoto } = this.state;
+    const { loading, profilePhoto } = this.state;
     // const notificationsCount = this.state.notifications.length;
     // const notificationsCount = 3;
     return (
@@ -138,7 +138,7 @@ class NavBar extends Component {
               </ul> */}
               <ul className="sidenav" id="slide-out">
                 {
-                  this.props.user.status === 'verified' && (
+                  this.props.isAuthenticated && (
                     <div>
                       <li>
                         <NavLink
@@ -160,7 +160,7 @@ class NavBar extends Component {
                   )
                 }
                 {
-                  (this.props.user.status === 'pending' || this.props.success) ? (
+                  (this.props.isAuthenticated && (this.props.user.status === 'pending' || this.props.success)) ? (
                     <div>
                       <li>
                         <NavLink

@@ -1,9 +1,6 @@
 /* eslint-env jquery */
-/* global M */
 
 import React, { Component } from 'react';
-import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import SubNav from '../common/SubNav';
 import SearchEscorts from './SearchEscorts';
 import SearchEvents from './SearchEvents';
