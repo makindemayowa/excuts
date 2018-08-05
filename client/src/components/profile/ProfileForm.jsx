@@ -7,7 +7,7 @@ const ProfileForm = props => {
   return (
     <div>
       {
-        (props.user.profilePhoto) ?
+        (props.user.profilePhoto && props.user.phone_no) ?
           <div className="publicProfile container">
             <div className="bottom_margin" />
             <div className="row">

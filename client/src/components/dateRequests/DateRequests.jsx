@@ -118,7 +118,7 @@ class DateRequests extends Component {
       comment: this.state.comment
     }
     this.props.updateDate(id, details).then((res) => {
-      toastr.success('Success, the other party will be notifies')
+      toastr.success('Success, the other party will be notified')
       this.props.getDateRequest()
     });
     this.setState({
