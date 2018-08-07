@@ -149,21 +149,7 @@ class Events extends Component {
     return (
       <div className="events">
         <SubNav currentPage={'home'} />
-        {/* <div className="navSelect">
-          <div className="form-fields">
-            <select
-              className="size1"
-              onChange={this.handleSelectChange}
-            >
-              <option value="all">All Events</option>
-              <option value="mine">Created by Me</option>
-            </select>
-          </div>
-        </div> */}
         <div className="event__container">
-          {/* <div className="right createEvent">
-            <Link to="/new-event" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons">add</i></Link>
-          </div> */}
           <div className="containerOnBigscreen">
             <div className="row">
 
