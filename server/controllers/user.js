@@ -59,7 +59,7 @@ exports.forgotPasswordMail = (req, res) => {
       if (err) {
         return res.status(500).send({ err });
       }
-      const siteUrl = `${req.protocol} + "://" + ${req.get('host')}`;
+      const siteUrl = `${req.protocol}://${req.get('host')}`;
       const link = `${siteUrl}/reset-password/verify?t=${token}`;
       emails.sendPasswordRecoveryMail(foundUser.email, link);
       return res.status(200).send({ success: true, token });

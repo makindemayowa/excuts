@@ -120,7 +120,9 @@ class DateRequests extends Component {
     this.props.updateDate(id, details).then((res) => {
       toastr.success('Success, the other party will be notified')
       this.props.getDateRequest()
-    });
+    }).catch(() => {
+      return toastr.error('An error occured, please try again')
+    })
     this.setState({
       comment: ''
     });

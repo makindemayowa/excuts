@@ -18,6 +18,8 @@ import Safety from './components/common/Safety';
 import DateRequests from './components/dateRequests/DateRequests';
 import Interests from './components/events/Interests';
 import Search from './components/search/Search';
+import ResetPassword from './components/landingPage/ResetPassword';
+import UpdatePassword from './components/landingPage/UpdatePassword';
 
 export default [
   {
@@ -39,6 +41,20 @@ export default [
     path: '/signup',
     secured: false,
     component: Signup,
+    exact: true
+  },
+  {
+    name: 'resetPassword',
+    path: '/reset-password',
+    secured: false,
+    component: ResetPassword,
+    exact: true
+  },
+  {
+    name: 'updatePassword',
+    path: '/reset-password/verify',
+    secured: false,
+    component: UpdatePassword,
     exact: true
   },
   {

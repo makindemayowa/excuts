@@ -120,6 +120,10 @@
     margin-left: 86%;
     cursor: pointer;
   }
+  .profile__warning {
+    color: #ff6666;
+    text-align: center;
+  }
   .btn:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     -webkit-animation: ripple .75s ease-out;

@@ -20,7 +20,7 @@ class App extends Component {
             </div> :
             <div>
               <NavBar />
-              <Comp />
+              <Comp {...this.props}/>
               <Footer />
             </div>
         }

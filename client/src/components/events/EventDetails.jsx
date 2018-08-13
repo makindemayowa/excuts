@@ -72,7 +72,8 @@ class Events extends Component {
   }
 
   render() {
-    const { event, loading } = this.state
+    const { event, loading } = this.state;
+    const { user } = this.props;
     return (
       <div>
         <SubNav />
@@ -84,12 +85,24 @@ class Events extends Component {
                   <div className="">
                     <div className="bottom_margin" />
                     <div>
-                      <span className="showinterest">
-                        Interested?
-                      </span>
-                      <a className="interestedC" onClick={this.showInterest}>
-                        <i className="far fa-thumbs-up interested"></i>
-                      </a>
+                      {
+                        user.email !== event.created_by ?
+                          <div>
+                            <span className="showinterest">
+                              Interested?
+                            </span>
+                            <a className="interestedC" onClick={this.showInterest}>
+                              <i className="far fa-thumbs-up interested"></i>
+                            </a>
+                          </div> : 
+                          <div>
+                            <Link to={`/interests/${event._id}`}>
+                            <span className="showinterest">
+                              {event.interested.length}{' '}Interested
+                            </span>
+                            </Link>
+                          </div>
+                      }
                     </div>
                     <div className="bottom_margin" />
                     <div className="newEventContainer">
@@ -143,7 +156,7 @@ class Events extends Component {
                         </div>
                         <div className="row">
                           <div className="form-fields">
-                            <div className=" col s6 m4 l4">
+                            <div className="col s6 m4 l4">
                               Interested in
                             </div>
                             <div className="col s6 m4 l3">
@@ -151,55 +164,28 @@ class Events extends Component {
                             </div>
                           </div>
                         </div>
-                        <div className="row reduce-margin">
-                          <div className="col s12 m12 l12">
+                        <div className="row">
+                          <div className="">
                             Details
                           </div>
-                          <div className="col s12">
-                            <textarea
-                              placeholder="Describe this event in brief..."
-                              id="textarea1"
-                              className="materialize-textarea"
-                              data-length="120"
-                              name="details"
-                              maxLength="120"
-                              required
-                              value={event.details}
-                            />
+                          <div className="row__content">
+                            {event.details}
                           </div>
                         </div>
-                        <div className="row reduce-margin">
-                          <div className="col s12 m12 l12">
+                        <div className="row">
+                          <div className="">
                             Preference
                           </div>
-                          <div className="col s12">
-                            <textarea
-                              placeholder="Who would you rather go out with..."
-                              id="textarea2"
-                              className="materialize-textarea"
-                              name="preference"
-                              data-length="120"
-                              maxLength="120"
-                              required
-                              value={event.preference}
-                            />
+                          <div className="row__content">
+                            {event.preference}
                           </div>
                         </div>
-                        <div className="row reduce-margin">
-                          <div className="col s12 m12 l12">
+                        <div className="row">
+                          <div className="">
                             Extra
                           </div>
-                          <div className="col s12">
-                            <textarea
-                              placeholder="Any other thing we should know..."
-                              id="textarea3"
-                              className="materialize-textarea"
-                              name="extra"
-                              data-length="120"
-                              maxLength="120"
-                              required
-                              value={event.extra}
-                            />
+                          <div className="row__content">
+                            {event.extra}
                           </div>
                         </div>
                         <div className="bottom_margin" />
@@ -219,6 +205,7 @@ class Events extends Component {
 const mapStateToProps = state => ({
   event: state.event.event,
   loading: state.auth.loading,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps,

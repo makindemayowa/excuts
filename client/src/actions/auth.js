@@ -138,6 +138,38 @@ export function userSignUpRequest(userData) {
 }
 
 /**
+ * Request to the API to reset users password
+ *
+ * @export
+ * @param {object} userData
+ * @returns {object} dispatch object
+ */
+export function resetPasswordRequest(email) {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.post('/api/reset-password', email).then((res) => {
+      dispatch(endAjax());
+    });
+  }
+}
+
+/**
+ * Request to the API to update new password
+ *
+ * @export
+ * @param {object} userData
+ * @returns {object} dispatch object
+ */
+export function updatePasswordRequest(password) {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.post('/api/reset-password/update', password).then((res) => {
+      dispatch(endAjax());
+    });
+  }
+}
+
+/**
  * Request to the API to update an existing user
  *
  * @export

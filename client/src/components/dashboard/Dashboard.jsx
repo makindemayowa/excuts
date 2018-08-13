@@ -2,6 +2,7 @@
 /* global M */
 import React, { Component } from 'react';
 import moment from 'moment';
+import toastr from 'toastr'
 import { connect } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
 import UserCard from '../common/UserCard';
@@ -49,6 +50,8 @@ class Discover extends Component {
         const elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
       })
+    }).catch(() => {
+      return toastr.error('An error occured, please try again')
     })
   }
 

@@ -7,11 +7,11 @@ const initialState = {
   user: {},
   pagination: {},
   users: [],
-  userDetails: {},
+  userDetails: { photos: [] },
   reviews: [],
   loc: {},
   loading: false,
-  photos: ['http://res.cloudinary.com/mayowa/image/upload/v1528715613/pbsvdzf8fnboydysjenx.png'],
+  photos: [],
 };
 
 /**
@@ -91,7 +91,8 @@ export default (state = initialState, action) => {
         isLogged: false,
         isAuthenticated: false,
         success: false,
-        user: {}
+        user: {},
+        userDetails: {}
       };
     default:
       return state;

@@ -107,6 +107,8 @@ class Profile extends Component {
         M.Materialbox.init(materialboxed);
         $('input#input_text, textarea#textarea1').characterCounter();
       });
+    }).catch(() => {
+      return toastr.error('An error occured')
     })
   }
 
@@ -152,9 +154,6 @@ class Profile extends Component {
     if (this.props.user.photos.length >= 5) {
       return toastr.error('You can"t upload more than 5 pictures')
     }
-    if (!event.target.files[0].type.includes('image')) {
-      return toastr.error('You can only upload images')
-    }
     const imageFile = event.target.files[0]
     var reader = new FileReader();
     reader.readAsDataURL(imageFile);
@@ -181,6 +180,12 @@ class Profile extends Component {
         uploadInProgress: false
       })
       return toastr.success('upload successful')
+    }).catch(() => {
+      this.setState({
+        imgurl: '',
+        uploadInProgress: false
+      })
+      return toastr.error('image upload failed')
     })
     const token = localStorage.getItem('tmo_token');
     setAuthorisation(token)
@@ -190,6 +195,8 @@ class Profile extends Component {
     e.preventDefault()
     this.props.deletePictureRequest(imgurl).then((res) => {
       return toastr.success('success')
+    }).catch(() => {
+      return toastr.error('request failed, please try again.')
     })
   }
 
@@ -200,12 +207,14 @@ class Profile extends Component {
     }
     this.props.updateUserDetails(dp).then((res) => {
       return toastr.success('success')
+    }).catch(() => {
+      return toastr.error('request failed, please try again.')
     })
   }
 
   _crop() {
     this.setState({
-      myCroppedFile: this.refs.cropper.getCroppedCanvas().toDataURL(),
+      myCroppedFile: this.refs.cropper.getCroppedCanvas({ maxWidth: 400, maxHeight: 400 }).toDataURL(),
     });
   }
 
@@ -269,11 +278,14 @@ class Profile extends Component {
       this.setState({
         success: true,
       });
+    }).catch(() => {
+      return toastr.error('request failed, please try again.')
     })
   }
 
   render() {
     const { imageUrls, imgurl, src, loading, uploadInProgress } = this.state;
+    const { user } = this.props;
     if (this.state.success) {
       return <Redirect to="/publicprofile" />;
     }
@@ -355,15 +367,20 @@ class Profile extends Component {
                     <div className="col s12 m6 l6 txt-bs">
                       <p className="img-txt">Upload images for your photos section and try to mix different photo styles <br />
                         Please try to upload high resolution images
-                </p>
+                      </p>
                       <p className="warning-text">
                         ***We’re not asking you to put on your Sunday best; just try to keep it classy and appropriate for public consumption.
                         No nudity, no sexually explicit content, no sex toys.
                         Photos that violate these guidelines may be deleted, and the most severe cases may result in account removal.***
-              </p>
+                      </p>
                     </div>
                   </div>
                   <div className="new_uploads">
+                    <div className="row">
+                      {
+                        user.photos.length && !user.profilePhoto &&
+                        <div className="profile__warning">Please upload and set your profile picture</div>}
+                    </div>
                     <div className="row">
                       {
                         imageUrls.map(url =>
@@ -520,8 +537,8 @@ class Profile extends Component {
                           />
                           <span>Make Public</span>
                           {!this.state.public &&
-                          <div>
-                            Only owners of events you're interested in can see your phone number.
+                            <div>
+                              Only owners of events you're interested in can see your phone number.
                           </div>}
                         </label>
                       </span>

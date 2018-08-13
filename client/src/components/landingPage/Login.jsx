@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import toastr from 'toastr';
 import { userLoginRequest } from '../../actions/auth';
 
@@ -80,13 +80,18 @@ class Login extends Component {
               <label htmlFor="loginPassword">Password</label>
             </div>
             <button
-              className="btn waves-effect waves-light col s12"
+              className="btn waves-effect waves-light col s12 bottom_margin"
               type="submit"
               name="action"
             >
               Login
             <i className="material-icons right">send</i>
             </button>
+            <div className="center">
+              <Link to="/reset-password">
+                forgot password?
+              </Link>
+            </div>
           </form>
         </div>
       </div>
