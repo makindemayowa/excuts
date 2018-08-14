@@ -121,6 +121,27 @@ export function userLoginRequest(userData) {
 }
 
 /**
+ * Request to the API to login a social user
+ *
+ * @export
+ * @param {any} userData The details of the user to be logged in
+ * @returns {object} dispatch object
+ */
+export function socialUserLoginRequest(userData) {
+  return dispatch => {
+    dispatch(ajaxInProcess());
+    return axios.post('/api/social/login', userData).then((res) => {
+      const token = res.data.jsonToken;
+      localStorage.setItem('tmo_token', token);
+      const loggedInUser = jwtDecode(token).userDetails;
+      setAuthorisation(token)
+      dispatch(endAjax());
+      dispatch(setUser(loggedInUser, true));
+    });
+  }
+}
+
+/**
  * Request to the API to create a new user
  *
  * @export

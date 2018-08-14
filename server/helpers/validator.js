@@ -5,6 +5,14 @@ module.exports = {
     email: Joi.string().email(),
     password: Joi.string().required(),
   }),
+  socialLogin: Joi.object({
+    email: Joi.string().email(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    profilePhoto: Joi.string().required(),
+    photos: Joi.array().required(),
+    loc: Joi.object(),
+  }),
   createUser: Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),

@@ -113,11 +113,11 @@ class Events extends Component {
                                 value={this.state.title}
                                 onChange={this.onChange}
                               />
-                              <label for="title">Title</label>
+                              <label htmlFor="title">Title</label>
                             </div>
                           </div>
                           <div className="row push-up">
-                            <div class="input-field col s12">
+                            <div className="input-field col s12">
                               <input
                                 name="location"
                                 type="text"
@@ -125,11 +125,11 @@ class Events extends Component {
                                 value={this.state.location}
                                 onChange={this.onChange}
                               />
-                              <label for="location">Location</label>
+                              <label htmlFor="location">Location</label>
                             </div>
                           </div>
                           <div className="row push-up">
-                            <div class="input-field col s12">
+                            <div className="input-field col s12">
                               <input
                                 name="state"
                                 type="text"
@@ -138,11 +138,11 @@ class Events extends Component {
                                 onChange={this.onChange}
                                 value={this.state.state}
                               />
-                              <label for="state">State</label>
+                              <label htmlFor="state">State</label>
                             </div>
                           </div>
                           <div className="row push-up">
-                            <div class="input-field col s12">
+                            <div className="input-field col s12">
                               <input
                                 name="city"
                                 type="text"
@@ -151,7 +151,7 @@ class Events extends Component {
                                 onChange={this.onChange}
                                 value={this.state.city}
                               />
-                              <label for="city">City</label>
+                              <label htmlFor="city">City</label>
                             </div>
                           </div>
                           <div className="row">
@@ -169,7 +169,7 @@ class Events extends Component {
                           <div className="row">
                             <div className="col s12 m4 l4">
                               Date
-                    </div>
+                            </div>
                             <div className="col s12 m4 l4">
                               <input onChange={this.onChange} type="date" name="eventDate" />
                             </div>
@@ -177,7 +177,7 @@ class Events extends Component {
                           <div className="row reduce-margin">
                             <div className="col s12 m12 l12">
                               Details
-                    </div>
+                            </div>
                             <div className="col s12">
                               <textarea
                                 placeholder="Describe this event in brief..."
@@ -195,7 +195,7 @@ class Events extends Component {
                           <div className="row reduce-margin">
                             <div className="col s12 m12 l12">
                               Preference
-                        </div>
+                            </div>
                             <div className="col s12">
                               <textarea
                                 placeholder="Who would you rather go out with..."
@@ -213,7 +213,7 @@ class Events extends Component {
                           <div className="row reduce-margin">
                             <div className="col s12 m12 l12">
                               Extra
-                        </div>
+                            </div>
                             <div className="col s12">
                               <textarea
                                 placeholder="Any other thing we should know..."

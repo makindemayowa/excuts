@@ -21,6 +21,11 @@ module.exports = (app) => {
     validator.body(dataValidators.userLogin),
     user.login
   );
+
+  app.post('/api/social/login',
+  validator.body(dataValidators.socialLogin),
+  user.updateOrCreateSocialUser
+  );
   app.post('/api/reset-password',
     user.forgotPasswordMail
   );

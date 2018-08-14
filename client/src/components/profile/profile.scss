@@ -30,6 +30,18 @@
   .img__card {
     max-height: 228px;
   }
+  .img__wrap {
+    .profile-image {
+      max-height: 207px;
+    }
+  
+    @media only screen and (max-width: 530px) {
+      .profile-image {
+        max-height: 111px;
+      }
+    } 
+  }
+
   .upload_card {
     cursor: pointer;
     max-width: 300px;

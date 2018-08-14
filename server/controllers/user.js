@@ -38,6 +38,79 @@ exports.create = (req, res) => {
   });
 };
 
+exports.updateOrCreateSocialUser = (req, res) => {
+  User.findOne({
+    email: req.body.email,
+  }).then((existingUser) => {
+    if (!existingUser) {
+      const user = new User({
+        email: req.body.email,
+        photos: req.body.photos,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        profilePhoto: req.body.profilePhoto,
+        loc: req.body.loc,
+        status: 'verified'
+      });
+      return user.save((err) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        const userDetails = {
+          email: user.email,
+          id: user._id,
+          role: user.role,
+          firstName: user.firstName,
+          status: user.status,
+          location: user.loc,
+          profilePhoto: user.profilePhoto,
+        };
+        const jsonToken = helper.createToken({ userDetails }, '24h');
+        return res.status(200).send({ message: 'login successful', jsonToken });
+      });
+    }
+    if (
+      !existingUser.profilePhoto ||
+      !existingUser.firstName ||
+      !existingUser.lastName ||
+      !existingUser.photos.length
+    ) {
+      existingUser.profilePhoto = existingUser.profilePhoto || req.body.photo;
+      existingUser.firstName = existingUser.firstName || req.body.firstName;
+      existingUser.lastName = existingUser.lastName || req.body.lastName;
+      existingUser.photos =
+        existingUser.photos.length ? existingUser.photos : req.body.photo;
+      return existingUser.save((err, updatedUser) => {
+        if (err) {
+          return res.status(500).send({ err });
+        }
+        const userDetails = {
+          email: updatedUser.email,
+          id: updatedUser._id,
+          role: updatedUser.role,
+          firstName: updatedUser.firstName,
+          status: updatedUser.status,
+          location: updatedUser.loc,
+          profilePhoto: updatedUser.profilePhoto,
+        };
+        const jsonToken = helper.createToken({ userDetails }, '24h');
+        return res.status(200).send({ message: 'login successful', jsonToken });
+      });
+    }
+    const userDetails = {
+      email: existingUser.email,
+      id: existingUser._id,
+      role: existingUser.role,
+      firstName: existingUser.firstName,
+      status: existingUser.status,
+      location: existingUser.loc,
+      profilePhoto: existingUser.profilePhoto,
+    };
+    const jsonToken = helper.createToken({ userDetails }, '24h');
+    return res.status(200).send({ message: 'login successful', jsonToken });
+  });
+};
+
 exports.forgotPasswordMail = (req, res) => {
   if (!req.body.email) {
     return res.status(400).json({ message: 'Please input Email' });
