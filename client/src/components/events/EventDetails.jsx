@@ -54,6 +54,9 @@ class Events extends Component {
   }
 
   showInterest() {
+    if (!this.props.user.here_to && !this.props.user.profilePhoto) {
+      return toastr.error('please complete your profile')
+    }
     this.setState({
       interested: !this.state.interested
     }, () => {

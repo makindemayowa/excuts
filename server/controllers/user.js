@@ -59,7 +59,7 @@ exports.updateOrCreateSocialUser = (req, res) => {
         const userDetails = {
           email: user.email,
           id: user._id,
-          role: user.role,
+          here_to: user.here_to,
           firstName: user.firstName,
           status: user.status,
           location: user.loc,
@@ -87,7 +87,7 @@ exports.updateOrCreateSocialUser = (req, res) => {
         const userDetails = {
           email: updatedUser.email,
           id: updatedUser._id,
-          role: updatedUser.role,
+          here_to: updatedUser.here_to,
           firstName: updatedUser.firstName,
           status: updatedUser.status,
           location: updatedUser.loc,
@@ -100,7 +100,7 @@ exports.updateOrCreateSocialUser = (req, res) => {
     const userDetails = {
       email: existingUser.email,
       id: existingUser._id,
-      role: existingUser.role,
+      here_to: existingUser.here_to,
       firstName: existingUser.firstName,
       status: existingUser.status,
       location: existingUser.loc,
@@ -178,7 +178,7 @@ exports.verifyToken = (req, res) => {
       if (err) return res.status(500).send({ err });
       const userDetails = {
         email: updateduser.email,
-        role: updateduser.role,
+        here_to: updateduser.here_to,
         firstName: user.firstName,
         id: updateduser._id,
         status: updateduser.status,
@@ -208,7 +208,7 @@ exports.login = (req, res) => {
     const userDetails = {
       email: user.email,
       id: user._id,
-      role: user.role,
+      here_to: user.here_to,
       firstName: user.firstName,
       status: user.status,
       location: user.loc,
