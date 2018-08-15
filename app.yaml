@@ -1,0 +1,8 @@
+runtime: nodejs8
+env_variables:
+  JWT_SECRET_KEY: "mankind"
+  MAILGUN_API_KEY: "key-696537b9c51104e877a86451ccbb9d45"
+  MAILGUN_SENDERS_NAME: "excuts"
+  MAILGUN_DOMAIN_NAME: "sandboxddb6b74be0884e899f796200f9c84688.mailgun.org"
+  MONGOHQ_URL: "mongodb://mayowamakinde:oreoluwa53@ds163630.mlab.com:63630/takemeout"
+  MAILGUN_SENDERS_EMAIL: "mayowamakinde53@gmail.com"
