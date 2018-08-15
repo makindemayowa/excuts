@@ -57,10 +57,6 @@ const UserSchema = new Schema({
   status: String,
   verifyingToken: String,
   passwordResetToken: String,
-  role: {
-    type: String,
-    default: 'availableForRent'
-  },
   rates: {
     type: Object,
   },

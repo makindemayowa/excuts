@@ -32,19 +32,23 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    const elems = document.querySelectorAll('select');
-    M.FormSelect.init(elems);
-    $('textarea#textarea1, textarea#textarea2, textarea#textarea3')
-      .characterCounter();
     this.props.getUserDetails().then(() => {
       this.setState({
         user: this.props.user,
         loading: false
       });
+      const elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+      $('textarea#textarea1, textarea#textarea2, textarea#textarea3')
+        .characterCounter();
     }).catch(() => {
       this.setState({
         loading: false
       });
+      const elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+      $('textarea#textarea1, textarea#textarea2, textarea#textarea3')
+        .characterCounter();
     })
   }
 

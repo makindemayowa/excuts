@@ -145,6 +145,9 @@ class ProfileById extends Component {
   }
 
   requestDate() {
+    if (!this.props.currentUser.here_to && !this.props.currentUser.profilePhoto) {
+      return toastr.error('please complete your profile')
+    }
     const dateBody = {
       date: this.state.date,
       description: this.state.description,
