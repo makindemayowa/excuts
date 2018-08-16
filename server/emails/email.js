@@ -36,14 +36,14 @@ module.exports = {
     const verficationHtml = ejs.render(verifyAccountHtml, {
       link
     });
-    const subject = 'Take Me Out Email Verification';
+    const subject = 'eXcuts Email Verification';
     sendMail(email, subject, verficationHtml);
   },
   sendPasswordRecoveryMail(email, link) {
     const resetHtml = ejs.render(resetPasswordHtml, {
       link
     });
-    const subject = 'Take Me Out password reset instructions';
+    const subject = 'eXcuts password reset instructions';
     sendMail(email, subject, resetHtml);
   },
 };
