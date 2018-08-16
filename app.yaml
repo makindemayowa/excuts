@@ -5,5 +5,4 @@ env_variables:
   MAILGUN_SENDERS_NAME: "excuts"
   MAILGUN_DOMAIN_NAME: "excuts.com"
   MONGOHQ_URL: "mongodb://mayowamakinde:oreoluwa53@ds163630.mlab.com:63630/takemeout"
-  MAILGUN_SENDERS_EMAIL: "excuts2018@gmail.com"
-  
+  MAILGUN_SENDERS_EMAIL: "mayowamakinde53@gmail.com"
