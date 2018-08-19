@@ -21,15 +21,7 @@ class Signup extends Component {
   }
 
   componentDidMount() {
-    window.navigator.geolocation.getCurrentPosition((pos) => {
-      this.long = parseFloat(pos.coords.longitude);
-      this.lat = parseFloat(pos.coords.latitude);
-      const locData = {
-        long: parseFloat(pos.coords.longitude),
-        lat: parseFloat(pos.coords.latitude)
-      }
-      storage.setItem('locdata', locData)
-    });
+
   }
 
   onChange(e) {
@@ -40,6 +32,7 @@ class Signup extends Component {
 
   handleSocialLogin = (event) => {
     const user = event._profile;
+    const locData = storage.getItem('locdata')
     const userdata = {
       email: user.email,
       firstName: user.firstName,
@@ -48,14 +41,13 @@ class Signup extends Component {
       photos: [user.profilePicURL],
       loc: {
         type: "Point",
-        coordinates: [this.long, this.lat]
+        coordinates: [locData.long, locData.lat]
       }
     };
     this.props
       .socialUserLoginRequest(userdata)
       .then(() => {
         toastr.success('registration successful')
-        this.setState({ success: this.props.success })
       })
       .catch((errorData) => {
         toastr.error(errorData.response.data.message)
@@ -63,8 +55,16 @@ class Signup extends Component {
   }
 
   handleSocialLoginFailure = (err) => {
-    console.error(err)
-    toastr.error(err)
+    if (err.message) {
+      if (err.message.indexOf('popup_closed_by_user') > -1) {
+        return window.location.reload()
+      }
+    }
+    if (err.indexOf('SDK not loaded') > -1) {
+      return toastr.error('please try again')
+    }
+    console.log(err)
+    toastr.error('An error occurred')
   }
 
   submitSignup(e) {
@@ -72,20 +72,20 @@ class Signup extends Component {
     if (this.state.password !== this.state.confirmPassword) {
       return toastr.error('passwords do not match')
     }
+    const locData = storage.getItem('locdata')
     const userdata = {
       email: this.state.email,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword,
       loc: {
         type: "Point",
-        coordinates: [this.long, this.lat]
+        coordinates: [locData.long, locData.lat]
       }
     };
     this.props
       .userSignUpRequest(userdata)
       .then(() => {
         toastr.success('signup successful')
-        this.setState({ success: this.props.success })
       })
       .catch((errorData) => {
         toastr.error(errorData.response.data.message)
@@ -93,7 +93,7 @@ class Signup extends Component {
   }
 
   render() {
-    const { success } = this.state;
+    const { success } = this.props;
     if (success) {
       return <Redirect to="/dashboard" />
     }
@@ -180,27 +180,6 @@ class Signup extends Component {
                 </SocialButton>
               </div>
             </div>
-            {/* <div className="social_login_container">
-              <div className="row">
-                <a
-                  className="waves-effect waves-light btn facebook social-button"
-                >
-                  <i
-                    className="fab fa-facebook-f fa-lg newLogo left"
-                    aria-hidden="true"
-                  />
-                  SIGN UP WITH FACEBOOK
-                </a>
-              </div>
-              <div className="row">
-                <a
-                  className="waves-effect waves-light btn google social-button"
-                >
-                  <i className="fab fa-google fa-lg newLogo left" aria-hidden="true" />
-                  SIGN UP WITH GOOGLE
-                </a>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
