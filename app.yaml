@@ -6,8 +6,8 @@ env_variables:
   MAILGUN_DOMAIN_NAME: "excuts.com"
   MONGOHQ_URL: "mongodb://mayowamakinde:oreoluwa53@ds163630.mlab.com:63630/takemeout"
   MAILGUN_SENDERS_EMAIL: "excuts2018@gmail.com"
-handlers:
-  - url: /.*
-    secure: always
-    redirect_http_response_code: 301
-    script: auto
+# handlers:
+#   - url: /.*
+#     secure: always
+#     redirect_http_response_code: 301
+#     script: auto
