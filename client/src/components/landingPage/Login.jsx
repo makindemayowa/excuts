@@ -14,28 +14,30 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      success: false,
-      isLogged: false,
-      loading: false,
+      loading: true,
     }
+    this.nodes = {}
     this.submitLogin = this.submitLogin.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ isLogged: this.props.isLogged });
-    window.navigator.geolocation.getCurrentPosition((pos) => {
-      this.long = parseFloat(pos.coords.longitude);
-      this.lat = parseFloat(pos.coords.latitude);
-      const locData = {
-        long: parseFloat(pos.coords.longitude),
-        lat: parseFloat(pos.coords.latitude)
-      }
-      storage.setItem('locdata', locData)
-    });
+    this.setState({
+      loading: false
+    })
+  }
+
+  setNodeRef(provider, node) {
+    if (node) {
+      this.nodes[provider] = node
+    }
   }
 
   handleSocialLogin = (event) => {
+    this.setState({
+      loading: true
+    })
+    const locData = storage.getItem('locdata')
     const user = event._profile;
     const userdata = {
       email: user.email,
@@ -45,22 +47,36 @@ class Login extends Component {
       photos: [user.profilePicURL],
       loc: {
         type: "Point",
-        coordinates: [this.long, this.lat]
+        coordinates: [locData.long, locData.lat]
       }
     };
     this.props
       .socialUserLoginRequest(userdata)
       .then(() => {
+        this.setState({
+          loading: false
+        })
         toastr.success('login successful')
-        this.setState({ isLogged: true });
       })
       .catch((errorData) => {
+        this.setState({
+          loading: false
+        })
         toastr.error(errorData.response.data.message)
       });
   }
 
   handleSocialLoginFailure = (err) => {
-    toastr.error(err)
+    if (err.message) {
+      if (err.message.indexOf('popup_closed_by_user') > -1) {
+        return window.location.reload()
+      }
+    }
+    if (err.indexOf('SDK not loaded') > -1) {
+      return toastr.error('please try again')
+    }
+    console.log(err)
+    toastr.error('An error occurred')
   }
 
   onChange(e) {
@@ -71,6 +87,9 @@ class Login extends Component {
 
   submitLogin(e) {
     e.preventDefault();
+    this.setState({
+      loading: true
+    })
     const userdata = {
       email: this.state.email,
       password: this.state.password,
@@ -78,16 +97,21 @@ class Login extends Component {
     this.props
       .userLoginRequest(userdata)
       .then(() => {
+        this.setState({
+          loading: false
+        })
         toastr.success('login successful')
-        this.setState({ isLogged: true });
       })
       .catch((errorData) => {
+        this.setState({
+          loading: false
+        })
         toastr.error(errorData.response.data.message)
       });
   }
 
   render() {
-    const { isLogged } = this.state;
+    const { isLogged } = this.props;
     if (isLogged) {
       return <Redirect to="/dashboard" />
     }
@@ -123,6 +147,7 @@ class Login extends Component {
                 className="btn waves-effect waves-light col s12 bottom_margin"
                 type="submit"
                 name="action"
+                disabled={this.state.loading}
               >
                 Sign in
             <i className="material-icons right">send</i>
@@ -154,6 +179,8 @@ class Login extends Component {
                   onLoginSuccess={this.handleSocialLogin}
                   onLoginFailure={this.handleSocialLoginFailure}
                   className="waves-effect waves-light btn google social-button"
+                  getInstance={this.setNodeRef.bind(this, 'google')}
+                  key={'google'}
                 >
                   <i className="fab fa-google fa-lg newLogo left" aria-hidden="true" />
                   SIGN IN WITH GOOGLE
@@ -174,7 +201,6 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  success: state.auth.success,
   isLogged: state.auth.isLogged,
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,

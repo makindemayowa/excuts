@@ -75,11 +75,13 @@ exports.updateOrCreateSocialUser = (req, res) => {
       !existingUser.lastName ||
       !existingUser.photos.length
     ) {
-      existingUser.profilePhoto = existingUser.profilePhoto || req.body.photo;
+      existingUser.profilePhoto = existingUser.profilePhoto ||
+        req.body.profilePhoto;
+      existingUser.status = 'verified';
       existingUser.firstName = existingUser.firstName || req.body.firstName;
       existingUser.lastName = existingUser.lastName || req.body.lastName;
       existingUser.photos =
-        existingUser.photos.length ? existingUser.photos : req.body.photo;
+        existingUser.photos.length ? existingUser.photos : req.body.photos;
       return existingUser.save((err, updatedUser) => {
         if (err) {
           return res.status(500).send({ err });
@@ -200,6 +202,10 @@ exports.login = (req, res) => {
     if (!user) {
       return res.status(404)
         .send({ message: 'email or password is incorrect' });
+    }
+    if (!user.password) {
+      return res.status(400)
+        .send({ message: 'incorrect password' });
     }
     if (!user.comparePassword(req.body.password)) {
       return res.status(400)

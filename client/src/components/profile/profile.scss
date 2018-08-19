@@ -31,8 +31,10 @@
     max-height: 228px;
   }
   .img__wrap {
+    max-height: 207px;
+    overflow: hidden;
     .profile-image {
-      max-height: 207px;
+      // max-height: 207px;
     }
   
     @media only screen and (max-width: 530px) {

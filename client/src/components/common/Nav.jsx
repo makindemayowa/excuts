@@ -30,10 +30,19 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
+    this.long = 3.3766358;
+    this.lat = 6.5002957;
+    let locData = {
+      long: 3.3766358,
+      lat: 6.5002957
+    }
+    storage.setItem('locdata', locData)
+    // This takes too long to load.
+    // I'll probably have to update the users loaction whenever it completes
     window.navigator.geolocation.getCurrentPosition((pos) => {
       this.long = parseFloat(pos.coords.longitude);
       this.lat = parseFloat(pos.coords.latitude);
-      const locData = {
+      locData = {
         long: parseFloat(pos.coords.longitude),
         lat: parseFloat(pos.coords.latitude)
       }
