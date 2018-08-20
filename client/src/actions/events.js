@@ -37,11 +37,25 @@ export function createReviewSuccess(reviews) {
  * @param {object} event
  * @returns {object} type payload
  */
-export function getAllSuccess(events, pagination) {
+export function getAllEventSuccess(events, pagination) {
   return {
     type: actionTypes.GET_ALL_EVENT_SUCCESS,
     events: events,
     pagination: pagination,
+  };
+}
+
+function searchAllEventSuccess(events, pagination) {
+  return {
+    type: actionTypes.SEARCH_ALL_EVENT_SUCCESS,
+    events: events,
+    pagination: pagination,
+  };
+}
+
+function clearEvent() {
+  return {
+    type: actionTypes.CLEAR_EVENT,
   };
 }
 
@@ -113,13 +127,22 @@ export function getAllEventRequest(query) {
   if (query === 'mine') {
     url = `/api/event/?q=${query}`
   } else {
-    url = '/api/event'
+    if (query) {
+      url = `/api/event/?page=${query}`
+    } else {
+      url = '/api/event'
+    }
   }
-  return dispatch => axios.get(url).then((res) => {
-    const events = res.data.events;
-    const pagination = res.data.pagination;
-    dispatch(getAllSuccess(events, pagination));
-  });
+  return (dispatch) => {
+    if(!query) {
+      dispatch(clearEvent())
+    }
+   return axios.get(url).then((res) => {
+      const events = res.data.events;
+      const pagination = res.data.pagination;
+      dispatch(getAllEventSuccess(events, pagination));
+    });
+  }
 }
 
 /**
@@ -155,7 +178,7 @@ export function getEventInterests(id) {
  * @returns {object} dispatch object
  */
 export function postReviewRequest(id, review) {
-  return dispatch => axios.post(`/api/user/${id}/review`, {review}).then((res) => {
+  return dispatch => axios.post(`/api/user/${id}/review`, { review }).then((res) => {
     // const reviews = res.data.updatedUser.reviews;
     // console.log('response from API', reviews)
     // dispatch(createReviewSuccess(reviews));
@@ -192,6 +215,6 @@ export function searchEventRequest(queryParam) {
   return dispatch => axios.get(url).then((res) => {
     const events = res.data.events;
     const pagination = res.data.pagination;
-    dispatch(getAllSuccess(events, pagination));
+    dispatch(searchAllEventSuccess(events, pagination));
   });
 }

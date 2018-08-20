@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import imgUrl from '../../images/datenight.jpg';
 
-const imgUrl = "https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_1280.jpg"
 export default props => {
   const currentId = `${props.id}`;
   return (

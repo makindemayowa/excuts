@@ -26,12 +26,24 @@ export default (state = initialState, action) => {
         ...state,
         event: action.event,
       };
+    case actionTypes.CLEAR_EVENT:
+      return {
+        ...state,
+        events: [],
+        pagination: {}
+      };
     case actionTypes.GET_ALL_INTERESTS_SUCCESS:
       return {
         ...state,
         interested: action.interests,
       };
     case actionTypes.GET_ALL_EVENT_SUCCESS:
+      return {
+        ...state,
+        events: [...state.events, ...action.events],
+        pagination: action.pagination,
+      };
+    case actionTypes.SEARCH_ALL_EVENT_SUCCESS:
       return {
         ...state,
         events: action.events,

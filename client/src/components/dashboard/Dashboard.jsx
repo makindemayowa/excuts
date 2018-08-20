@@ -25,20 +25,15 @@ class Discover extends Component {
       value: { min: 2, max: 10 },
       maxDistance: 5,
       maxAge: 40,
+      loadMore: false,
       sex: 'female',
       here_to: 'here_for_fun',
-      loadingText: '',
       currentPage: 1,
     };
     this.searchUsers = this.searchUsers.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.changeEvent = this.changeEvent.bind(this);
     this.loadItems = this.loadItems.bind(this);
-    // window.onscroll = () => {
-    //   if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-    //     this.loadItems()
-    //   }
-    // };
   }
 
   componentDidMount() {
@@ -62,25 +57,6 @@ class Discover extends Component {
       this.lat = prevLat;
       this.getUsers(this.long, this.lat)
     }
-    
-    // if (!this.props.users.length) {
-    //   const locData = storage.getItem('locdata')
-    //   if (locData) {
-    //     this.long = locData.long;
-    //     this.lat = locData.lat;
-    //     this.getUsers(this.long, this.lat)
-    //   } else {
-    //     this.long = prevLong;
-    //     this.lat = prevLat;
-    //     this.getUsers(this.long, this.lat)
-    //   }
-    // } else {
-    //   let currentPage = Number(this.props.pagination.currentPage)
-    //   this.setState({
-    //     currentPage: currentPage,
-    //     loading: false
-    //   })
-    // }
   }
 
   getUsers(long, lat, page) {
@@ -100,7 +76,7 @@ class Discover extends Component {
 
   searchUsers() {
     this.setState({
-      loading: true
+      loading: true,
     })
     const searchParams = {
       maxDistance: this.state.maxDistance,
@@ -111,16 +87,17 @@ class Discover extends Component {
     this.props.searchAllUsers(this.long, this.lat, searchParams).then((res) => {
       this.setState({
         loading: false,
-        currentPage: 1
       }, () => {
         const materialboxed = document.querySelectorAll('.materialboxed');
         M.Materialbox.init(materialboxed);
         const elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
+          this.setState({
+            currentPage: 1
+          })
       })
     }).catch(() => {
       this.setState({
-        currentPage: 1,
         loading: false,
       })
       const materialboxed = document.querySelectorAll('.materialboxed');
@@ -143,8 +120,15 @@ class Discover extends Component {
       document.getElementById("loadMore").style.display = 'inline-block'
       this.setState({
         currentPage: page += 1,
+        loadMore: true
       }, () => {
-        this.getUsers(this.long, this.lat, this.state.currentPage)
+        const newUsers = Promise.resolve(
+          this.getUsers(this.long, this.lat, this.state.currentPage))
+        newUsers.then(() => {
+          this.setState({
+            loadMore: false
+          })
+        })
       });
     }
   }
@@ -162,8 +146,8 @@ class Discover extends Component {
   }
 
   render() {
-    const { loading, here_to, sex, currentPage } = this.state
-    if (this.props.pagination.pages === currentPage) {
+    const { loading, loadMore, here_to, sex, currentPage } = this.state
+    if (this.props.pagination.pages === currentPage || this.props.pagination.pages === 0) {
       const loadButton = document.getElementById("loadMore");
       if (loadButton) {
         loadButton.style.display = 'none'
@@ -183,10 +167,10 @@ class Discover extends Component {
                       <div className="row">
                         {
                           loading ? <Loader /> :
-                            <div>
+                            <div className="row">
                               {
                                 this.props.users.length ?
-                                  <div>
+                                  <div className="row">
                                     {
                                       this.props.users.map(user => {
                                         if (user.profilePhoto && user.occupation && user.state) {
@@ -199,18 +183,17 @@ class Discover extends Component {
                                     }
                                   </div> : <NotFound type="user" />
                               }
+                              <div className="row center">
+                                <button
+                                  id="loadMore"
+                                  onClick={this.loadItems}
+                                  className="waves-effect waves-light btn"
+                                >
+                                  {loadMore ? 'loading...' : 'Load More'}
+                                </button>
+                              </div>
                             </div>
                         }
-                      </div>
-                      <div className="row center">
-                        {this.state.loadingText}
-                        <button
-                          id="loadMore"
-                          onClick={this.loadItems}
-                          className="waves-effect waves-light btn"
-                        >
-                          Load More
-                        </button>
                       </div>
                     </div>
                   }
