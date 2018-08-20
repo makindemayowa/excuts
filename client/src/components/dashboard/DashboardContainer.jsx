@@ -14,17 +14,17 @@ class App extends Component {
       status: ''
     };
   }
-  componentDidMount() {
-    navigator.permissions.query({
-      name: 'geolocation'
-    }).then((result) => {
-      if (result.state === 'denied') {
-        this.setState({
-          status: 'denied'
-        });
-      }
-    });
-  }
+  // componentDidMount() {
+  //   navigator.permissions.query({
+  //     name: 'geolocation'
+  //   }).then((result) => {
+  //     if (result.state === 'denied') {
+  //       this.setState({
+  //         status: 'denied'
+  //       });
+  //     }
+  //   });
+  // }
   render() {
     const Comp = this.props.Comp
     return (
@@ -38,13 +38,13 @@ class App extends Component {
             </div> :
             <div>
               <NavBar />
-              <div className="navigationError">
+              {/* <div className="navigationError">
                 {
                   this.state.status === 'denied' && <div>
                     Location access denied, please enable location access
                 </div>
                 }
-              </div>
+              </div> */}
               <Comp {...this.props} />
               <Footer />
             </div>
