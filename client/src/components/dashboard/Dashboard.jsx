@@ -26,18 +26,61 @@ class Discover extends Component {
       maxDistance: 5,
       maxAge: 40,
       sex: 'female',
-      here_to: 'here_to_hire',
+      here_to: 'here_for_fun',
       loadingText: '',
       currentPage: 1,
     };
     this.searchUsers = this.searchUsers.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.changeEvent = this.changeEvent.bind(this);
-    window.onscroll = () => {
-      if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-        this.loadItems()
-      }
-    };
+    this.loadItems = this.loadItems.bind(this);
+    // window.onscroll = () => {
+    //   if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+    //     this.loadItems()
+    //   }
+    // };
+  }
+
+  componentDidMount() {
+    const materialboxed = document.querySelectorAll('.materialboxed');
+    M.Materialbox.init(materialboxed);
+    const elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+    this.setState({
+      loading: true
+    })
+    const prevLong = this.props.user.location.coordinates[0];
+    const prevLat = this.props.user.location.coordinates[1];
+
+    const locData = storage.getItem('locdata')
+    if (locData) {
+      this.long = locData.long;
+      this.lat = locData.lat;
+      this.getUsers(this.long, this.lat)
+    } else {
+      this.long = prevLong;
+      this.lat = prevLat;
+      this.getUsers(this.long, this.lat)
+    }
+    
+    // if (!this.props.users.length) {
+    //   const locData = storage.getItem('locdata')
+    //   if (locData) {
+    //     this.long = locData.long;
+    //     this.lat = locData.lat;
+    //     this.getUsers(this.long, this.lat)
+    //   } else {
+    //     this.long = prevLong;
+    //     this.lat = prevLat;
+    //     this.getUsers(this.long, this.lat)
+    //   }
+    // } else {
+    //   let currentPage = Number(this.props.pagination.currentPage)
+    //   this.setState({
+    //     currentPage: currentPage,
+    //     loading: false
+    //   })
+    // }
   }
 
   getUsers(long, lat, page) {
@@ -68,10 +111,7 @@ class Discover extends Component {
     this.props.searchAllUsers(this.long, this.lat, searchParams).then((res) => {
       this.setState({
         loading: false,
-        maxDistance: 5,
-        maxAge: 40,
-        sex: 'female',
-        here_to: 'here_to_hire',
+        currentPage: 1
       }, () => {
         const materialboxed = document.querySelectorAll('.materialboxed');
         M.Materialbox.init(materialboxed);
@@ -80,48 +120,14 @@ class Discover extends Component {
       })
     }).catch(() => {
       this.setState({
+        currentPage: 1,
         loading: false,
-        maxDistance: 5,
-        maxAge: 40,
-        sex: 'female',
-        here_to: 'here_to_hire',
       })
       const materialboxed = document.querySelectorAll('.materialboxed');
       M.Materialbox.init(materialboxed);
       const elems = document.querySelectorAll('select');
       M.FormSelect.init(elems);
     })
-  }
-
-  componentDidMount() {
-    const materialboxed = document.querySelectorAll('.materialboxed');
-    M.Materialbox.init(materialboxed);
-    const elems = document.querySelectorAll('select');
-    M.FormSelect.init(elems);
-    this.setState({
-      loading: true
-    })
-    // document.getElementsByTagName("footer")[0].style.display = 'none'
-    const prevLong = this.props.user.location.coordinates[0];
-    const prevLat = this.props.user.location.coordinates[1];
-    if (!this.props.users.length) {
-      const locData = storage.getItem('locdata')
-      if (locData) {
-        this.long = locData.long;
-        this.lat = locData.lat;
-        this.getUsers(this.long, this.lat)
-      } else {
-        this.long = prevLong;
-        this.lat = prevLat;
-        this.getUsers(this.long, this.lat)
-      }
-    } else {
-      let currentPage = Number(this.props.pagination.currentPage)
-      this.setState({
-        currentPage: currentPage,
-        loading: false
-      })
-    }
   }
 
   loadItems() {
@@ -132,14 +138,11 @@ class Discover extends Component {
     }
     let page = this.state.currentPage
     if (this.props.pagination.pages === page) {
-      this.setState({
-        loadingText: ''
-      });
-      // document.getElementsByTagName("footer")[0].style.display = 'block'
+      document.getElementById("loadMore").style.display = 'none'
     } else {
+      document.getElementById("loadMore").style.display = 'inline-block'
       this.setState({
         currentPage: page += 1,
-        loadingText: 'please wait...'
       }, () => {
         this.getUsers(this.long, this.lat, this.state.currentPage)
       });
@@ -159,7 +162,14 @@ class Discover extends Component {
   }
 
   render() {
-    const { loading } = this.state
+    const { loading, here_to, sex, currentPage } = this.state
+    if (this.props.pagination.pages === currentPage) {
+      const loadButton = document.getElementById("loadMore");
+      if (loadButton) {
+        loadButton.style.display = 'none'
+      }
+    }
+
     return (
       <div className="discover bg-3">
         <SubNav currentPage={'people'} />
@@ -170,31 +180,40 @@ class Discover extends Component {
                 <div className="row">
                   {
                     <div className="col s12 m10 l10">
-                      {
-                        loading ? <Loader /> :
-                          <div>
-                            {
-                              this.props.users.length ?
-                                <div>
-                                  {
-                                    this.props.users.map(user => {
-                                      if (user.profilePhoto && user.occupation && user.state) {
-                                        return <UserCard
-                                          key={user._id}
-                                          userInfo={user}
-                                        />
-                                      }
-                                    })
-                                  }
-                                </div> : <NotFound type="user" />
-                            }
-                          </div>
-                      }
+                      <div className="row">
+                        {
+                          loading ? <Loader /> :
+                            <div>
+                              {
+                                this.props.users.length ?
+                                  <div>
+                                    {
+                                      this.props.users.map(user => {
+                                        if (user.profilePhoto && user.occupation && user.state) {
+                                          return <UserCard
+                                            key={user._id}
+                                            userInfo={user}
+                                          />
+                                        }
+                                      })
+                                    }
+                                  </div> : <NotFound type="user" />
+                              }
+                            </div>
+                        }
+                      </div>
+                      <div className="row center">
+                        {this.state.loadingText}
+                        <button
+                          id="loadMore"
+                          onClick={this.loadItems}
+                          className="waves-effect waves-light btn"
+                        >
+                          Load More
+                        </button>
+                      </div>
                     </div>
                   }
-                  <div>
-                    {this.state.loadingText}
-                  </div>
                   {
                     <div className="col m2 l2">
                       <div className="searchForm">
@@ -202,7 +221,7 @@ class Discover extends Component {
                         <div className="flex">
                           <div className="form-fields">
                             <label>Gender</label>
-                            <select onChange={this.changeEvent} name="sex" className="size1">
+                            <select onChange={this.changeEvent} defaultValue={sex} name="sex" className="size1">
                               <option value="female">Female</option>
                               <option value="male">Male</option>
                               <option value="others">Others</option>
@@ -210,7 +229,7 @@ class Discover extends Component {
                           </div>
                           <div className="form-fields">
                             <label>Here</label>
-                            <select onChange={this.changeEvent} name="here_to" className="size1">
+                            <select onChange={this.changeEvent} defaultValue={here_to} name="here_to" className="size1">
                               <option value="here_to_hire"> To Hire</option>
                               <option value="here_for_fun">For Fun</option>
                               <option value="professsional">Professional Escort</option>

@@ -64,7 +64,7 @@ class Events extends Component {
       title: this.state.title,
       date: this.state.eventDate,
       location: this.state.location,
-      state: this.state.state,
+      state: this.state.state.toLowerCase(),
       city: this.state.city,
       details: this.state.details,
       preference: this.state.preference,

@@ -16,6 +16,12 @@ function endAjax() {
   };
 }
 
+function clearUser() {
+  return {
+    type: actionTypes.CLEAR_USERS,
+  };
+}
+
 function getAllSucess(users, pagination) {
   return {
     type: actionTypes.GET_ALL_USERS_SUCCESS,
@@ -225,6 +231,9 @@ export function getAllUsers(long, lat, page) {
   }
   return dispatch => {
     dispatch(ajaxInProcess());
+    if(!page) {
+      dispatch(clearUser());
+    }
     return axios.get(url).then((res) => {
       dispatch(endAjax());
       const pagination = res.data.pagination;
@@ -248,6 +257,7 @@ export function searchAllUsers(long, lat, searchParams) {
   const url = `/api/user/?long=${long}&lat=${lat}&maxDistance=${searchParams.maxDistance}&maxAge=${searchParams.maxAge}&here_to=${searchParams.here_to}&sex=${searchParams.sex}`
   return dispatch => {
     dispatch(ajaxInProcess());
+    dispatch(clearUser());
     return axios.get(url).then((res) => {
       dispatch(endAjax());
       const pagination = res.data.pagination;

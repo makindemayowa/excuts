@@ -19,10 +19,10 @@ class Events extends Component {
       startDate: moment(),
       events: [],
       loading: true,
-      country: countriesWithStates.countries[0].country,
+      country: countriesWithStates.countries[131].country,
       sex: 'female',
-      state: countriesWithStates.countries[0].states[0],
-      countryIndex: 0,
+      state: countriesWithStates.countries[131].states[0],
+      countryIndex: 131,
       states: []
     };
     this.onChange = this.onChange.bind(this);
@@ -195,6 +195,12 @@ class Events extends Component {
                       onChange={this.onChange}
                       className="size1"
                     >
+                      <option
+                        key="Nigeria"
+                        value="Nigeria"
+                      >
+                        Nigeria
+                      </option>
                       {
                         countriesWithStates.countries.map((country) =>
                           <option
@@ -236,7 +242,7 @@ class Events extends Component {
                           </div>
                       </div>
                       <div className="col s12">
-                          <input onChange={this.onChange} type="date" name="startDate" />
+                        <input onChange={this.onChange} type="date" name="startDate" />
                       </div>
                     </div>
                   </div>
