@@ -108,7 +108,7 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  const limit = req.query.limit || 10;
+  const limit = req.query.limit || 6;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
   let query;
@@ -120,7 +120,7 @@ exports.getAll = (req, res) => {
     if (Object.keys(req.query).length) {
       query = {
         interestedIn: req.query.sex,
-        state: req.query.state,
+        state: req.query.state.toLowerCase(),
         date: { $gte: req.query.startDate }
       };
     } else {

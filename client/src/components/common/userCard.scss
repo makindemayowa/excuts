@@ -6,6 +6,11 @@
   &:hover {
     box-shadow: 0 5px 10px rgb(217, 218, 219);
   }
+
+  .card-image {
+    overflow: hidden;
+    height: 240px;
+  }
 }
 .card .card-content {
   padding: 15px;

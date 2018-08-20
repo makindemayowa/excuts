@@ -58,6 +58,12 @@ export default (state = initialState, action) => {
         ...state,
         loc: action.loc
       };
+    case actionTypes.CLEAR_USERS:
+      return {
+        ...state,
+        users: [],
+        pagination: {}
+      };
     case actionTypes.GET_ALL_USERS_SUCCESS:
       return {
         ...state,
