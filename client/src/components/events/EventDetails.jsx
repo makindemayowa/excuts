@@ -118,7 +118,7 @@ class Events extends Component {
                       <div className="container push-right">
                         <div className="bottom_padding" />
                         <div className="row">
-                          <div className=" col s6 m4 l4">
+                          <div className="event_key col s6 m4 l4">
                             Title
                           </div>
                           <div className="col s6 m4 l3">
@@ -126,7 +126,7 @@ class Events extends Component {
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col s6 m4 l4">
+                          <div className="event_key col s6 m4 l4">
                             Date
                           </div>
                           <div className="col s6 m4 l4">
@@ -134,7 +134,7 @@ class Events extends Component {
                           </div>
                         </div>
                         <div className="row">
-                          <div className=" col s6 m4 l4">
+                          <div className="event_key col s6 m4 l4">
                             Event venue
                           </div>
                           <div className="col s6 m4 l3">
@@ -142,7 +142,7 @@ class Events extends Component {
                           </div>
                         </div>
                         <div className="row">
-                          <div className=" col s6 m4 l4">
+                          <div className="event_key col s6 m4 l4">
                             State
                           </div>
                           <div className="col s6 m4 l3">
@@ -150,7 +150,7 @@ class Events extends Component {
                           </div>
                         </div>
                         <div className="row">
-                          <div className=" col s6 m4 l4">
+                          <div className="event_key col s6 m4 l4">
                             City
                           </div>
                           <div className="col s6 m4 l3">
@@ -159,35 +159,35 @@ class Events extends Component {
                         </div>
                         <div className="row">
                           <div className="form-fields">
-                            <div className="col s6 m4 l4">
+                            <div className="event_key col s6 m4 l4">
                               Interested in
                             </div>
-                            <div className="col s6 m4 l3">
+                            <div className="col s6 m8 l8">
                               {event.interestedIn}
                             </div>
                           </div>
                         </div>
                         <div className="row">
-                          <div className="">
+                          <div className="event_key col s12 m4 l4">
                             Details
                           </div>
-                          <div className="row__content">
+                          <div className="row__content col s12 m8 l8">
                             {event.details}
                           </div>
                         </div>
                         <div className="row">
-                          <div className="">
+                          <div className="event_key col s12 m4 l4">
                             Preference
                           </div>
-                          <div className="row__content">
+                          <div className="row__content col s12 m8 l8">
                             {event.preference}
                           </div>
                         </div>
                         <div className="row">
-                          <div className="">
+                          <div className="event_key col s12 m4 l4">
                             Extra
                           </div>
-                          <div className="row__content">
+                          <div className="row__content col s12 m8 l8">
                             {event.extra}
                           </div>
                         </div>

@@ -19,13 +19,16 @@ class Events extends Component {
       startDate: moment(),
       events: [],
       loading: true,
+      loadMore: false,
       country: countriesWithStates.countries[131].country,
       sex: 'female',
       state: countriesWithStates.countries[131].states[0],
       countryIndex: 131,
+      currentPage: 1,
       states: []
     };
     this.onChange = this.onChange.bind(this);
+    this.loadItems = this.loadItems.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onSexStateChange = this.onSexStateChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -39,7 +42,20 @@ class Events extends Component {
     this.setState({
       states: countriesWithStates.countries[this.state.countryIndex].states
     })
-    this.props.getAllEventRequest().then(() => {
+    this.getEvents()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const events = nextProps.events;
+    const loading = nextProps.loading
+    this.setState({
+      events,
+      loading
+    });
+  }
+
+  getEvents(page) {
+    this.props.getAllEventRequest(page).then(() => {
       this.setState({
         events: this.props.events,
         loading: false,
@@ -61,13 +77,24 @@ class Events extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const events = nextProps.events;
-    const loading = nextProps.loading
-    this.setState({
-      events,
-      loading
-    });
+  loadItems() {
+    let currentPage = this.state.currentPage
+    if (this.props.pagination.pages === currentPage) {
+      document.getElementById("loadMore").style.display = 'none'
+    } else {
+      document.getElementById("loadMore").style.display = 'inline-block'
+      this.setState({
+        currentPage: currentPage += 1,
+        loadMore: true
+      }, () => {
+        const newEvents = Promise.resolve(this.getEvents(this.state.currentPage))
+        newEvents.then(() => {
+          this.setState({
+            loadMore: false
+          })
+        })
+      });
+    }
   }
 
   handleSelectChange(selected) {
@@ -117,7 +144,7 @@ class Events extends Component {
 
   onSearchSubmit() {
     this.setState({
-      loading: true
+      loading: true,
     })
     const eventDetail = {
       sex: this.state.sex,
@@ -129,6 +156,10 @@ class Events extends Component {
       this.setState({
         success: true,
         loading: false
+      }, () => {
+        this.setState({
+          page: 1
+        })
       })
     }).catch((err) => {
       this.setState({
@@ -145,7 +176,13 @@ class Events extends Component {
   }
 
   render() {
-    const { loading, states } = this.state;
+    const { loading, states, loadMore, currentPage } = this.state;
+    if (this.props.pagination.pages === currentPage || this.props.pagination.pages === 0) {
+      const loadButton = document.getElementById("loadMore");
+      if (loadButton) {
+        loadButton.style.display = 'none'
+      }
+    }
     return (
       <div className="events">
         <SubNav currentPage={'home'} />
@@ -156,7 +193,7 @@ class Events extends Component {
               <div className="col s12 m8 l8 cardsContainer">
                 {
                   loading ? <Loader /> :
-                    <div>
+                    <div className="row">
                       {
                         this.state.events.length ?
                           <div className="row">
@@ -174,6 +211,15 @@ class Events extends Component {
                             No event found
                       </h5>
                       }
+                      <div className="row center">
+                        <button
+                          id="loadMore"
+                          onClick={this.loadItems}
+                          className="waves-effect waves-light btn"
+                        >
+                          {loadMore ? 'loading...' : 'Load More'}
+                        </button>
+                      </div>
                     </div>
                 }
               </div>

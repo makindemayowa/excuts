@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const ProfileForm = props => {
   return (
-    <div>
+    <div className="row">
       {
         (props.user.profilePhoto && props.user.phone_no) ?
           <div className="publicProfile container">
@@ -58,34 +58,34 @@ const ProfileForm = props => {
                   Personal Details
                 </div>
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     Age
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.age}
                   </p>
                 </div>
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     Country
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.country}
                   </p>
                 </div>
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     State
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.state}
                   </p>
                 </div>
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     City
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.city}
                   </p>
                 </div>
@@ -101,114 +101,92 @@ const ProfileForm = props => {
                   </div>
                 }
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     Best time to reach me
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.best_time}
                   </p>
                 </div>
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     Occupation
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.occupation}
                   </p>
                 </div>
                 <div className="row">
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     Education
                   </p>
-                  <p className="col s6 m4 l3">
+                  <p className="col s6 m6 l6">
                     {props.user.education}
                   </p>
                 </div>
               </div>
               <div className="col s12 m6 l6">
-                <div className="my_bold">
-                  About
+                <div className="row">
+                  <div className="my_bold">
+                    About
                 </div>
-                <p>
-                  {props.user.about}
-                </p>
-              </div>
-              <div className="col s12 m6 l6">
-                <div className="my_bold">
-                  Rates
+                  <p>
+                    {props.user.about}
+                  </p>
                 </div>
-                {props.user.here_to === 'here_for_fun' &&
-                  <p>
-                    I'm just here to have fun
+                <div className="row">
+                  <div className="my_bold">
+                    Rates
+                </div>
+                  {props.user.here_to === 'here_for_fun' &&
+                    <p>
+                      I'm just here to have fun
                   </p>
-                }
-                {props.user.here_to === 'here_to_hire' &&
-                  <p>
-                    I'm here to hire
+                  }
+                  {props.user.here_to === 'here_to_hire' &&
+                    <p>
+                      I'm here to hire
                   </p>
-                }
-                {props.user.here_to === 'professional' &&
-                  <div>
-                    <div className="row">
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.time1}
-                      </p>
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.rate1}
-                      </p>
+                  }
+                  {props.user.here_to === 'professional' &&
+                    <div>
+                      <div className="row">
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.time1}
+                        </p>
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.rate1}
+                        </p>
+                      </div>
+                      <div className="row">
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.time2}
+                        </p>
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.rate2}
+                        </p>
+                      </div>
+                      <div className="row">
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.time3}
+                        </p>
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.rate3}
+                        </p>
+                      </div>
+                      <div className="row">
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.time4}
+                        </p>
+                        <p className="col s6 m4 l3">
+                          {props.user.rates.rate4}
+                        </p>
+                      </div>
                     </div>
-                    <div className="row">
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.time2}
-                      </p>
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.rate2}
-                      </p>
-                    </div>
-                    <div className="row">
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.time3}
-                      </p>
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.rate3}
-                      </p>
-                    </div>
-                    <div className="row">
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.time4}
-                      </p>
-                      <p className="col s6 m4 l3">
-                        {props.user.rates.rate4}
-                      </p>
-                    </div>
-                  </div>
-                }
+                  }
+                </div>
               </div>
             </div>
-
-            {/* <div className="row">
-              <div className="my_bold">
-                Instagram
-            </div>
-              <div className="bottom_margin" />
-              <div className="col s12 m7 l8">
-                <div className="slider">
-                  <div className="carousel">
-                    {
-                      props.user.photos.map(url =>
-                        <a
-                          className="carousel-item"
-                          href={url}
-                          key={url}
-                        >
-                          <img alt="" src={url} />
-                        </a>
-                      )
-                    }
-                  </div>
-                </div>
-              </div>
-            </div> */}
             {
               props.currentUser.email !== props.user.email &&
               <ul className="collapsible">

@@ -198,6 +198,10 @@
 .create_event {
   .newEventContainer {
     border-top: solid 1px #ccc;
+    .event_key {
+      font-weight: 900;
+      font-size: 14px;
+    }
   }
   input[type=text]:not(.browser-default) {
     max-width: 720px;

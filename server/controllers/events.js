@@ -1,6 +1,7 @@
 const Events = require('../models/events');
 
 exports.create = (req, res) => {
+  req.body.title = req.body.title.toLowerCase();
   Events.findOne({
     title: req.body.title,
     created_by: req.user.id
@@ -108,7 +109,7 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  const limit = req.query.limit || 6;
+  const limit = req.query.limit || 10;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
   let query;
@@ -116,6 +117,8 @@ exports.getAll = (req, res) => {
     query = {
       created_by: req.user.email
     };
+  } else if (req.query.page) {
+    query = {};
   } else {
     if (Object.keys(req.query).length) {
       query = {
