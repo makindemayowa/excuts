@@ -215,7 +215,7 @@ class Discover extends Component {
                             <select onChange={this.changeEvent} defaultValue={here_to} name="here_to" className="size1">
                               <option value="here_to_hire"> To Hire</option>
                               <option value="here_for_fun">For Fun</option>
-                              <option value="professsional">Professional Escort</option>
+                              <option value="professional">Professional Escort</option>
                             </select>
                           </div>
                           <form action="#">
