@@ -55,6 +55,9 @@ class Events extends Component {
   }
 
   getEvents(page) {
+    this.setState({
+      loading: true
+    });
     this.props.getAllEventRequest(page).then(() => {
       this.setState({
         events: this.props.events,
