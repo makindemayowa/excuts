@@ -191,7 +191,7 @@ const ProfileForm = props => {
               props.currentUser.email !== props.user.email &&
               <ul className="collapsible">
                 <li>
-                  <div className="collapsible-header"><i className="material-icons">contact_mail</i>Contract Mayowa</div>
+                  <div className="collapsible-header"><i className="material-icons">contact_mail</i>{`Contract ${props.user.firstName}`}</div>
                   <div className="collapsible-body">
                     <div className="row">
                       <div className="my_bold col s4 m4 l4">
@@ -240,10 +240,10 @@ const ProfileForm = props => {
                     <div className="bottom_margin" />
                     <div className="row ">
                       <button
-                        className="col s12 m8 l8 waves-effect waves-light btn edit-button"
+                        className="col s3 m2 l2 waves-effect waves-light btn edit-button"
                         onClick={props.requestDate}
                       >
-                        Send Request
+                        Send
                       </button>
                     </div>
                   </div>
