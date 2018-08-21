@@ -7,16 +7,16 @@ const Footer = () => (
         <div className="col l12 s12">
           <div className="social">
             <span className="log">
-            Follow us on social media
+              Follow us on social media
             </span>
-            <span className="point fb social_log">
-              <i className="fab fa-facebook-f" />
-            </span>
+            {/* <span className="point fb social_log">
+              <a target="_blank" rel="noopener noreferrer" className="grey-text text-lighten-3" href="/safety"><i className="fab fa-facebook-f" /></a>
+            </span> */}
             <span className="point social_log twi">
-              <i className="fab fa-twitter" aria-hidden="true" />
+              <a target="_blank" rel="noopener noreferrer" className="grey-text text-lighten-3" href="https://twitter.com/excuts1"><i className="fab fa-twitter" aria-hidden="true" /></a>
             </span>
-            <span className="point social_log goog">
-              <i className="fab fa-google" aria-hidden="true" />
+            <span className="point social_log instagram">
+              <a target="_blank" rel="noopener noreferrer" className="grey-text text-lighten-3" href="https://www.instagram.com/e_x_c_u_t_s/"><i className="fab fa-instagram" aria-hidden="true" /></a>
             </span>
           </div>
         </div>
