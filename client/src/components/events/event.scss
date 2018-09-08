@@ -127,7 +127,6 @@
     border: 0.3px solid #cccccc;
     min-height: 140px;
     .cardfooter {
-      font-style: italic;
       font-size: 12px;
       color: #ff6666;
       text-align: right;
@@ -267,7 +266,6 @@
     border-radius: 50px 50px;
   }
   .created_by {
-    font-style: italic;
     text-align: right;
     margin-right: 20px;
   }
@@ -276,6 +274,13 @@
     margin-top: 5px;
     word-wrap: break-word;
   }
+}
+
+.interest__contained {
+  padding-top: 20px; 
+  padding-bottom: 20px;
+  cursor: pointer;
+  display: block;
 }
 .showinterest {
   font-size: 14px;

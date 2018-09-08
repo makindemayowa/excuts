@@ -219,6 +219,11 @@
   .progress .indeterminate {
     background-color: #ff6666;
   }
+  @media only screen and (max-width: 530px) {
+    .img__wrap {
+      height: 121px;
+    }
+  } 
 }
 .publicProfileContainer {
   min-height: 70vh;
