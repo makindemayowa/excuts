@@ -199,6 +199,19 @@ export function postInterestedRequest(id) {
 }
 
 /**
+ * Request to the API to delete user's interest
+ *
+ * @export
+ * @returns {object} dispatch object
+ */
+export function deleteInterestRequest(id) {
+  return dispatch => axios.put(`/api/event/${id}/deleteinterest`).then((res) => {
+    const event = res.data.event;
+    dispatch(interestedSuccess(event));
+  });
+}
+
+/**
  * Request to the API to get post a review
  *
  * @export

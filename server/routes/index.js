@@ -97,6 +97,10 @@ module.exports = (app) => {
     auth.checkToken,
     interest.showInterest
   );
+  app.put('/api/event/:id/deleteinterest',
+    auth.checkToken,
+    interest.removeInterest
+  );
   app.get('/api/event/:id/interested',
     auth.checkToken,
     interest.getEventInterest

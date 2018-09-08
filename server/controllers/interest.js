@@ -47,6 +47,41 @@ exports.showInterest = (req, res) => {
   });
 };
 
+exports.removeInterest = (req, res) => {
+  Events.findOne({
+    _id: req.params.id,
+    created_by_id: { $ne: req.user.id }
+  }).then((event) => {
+    Interest.findOne({
+      interestedUser: req.user.id,
+      event: req.params.id,
+    }).then((existingInterest) => {
+      if (existingInterest) {
+        existingInterest.remove((err) => {
+          if (err) {
+            return res.status(500).send({ err });
+          }
+          const index = event.interested.indexOf(req.user.id);
+          if (index > -1) {
+            event.interested.splice(index, 1);
+          }
+          event.save((err) => {
+            if (err) {
+              return res.status(500).send({ err });
+            }
+          });
+          return res.status(200)
+            .send({ message: 'Success' });
+        });
+      }
+    }).catch((err) => {
+      if (err) return res.status(500).send({ err });
+    });
+  }).catch((err) => {
+    if (err) return res.status(500).send({ err });
+  });
+};
+
 exports.getEventInterest = (req, res) => {
   Interest
     .find({ event: req.params.id, })

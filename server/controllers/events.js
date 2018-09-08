@@ -98,7 +98,7 @@ exports.interested = (req, res) => {
 exports.getOne = (req, res) => {
   Events
     .findOne({ _id: req.params.id })
-    .populate('interested', 'firstName')
+    .populate('interested', { email: 1, firstName: 1 })
     .exec((err, event) => {
       if (!event) {
         return res.status(404).send({ message: 'Event not found' });

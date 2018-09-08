@@ -8,7 +8,8 @@ import toastr from 'toastr';
 import SubNav from '../common/SubNav';
 import {
   getOneEventRequest,
-  postInterestedRequest
+  postInterestedRequest,
+  deleteInterestRequest
 } from '../../actions/events';
 import Loader from '../common/Loader';
 
@@ -31,9 +32,15 @@ class Events extends Component {
     M.Collapsible.init(collapsible);
     this.eventId = this.props.match.params.id
     this.props.getOneEventRequest(this.eventId).then((res) => {
+      const index = this.props.event.interested.findIndex(
+        interested => interested.email
+          === this.props.user.email
+      );
+      const interested = index !== -1 ? true : false
       this.setState({
         event: this.props.event,
-        loading: false
+        loading: false,
+        interested
       })
     }).catch((err) => {
       this.setState({
@@ -46,7 +53,6 @@ class Events extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const event = nextProps.event;
-    // const loading = nextProps.loading;
     this.setState({
       event,
       // loading
@@ -57,26 +63,33 @@ class Events extends Component {
     if (!this.props.user.here_to || !this.props.user.profilePhoto) {
       return toastr.error('please complete your profile')
     }
-    this.setState({
-      interested: !this.state.interested
-    }, () => {
-      if (this.state.interested) {
-        this.props.postInterestedRequest(this.eventId).then((res) => {
-          this.setState({
-            success: true
-          })
-          toastr.success('interest registered')
-        }).catch((err) => {
-          toastr.error(err.response.data.message)
+    if (!this.state.interested) {
+      this.props.postInterestedRequest(this.eventId).then((res) => {
+        this.setState({
+          success: true,
+          interested: true
         })
-      }
+        toastr.success('interest registered')
+      }).catch((err) => {
+        toastr.error(err.response.data.message)
+      })
+    } else if (this.state.interested) {
+      this.props.deleteInterestRequest(this.eventId).then((res) => {
+        this.setState({
+          success: true,
+          interested: false
+        })
+        toastr.success('interest deleted')
+      }).catch((err) => {
+        toastr.error(err.response.data.message)
+      })
     }
-    );
   }
 
   render() {
-    const { event, loading } = this.state;
+    const { event, loading, interested } = this.state;
     const { user } = this.props;
+    const interestStatus = !interested ? 'Interested?': 'No longer interested?';
     return (
       <div>
         <SubNav />
@@ -86,28 +99,24 @@ class Events extends Component {
               <div className="">
                 <div className="">
                   <div className="">
-                    <div className="bottom_margin" />
                     <div>
                       {
                         user.email !== event.created_by ?
-                          <div>
+                          <div onClick={this.showInterest} className="interest__contained">
                             <span className="showinterest">
-                              Interested?
+                              {interestStatus}
                             </span>
-                            <a className="interestedC" onClick={this.showInterest}>
+                            <a className="interestedC">
                               <i className="far fa-thumbs-up interested"></i>
                             </a>
-                          </div> : 
-                          <div>
-                            <Link to={`/interests/${event._id}`}>
-                            <span className="showinterest">
+                          </div> :
+                          <Link className="" to={`/interests/${event._id}`}>
+                            <span className="interest__contained showinterest">
                               {event.interested.length}{' '}Interested
-                            </span>
-                            </Link>
-                          </div>
+                              </span>
+                          </Link>
                       }
                     </div>
-                    <div className="bottom_margin" />
                     <div className="newEventContainer">
                       <div className="bottom_margin" />
                       <div className="created_by red-text">
@@ -212,4 +221,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps,
-  { getOneEventRequest, postInterestedRequest })(Events);
+  { getOneEventRequest, postInterestedRequest, deleteInterestRequest })(Events);
