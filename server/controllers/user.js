@@ -1,7 +1,24 @@
 const User = require('../models/user'),
   helper = require('../helpers/helper'),
   emails = require('../emails/email'),
-  jwt = require('jsonwebtoken');
+  jwt = require('jsonwebtoken'),
+  https = require('https');
+const { OAuth2Client } = require('google-auth-library');
+
+const getToken = (user) => {
+  const userDetails = {
+    email: user.email,
+    id: user._id,
+    role: user.role,
+    firstName: user.firstName,
+    status: user.status,
+    location: user.loc,
+    profilePhoto: user.profilePhoto,
+  };
+  const jsonToken = helper.createToken({ userDetails }, '24h');
+  return jsonToken;
+  // return res.status(200).send({ message: 'login successful', jsonToken });
+};
 
 exports.create = (req, res) => {
   const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -39,7 +56,31 @@ exports.create = (req, res) => {
 };
 
 exports.updateOrCreateSocialUser = (req, res) => {
-  User.findOne({
+  const provider = req.body.provider;
+
+  /**
+   * @returns {response} response object
+   * @param {any} CLIENT_ID
+   */
+  async function verify(CLIENT_ID) {
+    const client = new OAuth2Client(CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: req.body.token,
+      audience: CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    if (CLIENT_ID === payload.azp) {
+      req.body.email = payload.email;
+      req.body.photos = [payload.picture];
+      req.body.firstName = payload.given_name;
+      req.body.lastName = payload.family_name;
+      req.body.profilePhoto = payload.picture;
+    } else {
+      throw new Error('app id do not match');
+    }
+  }
+
+  const checkDetails = () => User.findOne({
     email: req.body.email,
   }).then((existingUser) => {
     if (!existingUser) {
@@ -56,16 +97,7 @@ exports.updateOrCreateSocialUser = (req, res) => {
         if (err) {
           return res.status(500).send({ err });
         }
-        const userDetails = {
-          email: user.email,
-          id: user._id,
-          here_to: user.here_to,
-          firstName: user.firstName,
-          status: user.status,
-          location: user.loc,
-          profilePhoto: user.profilePhoto,
-        };
-        const jsonToken = helper.createToken({ userDetails }, '24h');
+        const jsonToken = getToken(user);
         return res.status(200).send({ message: 'login successful', jsonToken });
       });
     }
@@ -86,31 +118,37 @@ exports.updateOrCreateSocialUser = (req, res) => {
         if (err) {
           return res.status(500).send({ err });
         }
-        const userDetails = {
-          email: updatedUser.email,
-          id: updatedUser._id,
-          here_to: updatedUser.here_to,
-          firstName: updatedUser.firstName,
-          status: updatedUser.status,
-          location: updatedUser.loc,
-          profilePhoto: updatedUser.profilePhoto,
-        };
-        const jsonToken = helper.createToken({ userDetails }, '24h');
+        const jsonToken = getToken(updatedUser);
         return res.status(200).send({ message: 'login successful', jsonToken });
       });
     }
-    const userDetails = {
-      email: existingUser.email,
-      id: existingUser._id,
-      here_to: existingUser.here_to,
-      firstName: existingUser.firstName,
-      status: existingUser.status,
-      location: existingUser.loc,
-      profilePhoto: existingUser.profilePhoto,
-    };
-    const jsonToken = helper.createToken({ userDetails }, '24h');
+    const jsonToken = getToken(existingUser);
     return res.status(200).send({ message: 'login successful', jsonToken });
   });
+
+  if (provider === 'google') {
+    verify(process.env.GOOGLE_CLIENT_ID)
+      .then(() => checkDetails())
+      .catch(() => res.status(400).send({ message: 'Error logging in' }));
+  } else if (provider === 'facebook') {
+    const token = req.body.token;
+    https.get(
+      `https://graph.facebook.com/debug_token?input_token=${
+      token}&access_token=${process.env.FACEBOOK_TOKEN}`,
+      (res) => {
+        res.setEncoding('utf8');
+        res.on('data',
+          (d) => {
+            const isValid = JSON.parse(d).data.is_valid;
+            if (isValid) {
+              checkDetails();
+            } else {
+              return res.status(400).send({ message: 'Invalid auth token' });
+            }
+          });
+      }).on('error',
+        () => res.status(400).send({ message: 'Error logging in' }));
+  }
 };
 
 exports.forgotPasswordMail = (req, res) => {
@@ -372,23 +410,5 @@ exports.getAll = (req, res) => {
         });
       });
     });
-};
-
-exports.getCloseToMe = (req, res) => {
-  const query = [
-    {
-      $geoNear: {
-        near: {
-          type: 'Point',
-          coordinates:
-            [req.user.location.coordinates[0], req.user.location.coordinates[1]]
-        },
-        distanceField: 'distance',
-        spherical: true,
-        maxDistance: 10000
-      }
-    }
-  ];
-  User.aggregate(query, (err, results) => { });
 };
 

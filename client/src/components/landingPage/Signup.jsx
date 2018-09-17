@@ -31,25 +31,50 @@ class Signup extends Component {
   }
 
   handleSocialLogin = (event) => {
-    const user = event._profile;
+    this.setState({
+      loading: true
+    })
     const locData = storage.getItem('locdata')
-    const userdata = {
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePhoto: user.profilePicURL,
-      photos: [user.profilePicURL],
-      loc: {
-        type: "Point",
-        coordinates: [locData.long, locData.lat]
-      }
-    };
+    const provider = event._provider;
+    const token = provider === 'google' ? event._token.idToken : event._token.accessToken
+    let userdata;
+    if (provider === 'facebook') {
+      const user = event._profile;
+      userdata = {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profilePhoto: user.profilePicURL,
+        photos: [user.profilePicURL],
+        provider,
+        token,
+        loc: {
+          type: "Point",
+          coordinates: [locData.long, locData.lat]
+        }
+      };
+    } else if (provider === 'google') {
+      userdata = {
+        provider,
+        token,
+        loc: {
+          type: "Point",
+          coordinates: [locData.long, locData.lat]
+        }
+      };
+    }
     this.props
       .socialUserLoginRequest(userdata)
       .then(() => {
-        toastr.success('registration successful')
+        this.setState({
+          loading: false
+        })
+        toastr.success('login successful')
       })
       .catch((errorData) => {
+        this.setState({
+          loading: false
+        })
         toastr.error(errorData.response.data.message)
       });
   }
@@ -63,7 +88,6 @@ class Signup extends Component {
     if (err.indexOf('SDK not loaded') > -1) {
       return toastr.error('please try again')
     }
-    console.log(err)
     toastr.error('An error occurred')
   }
 

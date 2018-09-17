@@ -7,11 +7,13 @@ module.exports = {
   }),
   socialLogin: Joi.object({
     email: Joi.string().email(),
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    profilePhoto: Joi.string().required(),
-    photos: Joi.array().required(),
+    firstName: Joi.string(),
+    lastName: Joi.string(),
+    profilePhoto: Joi.string(),
+    photos: Joi.array(),
     loc: Joi.object(),
+    token: Joi.string().required(),
+    provider: Joi.string().required(),
   }),
   createUser: Joi.object({
     email: Joi.string().email().required(),

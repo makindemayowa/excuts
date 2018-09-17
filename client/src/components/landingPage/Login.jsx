@@ -38,18 +38,34 @@ class Login extends Component {
       loading: true
     })
     const locData = storage.getItem('locdata')
-    const user = event._profile;
-    const userdata = {
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePhoto: user.profilePicURL,
-      photos: [user.profilePicURL],
-      loc: {
-        type: "Point",
-        coordinates: [locData.long, locData.lat]
-      }
-    };
+    const provider = event._provider;
+    const token = provider === 'google' ? event._token.idToken : event._token.accessToken
+    let userdata;
+    if (provider === 'facebook') {
+      const user = event._profile;
+      userdata = {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profilePhoto: user.profilePicURL,
+        photos: [user.profilePicURL],
+        provider,
+        token,
+        loc: {
+          type: "Point",
+          coordinates: [locData.long, locData.lat]
+        }
+      };
+    } else if (provider === 'google') {
+      userdata = {
+        provider,
+        token,
+        loc: {
+          type: "Point",
+          coordinates: [locData.long, locData.lat]
+        }
+      };
+    }
     this.props
       .socialUserLoginRequest(userdata)
       .then(() => {
@@ -75,7 +91,6 @@ class Login extends Component {
     if (err.indexOf('SDK not loaded') > -1) {
       return toastr.error('please try again')
     }
-    console.log(err)
     toastr.error('An error occurred')
   }
 
