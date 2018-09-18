@@ -41,60 +41,6 @@ exports.update = (req, res) => {
     });
 };
 
-exports.updateReview = (req, res) => {
-  Events.findOneAndUpdate({
-    _id: req.params.id
-  },
-    {
-      $set: {
-        // 'review.review': req.body.review,
-        // 'review.reviewer': req.user.id
-      }
-    }, { new: true }, (err, response) => {
-      if (!response) {
-        return res.status(400).send({ message: 'An error occurred' });
-      }
-      if (err) return res.status(500).send({ err });
-      return res.status(200).send({ message: 'success', response });
-    });
-};
-
-exports.interested = (req, res) => {
-  Events.findOne({
-    _id: req.params.id,
-    created_by_id: { $ne: req.user.id }
-  }).then((event) => {
-    if (!event) {
-      res.status(404)
-        .send({ message: 'Event not found' });
-    } else {
-      const index = event.interested.findIndex(
-        interested => interested._id == req.user.id
-      );
-      if (index !== -1) {
-        return res.status(400)
-          .send({
-            message: 'You have already signified interest for this event'
-          });
-      }
-      event.interested.push(req.user.id);
-      event.save((err, updatedInterest) => {
-        if (err) {
-          return res.status(500).send({ err });
-        }
-        global.io.sockets.emit('user_interested', {
-          user: req.user.email,
-          owner: event.created_by._id
-        });
-        return res.status(200)
-          .send({ message: 'Success', updatedInterest });
-      });
-    }
-  }).catch((err) => {
-    if (err) return res.status(500).send({ err });
-  });
-};
-
 exports.getOne = (req, res) => {
   Events
     .findOne({ _id: req.params.id })

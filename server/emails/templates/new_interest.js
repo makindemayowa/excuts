@@ -2,12 +2,12 @@ module.exports = {
   content: `<div class="container" style="width: 100%; background-color: #f3f3f3; font-family: 'Lato', 'Helvetica', sans-serif; box-sizing: border-box; padding-bottom: 25px; padding-top: 25px;" >
   <div class="panel" style="width: 80%; margin: 0px auto;">
     <div class="panel-heading" style="padding: 25px; margin-top:10px; background-color: #ff6666; border-top-left-radius: 6px; border-top-right-radius: 6px; border: 1px solid #ff6666;">
-      <h2 style="text-align: center; color: #ffffff; margin:0px; font-size: 34px;">Reset password</h2>
+      <h2 style="text-align: center; color: #ffffff; margin:0px; font-size: 34px;">New Interest</h2>
     </div>
     <div class="panel-body" style="background-color: #ffffff; padding: 25px; margin-bottom: 25px; color: #303030; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; border: 1px solid #dddddd;">
-      <p>Someone requested a password reset for your Bilimoda account. If this was not you, please disregard this email. Otherwise, click the button below to choose a new password:</p>
+      <p>Hi, <%= eventName %> got new interest(s). Please login to view</p>
       <div style="text-align: center;">
-        <a style="background-color: #ff6666; border: none; color: white; padding: 10px 10px;text-decoration: none; display: inline-block; font-size: 12px; margin: 4px 0px; border-radius: 10px;" href="<%= link %>">Reset Password</a>
+        <a style="background-color: #ff6666; border: none; color: white; padding: 10px 10px;text-decoration: none; display: inline-block; font-size: 12px; margin: 4px 0px; border-radius: 10px;" href="https://www.excuts.com/login" >Go to Account</a>
       </div>
       <p>Sincerely,</p>
       <p>The Excuts Team</p>

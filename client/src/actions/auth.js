@@ -208,8 +208,12 @@ export function updateUserDetails(userDetails) {
   return dispatch => {
     dispatch(ajaxInProcess());
     return axios.put('/api/user', userDetails).then((res) => {
+      const token = res.data.jsonToken;
+      localStorage.setItem('tmo_token', token);
+      const loggedInUser = jwtDecode(token).userDetails;
+      setAuthorisation(token)
       dispatch(endAjax());
-      dispatch(setDetails(res.data.updatedUser));
+      dispatch(setUser(loggedInUser, true));
     });
   }
 }

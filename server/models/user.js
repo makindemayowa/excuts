@@ -55,6 +55,7 @@ const UserSchema = new Schema({
   info: String,
   interests: String,
   status: String,
+  lastLogin: Date,
   verifyingToken: String,
   passwordResetToken: String,
   rates: {
@@ -70,10 +71,10 @@ const UserSchema = new Schema({
   }],
   dateRequests: [{
     type: Schema.Types.ObjectId,
-    ref: 'Date'
+    ref: 'DateOut'
   }]
 },
-{ timestamps: { createdAt: 'created_at' } });
+  { timestamps: { createdAt: 'created_at' } });
 // UserSchema.index({ email: 1, phone_no: 1 }, { unique: true });
 
 // Dunno why I did this...Next you want to tie an index to the schema:
@@ -92,7 +93,13 @@ UserSchema.pre('save', function (next) {
 });
 
 UserSchema.methods.comparePassword = function (plainText) {
-    return bcrypt.compareSync(plainText, this.password);
-  },
+  return bcrypt.compareSync(plainText, this.password);
+};
+
+UserSchema.methods.saveLastLogin = function () {
+  const user = this;
+  user.lastLogin = new Date();
+  user.save();
+};
 
 module.exports = mongoose.model('User', UserSchema);

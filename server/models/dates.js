@@ -31,4 +31,4 @@ const dateSchema = new Schema({
 },
 { timestamps: { createdAt: 'created_at' } });
 
-module.exports = mongoose.model('Date', dateSchema);
+module.exports = mongoose.model('DateOut', dateSchema);

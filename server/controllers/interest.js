@@ -1,5 +1,6 @@
 const Events = require('../models/events');
 const Interest = require('../models/interests');
+const emails = require('../emails/email');
 
 exports.showInterest = (req, res) => {
   Events.findOne({
@@ -35,6 +36,7 @@ exports.showInterest = (req, res) => {
           if (err) {
             return res.status(500).send({ err });
           }
+          emails.sendNewInterestMail(event.created_by, event.title);
         });
         return res.status(200)
           .send({ message: 'Success', updatedInterest });
