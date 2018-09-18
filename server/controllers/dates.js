@@ -1,5 +1,6 @@
-const Date = require('../models/dates');
+const DateOut = require('../models/dates');
 const User = require('../models/user');
+const emails = require('../emails/email');
 
 exports.create = (req, res) => {
   if (!req.body.description) {
@@ -21,7 +22,7 @@ exports.create = (req, res) => {
         venue: req.body.venue,
         status: 'pending',
       };
-      const date = new Date(dateBody);
+      const date = new DateOut(dateBody);
       date.save((err, newDate) => {
         if (err) {
           return res.status(500).send({ err });
@@ -31,6 +32,7 @@ exports.create = (req, res) => {
           if (err) {
             return res.status(500).send({ err });
           }
+          emails.sendNewDateRequestMail(user.email, date.venue);
           return res.status(200)
             .send({ message: 'Success', updatedUser });
         });
@@ -51,7 +53,7 @@ exports.getAllDates = (req, res) => {
   } else {
     query = { requested: req.user.id };
   }
-  Date
+  DateOut
     .find(query)
     .sort({ created_at: -1 })
     .populate('requester', 'firstName')
@@ -68,7 +70,7 @@ exports.getAllDates = (req, res) => {
 };
 
 exports.getMyDates = (req, res) => {
-  Date
+  DateOut
     .find({ requester: req.user.id })
     .sort({ created_at: -1 })
     .populate('requested', 'firstName')
@@ -85,11 +87,18 @@ exports.getMyDates = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  Date.findOneAndUpdate({ _id: req.params.id },
+  DateOut.findOneAndUpdate({ _id: req.params.id },
     { $set: req.body }, { new: true }, (err, updatedDate) => {
       if (!updatedDate) {
         return res.status(400).send({ message: 'An error occurred', err });
       }
-      return res.status(200).send({ message: 'success', updatedDate });
+      User.findOne({
+        _id: updatedDate.requester
+      }).then((requester) => {
+        emails.sendNewDateStatusMail(
+          requester.email, updatedDate.venue, updatedDate.status);
+        return res.status(200).send({ message: 'success', updatedDate });
+      })
+      .catch(() => res.status(400).send({ message: 'An error occurred', err }));
     });
 };

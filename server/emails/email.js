@@ -9,6 +9,10 @@ const senderName = process.env.MAILGUN_SENDERS_NAME;
 
 const verifyAccountHtml = require('./templates/verify_account').content;
 const resetPasswordHtml = require('./templates/reset_password').content;
+const newInterestHtml = require('./templates/new_interest').content;
+const newDateRequestHtml = require('./templates/new_date_request').content;
+const dateRequestStatusHtml = require(
+  './templates/date_request_status').content;
 
 const sendMail = (toEmail, subject, htmlContent) => {
   Mailgun.sendHtmlEmail({
@@ -46,5 +50,25 @@ module.exports = {
     const subject = 'eXcuts password reset instructions';
     sendMail(email, subject, resetHtml);
   },
+  sendNewInterestMail(email, eventName) {
+    const interestHtml = ejs.render(newInterestHtml, {
+      eventName
+    });
+    const subject = 'eXcuts interest notifications';
+    sendMail(email, subject, interestHtml);
+  },
+  sendNewDateRequestMail(email, venue) {
+    const newDateHtml = ejs.render(newDateRequestHtml, {
+      venue
+    });
+    const subject = 'eXcuts date notification';
+    sendMail(email, subject, newDateHtml);
+  },
+  sendNewDateStatusMail(email, venue, status) {
+    const dateStatusHtml = ejs.render(dateRequestStatusHtml, {
+      venue, status
+    });
+    const subject = 'eXcuts date status';
+    sendMail(email, subject, dateStatusHtml);
+  },
 };
-

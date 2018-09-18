@@ -17,7 +17,6 @@ const getToken = (user) => {
   };
   const jsonToken = helper.createToken({ userDetails }, '24h');
   return jsonToken;
-  // return res.status(200).send({ message: 'login successful', jsonToken });
 };
 
 exports.create = (req, res) => {
@@ -98,6 +97,7 @@ exports.updateOrCreateSocialUser = (req, res) => {
           return res.status(500).send({ err });
         }
         const jsonToken = getToken(user);
+        user.saveLastLogin();
         return res.status(200).send({ message: 'login successful', jsonToken });
       });
     }
@@ -119,10 +119,12 @@ exports.updateOrCreateSocialUser = (req, res) => {
           return res.status(500).send({ err });
         }
         const jsonToken = getToken(updatedUser);
+        existingUser.saveLastLogin();
         return res.status(200).send({ message: 'login successful', jsonToken });
       });
     }
     const jsonToken = getToken(existingUser);
+    existingUser.saveLastLogin();
     return res.status(200).send({ message: 'login successful', jsonToken });
   });
 
@@ -259,6 +261,7 @@ exports.login = (req, res) => {
       profilePhoto: user.profilePhoto,
     };
     const jsonToken = helper.createToken({ userDetails }, '24h');
+    user.saveLastLogin();
     return res.status(200).send({ message: 'login successful', jsonToken });
   });
 };
@@ -269,7 +272,18 @@ exports.update = (req, res) => {
       if (!updatedUser) {
         return res.status(400).send({ message: 'An error occurred' });
       }
-      return res.status(200).send({ message: 'success', updatedUser });
+      const userDetails = {
+        email: updatedUser.email,
+        id: updatedUser._id,
+        here_to: updatedUser.here_to,
+        firstName: updatedUser.firstName,
+        status: updatedUser.status,
+        location: updatedUser.loc,
+        profilePhoto: updatedUser.profilePhoto,
+      };
+      const jsonToken = helper.createToken({ userDetails }, '24h');
+      updatedUser.saveLastLogin();
+      return res.status(200).send({ message: 'success', jsonToken });
     });
 };
 
