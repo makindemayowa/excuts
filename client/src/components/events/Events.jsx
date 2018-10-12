@@ -17,9 +17,9 @@ class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      startDate: moment(),
+      startDate: new Date().toISOString().slice(0,10),
       events: [],
-      loading: true,
+      loading: false,
       loadMore: false,
       country: countriesWithStates.countries[131].country,
       sex: 'female',
@@ -41,7 +41,8 @@ class Events extends Component {
     const elems = document.querySelectorAll('select');
     M.FormSelect.init(elems);
     this.setState({
-      states: countriesWithStates.countries[this.state.countryIndex].states
+      states: countriesWithStates.countries[this.state.countryIndex].states,
+      loading: true
     })
     this.getEvents()
   }
@@ -182,8 +183,7 @@ class Events extends Component {
   }
 
   render() {
-    const { loading, states, loadMore, currentPage } = this.state;
-    console.log(this.props.pagination.pages , currentPage)
+    const { loading, states, loadMore, currentPage, startDate } = this.state;
     if (this.props.pagination.pages === currentPage || !this.props.pagination.pages) {
       const loadButton = document.getElementById("loadMore");
       if (loadButton) {
@@ -235,6 +235,7 @@ class Events extends Component {
                 onChange={this.onChange}
                 countriesWithStates={countriesWithStates}
                 states={states}
+                startDate={startDate}
                 onSearchSubmit={this.onSearchSubmit}
               />
             </div>
