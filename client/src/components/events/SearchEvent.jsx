@@ -67,7 +67,7 @@ export default props => {
               </div>
             </div>
             <div className="col s12">
-              <input onChange={props.onChange} type="date" name="startDate" />
+              <input onChange={props.onChange} defaultValue={props.startDate} type="date" name="startDate" />
             </div>
           </div>
         </div>
