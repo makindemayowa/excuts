@@ -6,6 +6,8 @@ env_variables:
   MAILGUN_DOMAIN_NAME: "excuts.com"
   MONGOHQ_URL: "mongodb://mayowamakinde:oreoluwa53@ds163630.mlab.com:63630/takemeout"
   MAILGUN_SENDERS_EMAIL: "excuts2018@gmail.com"
+  GOOGLE_CLIENT_ID: "746132111884-kf33l884cs137i1obkht8535c1nvq3iq.apps.googleusercontent.com"
+  FACEBOOK_TOKEN: "525167741278530|hCU3KIlLCAIYh_sJ_wGooRf1DTo"
 handlers:
   - url: /.*
     secure: always
