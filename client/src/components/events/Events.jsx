@@ -17,10 +17,11 @@ class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      startDate: new Date().toISOString().slice(0,10),
+      startDate: new Date().toISOString().slice(0, 10),
       events: [],
       loading: false,
       loadMore: false,
+      showLoadMore: false,
       country: countriesWithStates.countries[131].country,
       sex: 'female',
       state: countriesWithStates.countries[131].states[0],
@@ -49,10 +50,8 @@ class Events extends Component {
 
   componentWillReceiveProps(nextProps) {
     const events = nextProps.events;
-    const loading = nextProps.loading
     this.setState({
       events,
-      loading
     });
   }
 
@@ -65,6 +64,16 @@ class Events extends Component {
         events: this.props.events,
         loading: false,
       }, () => {
+        if (this.props.pagination.pages === this.state.currentPage
+          || !this.props.pagination.pages) {
+          this.setState({
+            showLoadMore: false,
+          })
+        } else {
+          this.setState({
+            showLoadMore: true,
+          })
+        }
         const select = document.querySelectorAll('select');
         M.FormSelect.init(select);
         const collapsible = document.querySelectorAll('.collapsible');
@@ -85,12 +94,12 @@ class Events extends Component {
   loadItems() {
     let currentPage = this.state.currentPage
     if (this.props.pagination.pages === currentPage) {
-      document.getElementById("loadMore").style.display = 'none'
+      this.setState({ showLoadMore: false })
     } else {
-      document.getElementById("loadMore").style.display = 'inline-block'
       this.setState({
         currentPage: currentPage += 1,
-        loadMore: true
+        loadMore: true,
+        showLoadMore: true,
       }, () => {
         const newEvents = Promise.resolve(this.getEvents(this.state.currentPage))
         newEvents.then(() => {
@@ -117,6 +126,11 @@ class Events extends Component {
           M.FormSelect.init(select);
           const collapsible = document.querySelectorAll('.collapsible');
           M.Collapsible.init(collapsible);
+          if (this.props.pagination.pages === this.state.currentPage || !this.props.pagination.pages) {
+            this.setState({ showLoadMore: false })
+          } else {
+            this.setState({ showLoadMore: true })
+          }
         });
       }).catch(() => {
         this.setState({
@@ -183,13 +197,7 @@ class Events extends Component {
   }
 
   render() {
-    const { loading, states, loadMore, currentPage, startDate } = this.state;
-    if (this.props.pagination.pages === currentPage || !this.props.pagination.pages) {
-      const loadButton = document.getElementById("loadMore");
-      if (loadButton) {
-        loadButton.style.display = 'none'
-      }
-    }
+    const { loading, states, loadMore, startDate, showLoadMore } = this.state;
     return (
       <div className="events">
         <SubNav currentPage={'home'} />
@@ -218,15 +226,18 @@ class Events extends Component {
                             No event found
                       </h5>
                       }
-                      <div className="row center">
-                        <button
-                          id="loadMore"
-                          onClick={this.loadItems}
-                          className="waves-effect waves-light btn"
-                        >
-                          {loadMore ? 'loading...' : 'Load More'}
-                        </button>
-                      </div>
+                      {
+                        showLoadMore &&
+                        <div className="row center">
+                          <button
+                            id="loadMore"
+                            onClick={this.loadItems}
+                            className="waves-effect waves-light btn"
+                          >
+                            {loadMore ? 'loading...' : 'Load More'}
+                          </button>
+                        </div>
+                      }
                     </div>
                 }
               </div>
