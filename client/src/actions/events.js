@@ -134,7 +134,7 @@ export function getAllEventRequest(query) {
     }
   }
   return (dispatch) => {
-    if(!query) {
+    if(!query || query === 'mine') {
       dispatch(clearEvent())
     }
    return axios.get(url).then((res) => {

@@ -147,7 +147,7 @@ class Discover extends Component {
 
   render() {
     const { loading, loadMore, here_to, sex, currentPage } = this.state
-    if (this.props.pagination.pages === currentPage || this.props.pagination.pages === 0) {
+    if (this.props.pagination.pages === currentPage || !this.props.pagination.pages) {
       const loadButton = document.getElementById("loadMore");
       if (loadButton) {
         loadButton.style.display = 'none'
