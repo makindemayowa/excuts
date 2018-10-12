@@ -64,6 +64,9 @@ class Discover extends Component {
       this.setState({
         loading: false
       }, () => {
+        if(this.props.pagination.pages === 1) {
+          document.getElementById("loadMore").style.display = 'none'
+        }
         const materialboxed = document.querySelectorAll('.materialboxed');
         M.Materialbox.init(materialboxed);
         const elems = document.querySelectorAll('select');
