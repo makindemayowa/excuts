@@ -55,7 +55,7 @@ exports.getOne = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  const limit = req.query.limit || 10;
+  let limit = req.query.limit || 10;
   const page = req.query.page || 1;
   const offset = (limit * page) - limit;
   let query;
@@ -63,6 +63,7 @@ exports.getAll = (req, res) => {
     query = {
       created_by: req.user.email
     };
+    limit = null;
   } else if (req.query.page) {
     query = {};
   } else {
@@ -72,6 +73,7 @@ exports.getAll = (req, res) => {
         state: req.query.state.toLowerCase(),
         date: { $gte: req.query.startDate }
       };
+      limit = null;
     } else {
       const today = new Date();
       const yesterday = new Date(today);

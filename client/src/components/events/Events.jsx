@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import SubNav from '../common/SubNav';
-import EventsCard from './EventsCard'
+import EventsCard from './EventsCard';
+import SearchEvent from './SearchEvent';
 import countriesWithStates from '../../helpers/states'
 import Loader from '../common/Loader';
 import moment from 'moment';
@@ -103,6 +104,7 @@ class Events extends Component {
   handleSelectChange(selected) {
     this.setState({
       loading: true,
+      currentPage: 1,
       events: [],
     }, () => {
       this.props.getAllEventRequest(selected).then(() => {
@@ -148,6 +150,7 @@ class Events extends Component {
   onSearchSubmit() {
     this.setState({
       loading: true,
+      currentPage: 1,
     })
     const eventDetail = {
       sex: this.state.sex,
@@ -180,7 +183,8 @@ class Events extends Component {
 
   render() {
     const { loading, states, loadMore, currentPage } = this.state;
-    if (this.props.pagination.pages === currentPage || this.props.pagination.pages === 0) {
+    console.log(this.props.pagination.pages , currentPage)
+    if (this.props.pagination.pages === currentPage || !this.props.pagination.pages) {
       const loadButton = document.getElementById("loadMore");
       if (loadButton) {
         loadButton.style.display = 'none'
@@ -226,86 +230,13 @@ class Events extends Component {
                     </div>
                 }
               </div>
-              <div className="col s12 m4 l2 searchForm">
-                <div className="bottom_margin" />
-                <div className="flex">
-                  <div className="form-fields">
-                    <label>Interested in</label>
-                    <select name="sex" onChange={this.onSexStateChange} className="size1">
-                      <option value="female">female</option>
-                      <option value="male">male</option>
-                      <option value="others">others</option>
-                    </select>
-                  </div>
-                  <div className="form-fields">
-                    <label>Country</label>
-                    <select
-                      name="country"
-                      onChange={this.onChange}
-                      className="size1"
-                    >
-                      <option
-                        key="Nigeria"
-                        value="Nigeria"
-                      >
-                        Nigeria
-                      </option>
-                      {
-                        countriesWithStates.countries.map((country) =>
-                          <option
-                            key={country.country}
-                            value={country.country}
-                          >
-                            {country.country}
-                          </option>
-                        )
-                      }
-                    </select>
-                  </div>
-
-                  <div className="form-fields">
-                    <label>State</label>
-                    <select
-                      name="state"
-                      onChange={this.onSexStateChange}
-                      className="size1 browser-default"
-                    >
-                      {
-                        states.map((state) =>
-                          <option
-                            key={state}
-                            value={state}
-                          >
-                            {state}
-                          </option>
-                        )
-                      }
-                    </select>
-                  </div>
-
-                  <div className="form-fields">
-                    <div className="row">
-                      <div className="col s12">
-                        <div>
-                          From
-                          </div>
-                      </div>
-                      <div className="col s12">
-                        <input onChange={this.onChange} type="date" name="startDate" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <button
-                      className="waves-effect right waves-light btn"
-                      onClick={this.onSearchSubmit}
-                    >
-                      Go
-                      </button>
-                  </div>
-                </div>
-              </div>
+              <SearchEvent
+                onSexStateChange={this.onSexStateChange}
+                onChange={this.onChange}
+                countriesWithStates={countriesWithStates}
+                states={states}
+                onSearchSubmit={this.onSearchSubmit}
+              />
             </div>
           </div>
         </div>
@@ -315,8 +246,8 @@ class Events extends Component {
           </div>
           <div>
             <ul id='dropdown2' className='eventul dropdown-content'>
-              <li value="declined"><a onClick={() => this.handleSelectChange('mine')}>Created by me</a></li>
-              <li value="accepted"><a onClick={() => this.handleSelectChange('all')}>All events</a></li>
+              <li value="mine"><a onClick={() => this.handleSelectChange('mine')}>Created by me</a></li>
+              <li value="all"><a onClick={() => this.handleSelectChange('')}>All events</a></li>
             </ul>
           </div>
         </div>
