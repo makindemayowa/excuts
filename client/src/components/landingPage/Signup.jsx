@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import storage from '../../actions/storage';
 import SocialButton from './SocialButton';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import toastr from 'toastr';
+import Loader from '../common/Loader';
 import { userSignUpRequest, socialUserLoginRequest } from '../../actions/auth';
 
 class Signup extends Component {
@@ -15,6 +16,7 @@ class Signup extends Component {
       email: '',
       password: '',
       confirmPassword: '',
+      loadingSocial: false
     }
     this.submitSignup = this.submitSignup.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -32,7 +34,8 @@ class Signup extends Component {
 
   handleSocialLogin = (event) => {
     this.setState({
-      loading: true
+      loading: true,
+      loadingSocial: true
     })
     const locData = storage.getItem('locdata')
     const provider = event._provider;
@@ -67,13 +70,15 @@ class Signup extends Component {
       .socialUserLoginRequest(userdata)
       .then(() => {
         this.setState({
-          loading: false
+          loading: false,
+          loadingSocial: false
         })
         toastr.success('login successful')
       })
       .catch((errorData) => {
         this.setState({
-          loading: false
+          loading: false,
+          loadingSocial: false
         })
         toastr.error(errorData.response.data.message)
       });
@@ -118,12 +123,15 @@ class Signup extends Component {
 
   render() {
     const { success } = this.props;
+    const { loadingSocial } = this.state;
     if (success) {
       return <Redirect to="/dashboard" />
     }
     return (
       <div className="container">
         <div className="signup row">
+        {
+            loadingSocial ? <Loader /> :
           <div className="signupForm">
             <div className="">
               <form className="col s12" onSubmit={this.submitSignup}>
@@ -167,6 +175,7 @@ class Signup extends Component {
                   className="btn waves-effect waves-light bottom_margin col s12"
                   type="submit"
                   name="action"
+                  disabled={this.state.loading}
                 >Sign Up
               <i className="material-icons right">send</i>
                 </button>
@@ -203,8 +212,14 @@ class Signup extends Component {
                   SIGN IN WITH GOOGLE
                 </SocialButton>
               </div>
+              <div className="center">
+                <Link to="/login">
+                  Already have an account?
+              </Link>
+              </div>
             </div>
           </div>
+        }
         </div>
       </div>
     );

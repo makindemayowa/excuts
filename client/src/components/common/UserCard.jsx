@@ -12,12 +12,11 @@ export default props => {
           <img className="materialboxed" width="650" alt={props.userInfo.firstName} src={props.userInfo.profilePhoto || noAvatar} />
         </div>
         <div className="card-content">
+        <Link to={`/publicProfile/${currentId}`}>
           <p className="content-title">
-            <Link to={`/publicProfile/${currentId}`}>
               <span className="username">
                 {`${props.userInfo.firstName}${` `}${props.userInfo.lastName}`}{`, `}
               </span>
-            </Link>
             {props.userInfo.age}
           </p>
           <div className="userDetails">
@@ -27,6 +26,7 @@ export default props => {
           <div className="flex">
             <p className="location"><i className="fas fa-map-marker-alt" /> {props.userInfo.state}</p>
           </div>
+          </Link>
         </div>
       </div>
     </div>

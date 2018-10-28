@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import toastr from 'toastr';
+import Loader from '../common/Loader';
 import SocialButton from './SocialButton';
 import storage from '../../actions/storage'
 import { userLoginRequest, socialUserLoginRequest } from '../../actions/auth';
@@ -15,6 +16,7 @@ class Login extends Component {
       email: '',
       password: '',
       loading: true,
+      loadingSocial: false
     }
     this.nodes = {}
     this.submitLogin = this.submitLogin.bind(this);
@@ -35,7 +37,8 @@ class Login extends Component {
 
   handleSocialLogin = (event) => {
     this.setState({
-      loading: true
+      loading: true,
+      loadingSocial: true
     })
     const locData = storage.getItem('locdata')
     const provider = event._provider;
@@ -70,15 +73,17 @@ class Login extends Component {
       .socialUserLoginRequest(userdata)
       .then(() => {
         this.setState({
-          loading: false
+          loading: false,
+          loadingSocial: false
         })
         toastr.success('login successful')
       })
       .catch((errorData) => {
         this.setState({
-          loading: false
+          loading: false,
+          loadingSocial: false
         })
-        toastr.error(errorData.response.data.message)
+        toastr.error(errorData.response.data.message || 'An error occurred')
       });
   }
 
@@ -91,7 +96,7 @@ class Login extends Component {
     if (err.indexOf('SDK not loaded') > -1) {
       return toastr.error('please try again')
     }
-    toastr.error('An error occurred')
+    return toastr.error('An error occurred')
   }
 
   onChange(e) {
@@ -127,88 +132,91 @@ class Login extends Component {
 
   render() {
     const { isLogged } = this.props;
+    const { loadingSocial } = this.state;
     if (isLogged) {
       return <Redirect to="/dashboard" />
     }
     return (
       <div className="container">
         <div className="login row">
-          <div className="loginForm">
-            <form className="col s12" onSubmit={this.submitLogin}>
-              <div className="input-field col s12">
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.email}
-                  className="validate"
-                />
-                <label htmlFor="email">Email</label>
+          {
+            loadingSocial ? <Loader /> :
+              <div className="loginForm">
+                <form className="col s12" onSubmit={this.submitLogin}>
+                  <div className="input-field col s12">
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      required
+                      onChange={this.onChange}
+                      value={this.state.email}
+                      className="validate"
+                    />
+                    <label htmlFor="email">Email</label>
+                  </div>
+                  <div className="input-field col s12">
+                    <input
+                      id="loginPassword"
+                      type="password"
+                      name="password"
+                      required
+                      onChange={this.onChange}
+                      value={this.state.password}
+                      className="validate" />
+                    <label htmlFor="loginPassword">Password</label>
+                  </div>
+                  <button
+                    className="btn waves-effect waves-light col s12 bottom_margin"
+                    type="submit"
+                    name="action"
+                    disabled={this.state.loading}
+                  >
+                    Sign in
+                  <i className="material-icons right">send</i>
+                  </button>
+                </form>
+                <div className="center forms_divider">
+                  or
+                </div>
+                <div className="social_login_container">
+                  <div className="row">
+                    <SocialButton
+                      provider='facebook'
+                      appId='268972600371103'
+                      onLoginSuccess={this.handleSocialLogin}
+                      onLoginFailure={this.handleSocialLoginFailure}
+                      className="waves-effect waves-light btn facebook social-button"
+                    >
+                      <i
+                        className="fab fa-facebook-f fa-lg newLogo left"
+                        aria-hidden="true"
+                      />
+                      SIGN IN WITH FACEBOOK
+                    </SocialButton>
+                  </div>
+                  <div className="row">
+                    <SocialButton
+                      provider='google'
+                      appId='746132111884-kf33l884cs137i1obkht8535c1nvq3iq.apps.googleusercontent.com'
+                      onLoginSuccess={this.handleSocialLogin}
+                      onLoginFailure={this.handleSocialLoginFailure}
+                      className="waves-effect waves-light btn google social-button"
+                      getInstance={this.setNodeRef.bind(this, 'google')}
+                      key={'google'}
+                    >
+                      <i className="fab fa-google fa-lg newLogo left" aria-hidden="true" />
+                      SIGN IN WITH GOOGLE
+                    </SocialButton>
+                  </div>
+                </div>
+                <div className="center">
+                  <Link to="/reset-password">
+                    forgot password?
+                  </Link>
+                </div>
               </div>
-              <div className="input-field col s12">
-                <input
-                  id="loginPassword"
-                  type="password"
-                  name="password"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.password}
-                  className="validate" />
-                <label htmlFor="loginPassword">Password</label>
-              </div>
-              <button
-                className="btn waves-effect waves-light col s12 bottom_margin"
-                type="submit"
-                name="action"
-                disabled={this.state.loading}
-              >
-                Sign in
-            <i className="material-icons right">send</i>
-              </button>
-            </form>
-            <div className="center forms_divider">
-              or
-            </div>
-            <div className="social_login_container">
-              <div className="row">
-                <SocialButton
-                  provider='facebook'
-                  appId='268972600371103'
-                  onLoginSuccess={this.handleSocialLogin}
-                  onLoginFailure={this.handleSocialLoginFailure}
-                  className="waves-effect waves-light btn facebook social-button"
-                >
-                  <i
-                    className="fab fa-facebook-f fa-lg newLogo left"
-                    aria-hidden="true"
-                  />
-                  SIGN IN WITH FACEBOOK
-                </SocialButton>
-              </div>
-              <div className="row">
-                <SocialButton
-                  provider='google'
-                  appId='746132111884-kf33l884cs137i1obkht8535c1nvq3iq.apps.googleusercontent.com'
-                  onLoginSuccess={this.handleSocialLogin}
-                  onLoginFailure={this.handleSocialLoginFailure}
-                  className="waves-effect waves-light btn google social-button"
-                  getInstance={this.setNodeRef.bind(this, 'google')}
-                  key={'google'}
-                >
-                  <i className="fab fa-google fa-lg newLogo left" aria-hidden="true" />
-                  SIGN IN WITH GOOGLE
-                </SocialButton>
-              </div>
-            </div>
-            <div className="center">
-              <Link to="/reset-password">
-                forgot password?
-              </Link>
-            </div>
-          </div>
-
+          }
         </div>
       </div>
     );

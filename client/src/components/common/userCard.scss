@@ -13,9 +13,11 @@
   }
 }
 .card .card-content {
+  a {
+    color: #B7B8BE;
+  }
   padding: 15px;
   font-size: 12px;
-  color: #B7B8BE;
 
   hr {
     border: none;
@@ -32,6 +34,9 @@
     font-size: 14px;
     a {
       color: #000;
+    }
+    .userDetails {
+      display: block;
     }
   }
   .userDetails {

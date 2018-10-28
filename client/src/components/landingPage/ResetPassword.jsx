@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
+import { Link } from 'react-router-dom';
 import { resetPasswordRequest } from '../../actions/auth';
 
 class ResetPassword extends Component {
@@ -59,6 +60,11 @@ class ResetPassword extends Component {
             <i className="material-icons right">send</i>
             </button>
           </form>
+          <div className="center">
+          <Link to="/login">
+            Back to login
+          </Link>
+        </div>
         </div>
       </div>
     );

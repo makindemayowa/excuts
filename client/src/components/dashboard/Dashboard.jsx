@@ -13,7 +13,7 @@ import {
   getAllUsers, searchAllUsers
 } from '../../actions/auth';
 import './dashboard.scss';
-import Loader from '../common/Loader'
+import Loader from '../common/Loader';
 
 class Discover extends Component {
   constructor() {
