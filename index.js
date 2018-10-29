@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
 
 routes(app);
 
-// app.use(express.static('./client/build'));
+app.use(express.static('./client/build'));
 
 app.all('*', (req, res) => {
   res.status(404).send({ message: 'route not found' });
