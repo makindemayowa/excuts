@@ -1,15 +1,22 @@
 runtime: nodejs8
-env_variables:
-  JWT_SECRET_KEY: "mankind"
-  MAILGUN_API_KEY: "key-696537b9c51104e877a86451ccbb9d45"
-  MAILGUN_SENDERS_NAME: "excuts"
-  MAILGUN_DOMAIN_NAME: "excuts.com"
-  MONGOHQ_URL: "mongodb://mayowamakinde:oreoluwa53@ds163630.mlab.com:63630/takemeout"
-  MAILGUN_SENDERS_EMAIL: "excuts2018@gmail.com"
-  GOOGLE_CLIENT_ID: "746132111884-kf33l884cs137i1obkht8535c1nvq3iq.apps.googleusercontent.com"
-  FACEBOOK_TOKEN: "268972600371103|4ea1e1b7c520a98fddd3b48458869dbd"
+env: standard
+instance_class: F1
 handlers:
-  - url: /.*
-    secure: always
-    redirect_http_response_code: 301
+  - url: '/.*'
     script: auto
+    secure: always
+    redirect_http_response_code: '301'
+env_variables:
+  FACEBOOK_TOKEN: '268972600371103|4ea1e1b7c520a98fddd3b48458869dbd'
+  GOOGLE_CLIENT_ID: 746132111884-kf33l884cs137i1obkht8535c1nvq3iq.apps.googleusercontent.com
+  JWT_SECRET_KEY: mankind
+  MAILGUN_API_KEY: key-696537b9c51104e877a86451ccbb9d45
+  MAILGUN_DOMAIN_NAME: excuts.com
+  MAILGUN_SENDERS_EMAIL: excuts2018@gmail.com
+  MAILGUN_SENDERS_NAME: excuts
+  MONGOHQ_URL: 'mongodb://mayowamakinde:oreoluwa53@ds163630.mlab.com:63630/takemeout'
+automatic_scaling:
+  min_idle_instances: automatic
+  max_idle_instances: automatic
+  min_pending_latency: automatic
+  max_pending_latency: automatic
